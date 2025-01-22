@@ -1,0 +1,9 @@
+export const ADMIN_PATH = "/admin";
+export const HOME_PATH = "/";
+export const TV_RADIO_PATH = "/video";
+export const CONCERT_PATH = "/concert";
+export const NEWS_PATH = "/news";
+export const ARTISTS_PATH = "/artists";
+export const CREATE_NEWS = "/news/create";
+export const MATERIAL_PATH = "/material";
+export const NEWRELEASE_PATH = "/releases";

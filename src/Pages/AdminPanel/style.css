@@ -1,0 +1,47 @@
+.Nav-bar-top {
+    background-color: #e8ecfe;
+    height: 79px !important;
+  }
+  
+.back-dark{
+    background-color: #111217 !important;
+  }
+  
+  .Nav-bar-top-dark {
+    background-color: #242526;
+  }
+
+  @media (max-width: 640px) {
+    .Nav-bar-top {
+      height: 46px !important;
+    }
+  }
+
+  .sideBar-dark {
+    background-color: #242526;
+    box-shadow: 5px 10px 15px 0px rgba(59, 214, 198, 0.10);
+    backdrop-filter: blur(150px);
+    width: 250px;
+  }
+
+  .sideBar {
+    width: 250px;
+    background-color: #E8ECFE;
+    box-shadow: 2px 5px 10px 0px rgba(138, 138, 138, 0.24);
+    backdrop-filter: blur(150px);
+  }
+
+  .side-menu-selected {
+    background-color: #a7a7b6;
+  }
+
+  .side-menu {
+    border-radius: 10px;
+  }
+  .side-menu-dark {
+    color: white;
+  }
+
+  .side-menu:hover {
+    background-color: #a7a7b6;
+  }

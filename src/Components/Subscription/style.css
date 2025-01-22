@@ -1,0 +1,96 @@
+.subscription-body{
+    border-radius: 24px;
+    background: #FFF;
+    box-shadow: 0px 0px 11.638px 0px rgba(138, 138, 138, 0.24);
+    backdrop-filter: blur(116.37931823730469px);
+    width: 100%;
+}
+
+.subscription-body-dark {
+    border-radius: 24px;
+    background: #242526 !important;
+    width: 100%;
+}
+
+.input-back{
+    border-radius: 8px;
+    border-top-right-radius: unset;
+    border-bottom-right-radius: unset;
+    height: 54px;
+    opacity: 0.5;
+    background: var(--Base-base-50, #E9E9EB);
+}
+@media screen and (max-width: 768px) {
+    .input-back{
+        height: 36.28px;
+        font-size: 12px;
+    }
+}
+.input-back-dark{
+    border-radius: 8px;
+    border-top-right-radius: unset;
+    border-bottom-right-radius: unset;
+    opacity: 0.5;
+    background: #FFF !important;
+    opacity: unset
+    ;
+}
+.subscription-title{
+    color: var(--Base-base-500, #252733);
+    font-family: Urbanist;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -1.2px;
+}
+
+@media screen and (max-width: 768px) {
+    .subscription-title{
+        font-size: 22px;
+    }
+}
+
+.subscription-text {
+    color: var(--Base-base-400, #51525C);
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: Urbanist;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; /* 150% */
+    text-align: left;
+    margin-top: 20px;
+}
+.subscription-btn{
+    width: 148px;
+    height: 54px;
+    border-radius: 0px 8px 8px 0px;
+    background: var(--Primary-Purple-primary-purple-500, #5A1073);
+    color: #FFF;
+    text-align: center;
+    font-family: Urbanist;
+    font-size: 16px; 
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-wrap: nowrap;
+}
+
+@media screen and (max-width: 768px) {
+    .subscription-btn{
+        width: 99.926px;
+        height: 36.274px;
+        border-radius: 0px 5.374px 5.374px 0px;
+        font-size: 12px;
+    }
+}
+
+.subscription-btn-dark{
+    border-radius: 0px 8px 8px 0px;
+    background: #2FC4B2;
+    color: #5A1073 !important;
+}
+.subscription-btn-dark:active{
+    background: #6ddbce;
+}

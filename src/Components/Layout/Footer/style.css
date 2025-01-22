@@ -1,0 +1,149 @@
+.footer {
+    background-image: url('../../../assets/png/footer-back.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.footer-dark {
+  background-image: url('../../../assets/png/Footer-dark.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@media (max-width: 300px) {
+  .footer {
+    height: 270px;
+  }
+  .footer-dark {
+    height: 270px;
+  }
+}
+
+@media (min-width: 300px) {
+    .footer {
+      height: 270px;
+    }
+    .footer-dark {
+      height: 270px;
+    }
+}
+
+@media (min-width: 350px) {
+    .footer {
+      height: 300px;
+    }
+    .footer-dark {
+      height: 300px;
+    }
+}
+
+@media (min-width: 420px) {
+  .footer {
+    height: 350px;
+  }
+    .footer-dark {
+      height: 350px;
+    }
+}
+
+@media (min-width: 500px) {
+    .footer {
+      height: 380px;
+    }
+    .footer-dark {
+      height: 380px;
+    }
+}
+
+
+@media (min-width: 640px) {
+    .footer {
+        height: 400px;
+    }
+    .footer-dark {
+      height: 400px;
+  }
+}
+
+@media (min-width: 670px) {
+    .footer {
+      height: 420px;
+    }
+    .footer-dark {
+      height: 420px;
+    }
+}
+
+@media (min-width: 700px) {
+    .footer {
+      height: 530px;
+    }
+    .footer-dark {
+      height: 530px;
+    }
+}
+
+@media (min-width: 768px) {
+    .footer-dark {
+        height: 750px;
+    }
+    .footer-dark {
+      height: 750px;
+  }
+}
+
+@media (min-width: 830px) {
+    .footer-dark {
+      height: 800px;
+    }
+    .footer-dark {
+      height: 800px;
+    }
+}
+
+@media (min-width: 920px) {
+    .footer {
+      height: 850px;
+    }
+    .footer-dark {
+      height: 850px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .footer {
+        height: 900px;
+    }
+    .footer-dark {
+      height: 900px;
+  }
+}
+
+@media (min-width: 1100px) {
+    .footer {
+      height: 950px;
+    }
+    .footer-dark {
+      height: 950px;
+    }
+}
+
+@media (min-width: 1440px) {
+    .footer {
+      height: 1060px;
+    }
+    .footer-dark {
+      height: 1060px;
+    }
+}
+
+@media (min-width: 1536px) {
+    .footer {
+        height: 1300px;
+    }
+    .footer-dark {
+      height: 1300px;
+  }
+}

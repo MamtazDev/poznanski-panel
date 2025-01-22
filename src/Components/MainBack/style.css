@@ -1,0 +1,186 @@
+.background {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    background: url('../../assets/png/main-back.png');
+    background-position: center;
+    background-size: cover;
+    background-position-y: bottom;
+    z-index: 0;
+}
+.background-dark {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    background: url('../../assets/png/dark-main-back.png');
+    background-position: center;
+    background-size: cover;
+    background-position-y: bottom;
+    z-index: 0;
+}
+
+@media (min-width: 300px) {
+    .background {
+      height: 330px;
+    }
+    .background-dark {
+        height: 330px;
+    }
+}
+
+@media (min-width: 350px) {
+    .background {
+      height: 340px;
+    }
+    .background-dark {
+        height: 340px;
+      }
+}
+
+@media (min-width: 420px) {
+    .background {
+      height: 350px;
+    }
+    .background-dark {
+        height: 350px;
+      }
+}
+
+@media (min-width: 500px) {
+    .background {
+      height: 360px;
+    }
+    .background-dark {
+        height: 360px;
+      }
+}
+
+@media (min-width: 550px) {
+    .background {
+      height: 370px;
+    }
+    .background-dark {
+        height: 370px;
+      }
+}
+
+@media (min-width: 640px) {
+    .background {
+        height: 380px;
+    }
+    .background-dark {
+        height: 380px;
+    }
+}
+
+@media (min-width: 670px) {
+    .background {
+      height: 400px;
+    }
+    .background-dark {
+        height: 400px;
+    }
+}
+
+@media (min-width: 700) {
+    .background {
+      height: 400px;
+    }
+    .background-dark {
+        height: 400px;
+    }
+}
+
+@media (min-width: 768px) {
+    .background {
+        height: 450px;
+    }
+    .background-dark {
+        height: 450px;
+    }
+}
+
+@media (min-width: 830px) {
+    .background {
+      height: 500px;
+    }
+    .background-dark {
+        height: 500px;
+      }
+}
+
+@media (min-width: 920px) {
+    .background {
+      height: 550px;
+    }
+    .background-dark {
+        height: 550px;
+      }
+}
+
+@media (min-width: 1024px) {
+    .background {
+        height: 600px;
+    }
+    .background-dark {
+        height: 600px;
+    }
+}
+
+@media (min-width: 1100px) {
+    .background {
+      height: 650px;
+    }
+    .background-dark {
+        height: 650px;
+      }
+}
+
+@media (min-width: 1200px) {
+    .background {
+      height: 700px;
+    }
+    .background-dark {
+        height: 700px;
+      }
+}
+
+@media (min-width: 1536px) {
+    .background {
+        height: 850px;
+    }
+    .background-dark {
+        height: 850px;
+    }
+}
+
+@media (min-width: 1620px) {
+    .background {
+        height: 900px;
+    }
+    .background-dark {
+        height: 900px;
+    }
+}
+
+.back-img {
+    position: absolute;
+    bottom: 50px;
+}
+
+.main-board-text {
+    height: 116.5%;
+    font-family: Oswald;
+}
+
+.wujo-logo {
+    width: 80px;
+    height: 45px;
+}
+
+@media (max-width: 768px) {
+    .wujo-logo {
+        width: 53px !important;
+        height: 30px !important;
+    }
+}

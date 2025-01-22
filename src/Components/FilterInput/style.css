@@ -1,0 +1,57 @@
+.filter-box-2 {
+    background-color: #fff;
+    width: 100%;
+    border-radius: 8px;
+    box-sizing: border-box;
+    box-shadow: 0px 0px 11.078px 0px rgba(138, 138, 138, 0.24);
+    backdrop-filter: blur(110.78475952148438px);
+  }
+
+  .filter-box-2 svg path {
+    stroke: #6D6E76 !important;
+  }
+
+  .filter-box-dark-2 svg path {
+    stroke: #BBBCC0 !important;
+  }
+  
+  .filter-box-dark-2 {
+    border-radius: 8px;
+    background: #242526;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .filter-box-2 input {
+    color: var(--Base-base-100, #BBBCC0);
+    font-family: Urbanist;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  .filter-box-dark-2 input {
+    color: var(--Base-base-300, #6D6E76);
+    font-family: Urbanist;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  .filter-box-web-2 {
+    height: 58px;
+    padding: 18px 24px;
+  }
+
+  .filter-box-mobile-2 {
+    height: 42px !important;
+    padding: 12px 16px !important;
+  }
+
+  .filter-box-web-2 input{
+    font-size: 18px !important;
+  }
+
+  .filter-box-mobile-2 input {
+    font-size: 14px !important;
+  }

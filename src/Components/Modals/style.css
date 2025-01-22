@@ -1,0 +1,37 @@
+.image-field {
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 0.767px dashed #E1E1E1;
+    background-color: rgb(156 163 175);
+}
+
+.add-file-btn {
+    display: inline-flex;
+    padding: 7.672px 18.413px 7.672px 12.275px;
+    justify-content: center;
+    align-items: center;
+    gap: 6.138px;
+    border-radius: 9.206px;
+    text-align: center;
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: Urbanist;
+    font-size: 10.741px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 15.344px; /* 142.857% */
+    text-transform: capitalize;
+}
+
+.add-btn {
+    color: var(--Base-base-500, #252733);
+    text-align: center;
+    font-family: "Font Awesome 6 Free";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    opacity: 0.5;
+    background: var(--Base-base-100, #BBBCC0);
+    padding: 10px;
+    flex-shrink: 0;
+}

@@ -1,0 +1,157 @@
+.Nav-bar-top {
+  background-color: #e8ecfe;
+  height: 79px !important;
+}
+
+.back-dark{
+  background-color: #111217 !important;
+}
+
+.Nav-bar-top-dark {
+  background-color: #242526;
+}
+
+.Nav-part {
+  background-color: #e8ecfe;
+  height: 44px;
+}
+
+.Nav-part-dark {
+  background-color: #242526;
+  height: 44px;
+}
+
+@media (max-width: 640px) {
+  .Nav-bar-top {
+    height: 46px !important;
+  }
+}
+
+.submit-btn {
+  width: 150px;
+  height: 40px;
+  flex-shrink: 0;
+  color: #fff;
+  text-align: center;
+  font-family: Urbanist;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: capitalize;
+  justify-content: center;
+  background-color: #5A1073;
+  border-radius: 8px;
+}
+
+.submit-btn-dark{
+  background-color: #3BD6C6;
+  color: #5A1073;
+}
+
+.submit-btn-2 {
+    border-radius: 8px;
+    background: var(--Primary-Purple-primary-purple-500, #5A1073);
+    height: 48px;
+    padding: 18px 34px;
+    color: #FFF;
+    text-align: center;
+    font-family: Urbanist;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: capitalize;
+    justify-content: center;
+    align-items: center;
+}
+
+.filter-box {
+  background-color: #fff;
+  stroke-width: 1px;
+  stroke: var(--Base-base-100, #bbbcc0);
+  width: 100%;
+  height: 39px;
+  border: 1px #bbbcc0 solid;
+  border-radius: 10px;
+  box-sizing: border-box;
+  padding: 8px 16px;
+}
+
+.filter-box-dark {
+  background-color: #14151C;
+}
+
+.filter-box input {
+  color: var(--Base-base-100, #bbbcc0);
+  font-family: Urbanist;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.Nav-bar-down {
+  color: var(--Base-base-100, #bbbcc0);
+  font-family: Urbanist;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  background: #fff;
+  padding: 17px 0px;
+}
+
+.Nav-bar-down-dark {
+  background: #111217;
+}
+
+.Nav-bar-down div {
+  margin: 0px 24px;
+  cursor: pointer;
+}
+
+.Nav-btn:hover {
+  color: var(--Primary-Purple-primary-purple-500, #5a1073);
+}
+
+.Nav-btn-dark{
+  color: #6D6E76;
+}
+.Nav-btn-dark:hover{
+  color: #21E3CE;
+}
+.selected-menu {
+  color: var(--Primary-Purple-primary-purple-500, #5a1073) !important;
+  font-weight: 700 !important;
+}
+
+.selected-menu-dark {
+  color: #21E3CE !important;
+  font-weight: 700 !important;
+}
+
+.breadcrumb-text{
+    color: var(--Base-base-200, #9B9CA1);
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: Urbanist;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.selected-text-color {
+    color: var(--Primary-Purple-primary-purple-500, #5A1073);
+    font-weight: 600 !important;
+}
+
+.Nav-vertical-btn {
+    color: var(--Base-base-100, #BBBCC0);
+    font-family: Urbanist;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
