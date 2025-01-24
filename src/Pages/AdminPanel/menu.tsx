@@ -40,6 +40,11 @@ const mainMenu = [
     text: "Partner Logos",
     link: "logos",
   },
+  {
+    icon: <BiCircle />,
+    text: "User",
+    link: "user",
+  },
 ];
 
 interface MenuProps {
@@ -57,7 +62,7 @@ const Menu: React.FC<MenuProps> = ({ selectedMenu, setSelectedMenu }) => {
   return (
     <div className="flex flex-col gap-1 w-full">
       {mainMenu.map((item, idx) => (
-        <Link to={`/admin/${item.link}`}>
+        <Link key={idx} to={`/admin/${item.link}`}>
           <div
             key={`side-menu-${idx}`}
             className={`flex gap-3 justify-start items-center w-full cursor-pointer p-2.5 side-menu ${selectedMenu === item.link && "side-menu-selected"} ${!themeMode && "side-menu-dark"} `}
