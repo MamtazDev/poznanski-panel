@@ -9,6 +9,7 @@ import ScrollToTopOnPageChange from "../Components/ScrollToTop";
 import YoutubePlayer from "../Components/YoutubePlayer";
 import Modal from "../Components/Modals";
 import { useDispatch } from "react-redux";
+import UserMainPage from "../Pages/AdminPanel/User";
 // import UserMainPage from "../Pages/AdminPanel/User";
 
 const AdminPanel = lazy(() => import("../Pages/AdminPanel"));
@@ -97,10 +98,10 @@ const AppMain: React.FC = () => {
               path="logos"
               element={<AdminPanel component={<PartnerLogos />} />}
             />
-            {/* <Route
+            <Route
               path="user"
-              element={<AdminPanel component={<Article tagData={tags} />} />}
-            /> */}
+              element={<AdminPanel component={<UserMainPage user={[]} />} />}
+            />
           </Route>
         </Routes>
       </Suspense>
