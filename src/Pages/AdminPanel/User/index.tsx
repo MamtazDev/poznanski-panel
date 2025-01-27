@@ -1,11 +1,26 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reducers';
-import CommonButton from '../../../Components/Buttons/CommonButton';
-import { Input, InputGroup, InputRightElement } from '@chakra-ui/react';
-import { AiOutlineSearch } from 'react-icons/ai';
-import staticImg from '../../../assets/png/defaultimg.png';
-import { apiGetReq } from '../../../Constant/api-functions';
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../reducers";
+import CommonButton from "../../../Components/Buttons/CommonButton";
+import {
+  Input,
+  InputGroup,
+  InputRightElement,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+  Avatar,
+  MenuItem,
+  Button,
+} from "@chakra-ui/react";
+import { AiOutlineSearch } from "react-icons/ai";
+import staticImg from "../../../assets/png/defaultimg.png";
+import { apiGetReq } from "../../../Constant/api-functions";
+import { MenuContent, MenuRoot, MenuTrigger } from "../../../Components/ui/menu";
 
 interface Users {
   id: string;
@@ -13,7 +28,7 @@ interface Users {
 }
 
 interface UserDataProps {
-  user: Users[]; // Assuming the `user` property holds the actual user data.
+  user: Users[];
 }
 
 const UserMainPage: React.FC<UserDataProps> = () => {
@@ -23,7 +38,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
   const [selectedRowsNum, setSelectedRowsNum] = useState<number>(5);
   const [selectedPage, setSelectedPage] = useState<string>("1");
   const [userAllData, setUserAllData] = useState<UserDataProps | null>(null);
-  console.log(userAllData, "userAllDatauserAllData")
+
   const handleAddArticle = () => {
     setOpenAddModal(true);
   };
@@ -31,25 +46,18 @@ const UserMainPage: React.FC<UserDataProps> = () => {
   const handleChangeFilterText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(e.target.value);
   };
-  const fetchUserAllData = userAllData?.user || [];
-  console.log("Fetched User Data:", fetchUserAllData);
-
 
   useEffect(() => {
-    apiGetReq("/users", {
+    apiGetReq("/auth/users", {
       filter: filterText,
     })
       .then((res) => {
-        console.log("API Response Full Data:", res);
         setUserAllData(res);
       })
       .catch((err) => {
         console.error("Error fetching data:", err);
       });
   }, [selectedRowsNum, selectedPage, filterText]);
-
-
-
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
@@ -69,42 +77,35 @@ const UserMainPage: React.FC<UserDataProps> = () => {
         </div>
         <CommonButton text="Add article" onClick={handleAddArticle} />
       </div>
+      <TableContainer>
+        <Table variant="striped" colorScheme="gray">
+          <Thead>
+            <Tr>
+              <Th>Image</Th>
+              <Th>Title</Th>
+              <Th>Role</Th>
+              <Th>Email</Th>
+              <Th>Is Verified</Th>
+            </Tr>
+          </Thead>
 
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
-        <table className="w-full h-full" style={{ minWidth: "400px" }}>
-          <thead
-            className={`text-xs uppercase ${themeMode ? " text-gray-700  bg-gray-400" : "bg-gray-700 text-gray-400"}`}
-          >
-            <tr>
-              <th className="px-6 py-3" style={{ width: "130px" }}>Image</th>
-              <th className="px-6 py-3">Title</th>
-              <th className="px-6 py-3 w-28">Tag</th>
-              <th className="px-6 py-3 w-32">Date</th>
-              <th className="px-6 py-3 w-32">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fetchUserAllData.map((user) => (
-              <tr
-                key={user.id}
-                className={`border-b py-3 ${!themeMode ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white text-gray-900"}`}
-              >
-                <td className="flex justify-center mt-3">
-                  <img src={staticImg} className="rounded-full w-[100px] h-[100px]" alt="img" />
-                </td>
-                <td style={{ width: "200px" }}>tags</td>
-                <td>date</td>
-                <td>
-                  <div className="flex justify-center">
-                    {/* Actions can go here */}
-                  </div>
-                </td>
-              </tr>
-            ))
-            }
-          </tbody>
-        </table>
-      </div>
+          <Tbody>
+            {userAllData?.map((users, index) => (
+              <Tr key={index}>
+                <Td>
+                  <Avatar name={users.nickname} src="" />
+                </Td>
+                <Td className="capitalize">{users.nickname}</Td>
+                <Td className="capitalize">{users.role}</Td>
+                <Td>{users.email}</Td>
+                <Td className="capitalize">
+                  {users.isVerified ? "Verified" : "Unverified"}
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
     </div>
   );
 };
