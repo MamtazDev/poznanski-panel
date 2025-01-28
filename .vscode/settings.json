@@ -1,0 +1,51 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "search.exclude": {
+    "package-lock.json": true
+  },
+
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+
+  // Disable the default formatter, use ESLint instead
+  "prettier.enable": true,
+  "editor.formatOnSave": true,
+  "prettier.requireConfig": true,
+  "prettier.jsxSingleQuote": true,
+
+  // Auto fix with ESLint on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit",
+    "source.addMissingImports": "explicit"
+  },
+
+  // Enable eslint for all supported languages
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "html",
+    "markdown",
+    "json",
+    "jsonc",
+    "yaml",
+    "toml",
+    "xml",
+    "gql",
+    "graphql",
+    "astro",
+    "css",
+    "less",
+    "scss",
+    "pcss",
+    "postcss",
+    "github-actions-workflow"
+  ],
+  "cSpell.words": ["Brandcamb"]
+}

@@ -1,26 +1,22 @@
-import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../reducers";
-import CommonButton from "../../../Components/Buttons/CommonButton";
 import {
+  Avatar,
   Input,
   InputGroup,
   InputRightElement,
   Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
   TableContainer,
-  Avatar,
-  MenuItem,
-  Button,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr
 } from "@chakra-ui/react";
+import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import staticImg from "../../../assets/png/defaultimg.png";
+import { useSelector } from "react-redux";
+import CommonButton from "../../../Components/Buttons/CommonButton";
 import { apiGetReq } from "../../../Constant/api-functions";
-import { MenuContent, MenuRoot, MenuTrigger } from "../../../Components/ui/menu";
+import { RootState } from "../../../reducers";
 
 interface Users {
   id: string;
