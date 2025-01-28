@@ -344,9 +344,9 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
               <th className="px-6 py-3 w-32">Action</th>
             </tr>
           </thead>
-          <tbody className="">
+          <tbody>
             {fetchNesAllData?.map((item: News, index: number) => {
-              console.log(item.tags, "itemsdkfjdkfjd")
+              // console.log(item.tags, "itemsdkfjdkfjd")
               return (
                 <tr key={index}
                   className={`border-b py-3  ${!themeMode ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white text-gray-900"}`}>
