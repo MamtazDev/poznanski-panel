@@ -25,6 +25,9 @@ import { MenuContent, MenuRoot, MenuTrigger } from "../../../Components/ui/menu"
 interface Users {
   id: string;
   nickname: string;
+  role: string;
+  email: string;
+  isVerified: boolean;
 }
 
 interface UserDataProps {
@@ -37,7 +40,8 @@ const UserMainPage: React.FC<UserDataProps> = () => {
   const [filterText, setFilterText] = useState<string>("");
   const [selectedRowsNum, setSelectedRowsNum] = useState<number>(5);
   const [selectedPage, setSelectedPage] = useState<string>("1");
-  const [userAllData, setUserAllData] = useState<UserDataProps | null>(null);
+  const [userAllData, setUserAllData] = useState<Users[]>([]);
+  console.log(userAllData)
 
   const handleAddArticle = () => {
     setOpenAddModal(true);
@@ -53,6 +57,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
     })
       .then((res) => {
         setUserAllData(res);
+
       })
       .catch((err) => {
         console.error("Error fetching data:", err);
@@ -90,7 +95,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
           </Thead>
 
           <Tbody>
-            {userAllData?.map((users: { nickname: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined; role: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; email: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; isVerified: any; }, index: Key | null | undefined) => (
+            {userAllData?.map((users:any, index:any) => (
               <Tr key={index}>
                 <Td>
                   <Avatar name={users.nickname} src="" />
