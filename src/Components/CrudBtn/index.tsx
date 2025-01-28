@@ -5,14 +5,15 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import "./style.css";
 
-interface CrubBtnProps {
+interface CrudBtnProps {
   value: string;
   mode?: boolean;
   onClickEdit: (value: string, mode?: boolean) => void;
   onClickDelete: (value: string, mode?: boolean) => void;
+
 }
 
-const CrudBtn: React.FC<CrubBtnProps> = ({
+const CrudBtn: React.FC<CrudBtnProps> = ({
   value,
   mode,
   onClickEdit,
@@ -21,19 +22,25 @@ const CrudBtn: React.FC<CrubBtnProps> = ({
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
   return (
-    <div>
+    <div className="crud-btn">
       <div className="flex gap-2">
         <IconButton
-          aria-label="Edit btn"
-          variant={themeMode ? "outline" : ""}
+          aria-label="Edit button"
+          variant={themeMode ? "outline" : "solid"}
           icon={<AiFillEdit />}
-          onClick={() => onClickEdit(value, mode)}
+          onClick={() => {
+            console.log("Edit clicked:", value, mode);
+            onClickEdit(value, mode);
+          }}
         />
         <IconButton
-          aria-label="Edit btn"
-          variant={themeMode ? "outline" : ""}
+          aria-label="Delete button"
+          variant={themeMode ? "outline" : "solid"}
           icon={<AiFillDelete />}
-          onClick={() => onClickDelete(value, mode)}
+          onClick={() => {
+            console.log("Delete clicked:", value, mode);
+            onClickDelete(value, mode);
+          }}
         />
       </div>
     </div>

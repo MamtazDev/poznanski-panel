@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalBody,
@@ -42,14 +42,7 @@ interface Data {
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: {
-    id: string;
-    title: string;
-    feature: string;
-    date: string;
-    content: Content[];
-    link: string;
-  };
+  data?: Data;
   setData: React.Dispatch<React.SetStateAction<Data>>;
   handleOk: () => void;
   tags: {
@@ -71,16 +64,19 @@ const EditModal: React.FC<ModalProps> = ({
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [errTitle, setErrTitle] = useState<boolean>(false);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click(); // Trigger the file selection dialog
     }
   };
+  if (!data) {
+    // Return null if data is undefined to prevent rendering issues
+    return null;
+  }
 
   const handleDelete = () => {
-    // setData({ ...data, content[0].img: "" });
+    // Handle delete action if needed
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,11 +84,7 @@ const EditModal: React.FC<ModalProps> = ({
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        // setEditedData({ ...editedData, img: reader.result });
-        // setData({
-        //   ...data,
-        //   content[0].img: reader.result ? reader.result : "",
-        // });
+        // Handle image upload logic
       };
       reader.readAsDataURL(file);
     }
@@ -132,12 +124,11 @@ const EditModal: React.FC<ModalProps> = ({
       })
       .catch((err) => {
         console.log(err);
-        throw err;
       });
   };
 
   const handleDescription = (value: string) => {
-    // setData({ ...data, description: value });
+    // Update description field logic if needed
   };
 
   const handleClickOk = () => {
@@ -149,9 +140,9 @@ const EditModal: React.FC<ModalProps> = ({
   };
 
   const handleChangeDate = (payload: Object) => {
-    console.log({payload})
+    console.log({ payload });
     setData({
-      ...data,...payload
+      ...data, ...payload,
     });
   };
 
@@ -175,7 +166,7 @@ const EditModal: React.FC<ModalProps> = ({
                   errMsg="Type news title"
                   onChange={handleTitle}
                 />
-                <div className=" md:mt-6">
+                <div className="md:mt-6">
                   <Select
                     label="Add Tag"
                     data={tags}
@@ -194,8 +185,7 @@ const EditModal: React.FC<ModalProps> = ({
                 </div>
               </div>
               <div className="image-field w-2/5">
-                {data?.content[0].img === fileUrl ||
-                data?.content[0].img === "" ? (
+                {data?.content[0].img === fileUrl || data?.content[0].img === "" ? (
                   <div className="flex items-center justify-center h-full">
                     <div className="flex flex-col gap-2">
                       <div className="flex justify-center">
@@ -255,7 +245,7 @@ const EditModal: React.FC<ModalProps> = ({
                     onChange={handleChange}
                   />
                 </div>
-                <div className="flex w-full  md:mt-6">
+                <div className="flex w-full md:mt-6">
                   <Textarea
                     label="Description"
                     value={item.description}
@@ -267,7 +257,7 @@ const EditModal: React.FC<ModalProps> = ({
             <div className="md:mt-6">
               <DatePicker
                 name="date"
-                label={`Date`}
+                label="Date"
                 value={data.date}
                 onChange={handleChangeDate}
               />

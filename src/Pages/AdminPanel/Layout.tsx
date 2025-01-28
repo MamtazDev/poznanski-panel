@@ -81,7 +81,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, component }) => {
       <div className="Nav-bar">
         <div
           className={`block sm:hidden Nav-part ${!themeMode && "Nav-part-dark"} w-full`}
-        ></div>
+        >
+
+        </div>
         <div
           className={`flex justify-center Nav-bar-top w-screen z-10 ${!themeMode && "Nav-bar-top-dark"}`}
         >
