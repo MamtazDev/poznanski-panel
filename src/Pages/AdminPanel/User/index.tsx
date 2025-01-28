@@ -1,20 +1,31 @@
 import {
   Avatar,
+  Button,
   Input,
   InputGroup,
   InputRightElement,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Radio,
+  RadioGroup,
+  Stack,
   Table,
   TableContainer,
   Tbody,
   Td,
   Th,
   Thead,
-  Tr
+  Tr,
+  useDisclosure
 } from "@chakra-ui/react";
-import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
+import { useEffect, useState } from "react";
+import { AiOutlineEdit, AiOutlineSearch } from "react-icons/ai";
 import { useSelector } from "react-redux";
-import CommonButton from "../../../Components/Buttons/CommonButton";
 import { apiGetReq } from "../../../Constant/api-functions";
 import { RootState } from "../../../reducers";
 
@@ -37,7 +48,9 @@ const UserMainPage: React.FC<UserDataProps> = () => {
   const [selectedRowsNum, setSelectedRowsNum] = useState<number>(5);
   const [selectedPage, setSelectedPage] = useState<string>("1");
   const [userAllData, setUserAllData] = useState<Users[]>([]);
-  console.log(userAllData)
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
+  const [verificationStatus, setVerificationStatus] = useState<string>("");
 
   const handleAddArticle = () => {
     setOpenAddModal(true);
@@ -47,18 +60,51 @@ const UserMainPage: React.FC<UserDataProps> = () => {
     setFilterText(e.target.value);
   };
 
+  const handleEditClick = (userId: string, isVerified: boolean) => {
+    setSelectedUserId(userId);
+    setVerificationStatus(isVerified ? "Verified" : "Unverified");
+    onOpen();
+  };
+
+  const handleVerificationChange = (status: string) => {
+    setVerificationStatus(status);
+  };
+
+  const handleSaveVerification = () => {
+    // Debugging logs
+    console.log("selectedUserId:", selectedUserId);
+    console.log("verificationStatus:", verificationStatus);
+    console.log("userAllData before update:", userAllData);
+
+    setUserAllData((prevData) =>
+      prevData.map((user) =>
+        user.id === selectedUserId
+          ? { ...user, isVerified: verificationStatus === "Verified" }
+          : user
+      )
+    );
+
+    // Debugging after the update
+    console.log("userAllData after update:", userAllData);
+
+    onClose(); // Close the modal after saving
+  };
+
   useEffect(() => {
     apiGetReq("/auth/users", {
       filter: filterText,
     })
       .then((res) => {
         setUserAllData(res);
-
       })
       .catch((err) => {
         console.error("Error fetching data:", err);
       });
   }, [selectedRowsNum, selectedPage, filterText]);
+
+  useEffect(() => {
+    console.log("Updated userAllData:", userAllData);
+  }, [userAllData]);
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
@@ -76,7 +122,6 @@ const UserMainPage: React.FC<UserDataProps> = () => {
             </InputRightElement>
           </InputGroup>
         </div>
-        <CommonButton text="Add article" onClick={handleAddArticle} />
       </div>
       <TableContainer>
         <Table variant="striped" colorScheme="gray">
@@ -91,7 +136,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
           </Thead>
 
           <Tbody>
-            {userAllData?.map((users:any, index:any) => (
+            {userAllData?.map((users: any, index: any) => (
               <Tr key={index}>
                 <Td>
                   <Avatar name={users.nickname} src="" />
@@ -99,14 +144,48 @@ const UserMainPage: React.FC<UserDataProps> = () => {
                 <Td className="capitalize">{users.nickname}</Td>
                 <Td className="capitalize">{users.role}</Td>
                 <Td>{users.email}</Td>
-                <Td className="capitalize">
-                  {users.isVerified ? "Verified" : "Unverified"}
+                <Td>
+                  <div className="flex gap-2 items-center">
+                    <h2 style={{ color: users.isVerified ? "green" : "red" }}>
+                      {users.isVerified ? "Verified" : "Unverified"}
+                    </h2>
+                    <AiOutlineEdit onClick={() => handleEditClick(users.id, users.isVerified)} />
+                  </div>
                 </Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
       </TableContainer>
+
+      {/* Modal for editing verification status */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Verification Status</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <RadioGroup
+              onChange={handleVerificationChange}
+              value={verificationStatus}
+            >
+              <Stack direction="column">
+                <Radio value="Verified">Verified</Radio>
+                <Radio value="Unverified">Unverified</Radio>
+              </Stack>
+            </RadioGroup>
+          </ModalBody>
+
+          <ModalFooter className="space-x-2">
+            <Button colorScheme="blue" onClick={handleSaveVerification}>
+              Save
+            </Button>
+            <Button variant="ghost" onClick={onClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
