@@ -1,28 +1,26 @@
+import {
+  Input,
+  InputGroup,
+  InputRightElement,
+  Select
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { fileUrl } from "../../../Constant/config";
+import { AiOutlineSearch } from "react-icons/ai";
+import { useSelector } from "react-redux";
+import staticImg from '../../../assets/png/defaultimg.png';
+import CommonButton from "../../../Components/Buttons/CommonButton";
+import CrudBtn from "../../../Components/CrudBtn";
+import EditModal from "../../../Components/Modals/AticleEditModal";
+import ConfirmModal from "../../../Components/Modals/ConfirmModal";
+import PaginationBar from "../../../Components/PaginationBar";
 import {
   apiDeleteReq,
   apiGetReq,
-  apiPutReq,
   apiPostReq,
+  apiPutReq,
 } from "../../../Constant/api-functions";
-import {
-  InputGroup,
-  InputRightElement,
-  Input,
-  Image,
-  Select,
-} from "@chakra-ui/react";
-import { AiOutlineSearch } from "react-icons/ai";
-import CrudBtn from "../../../Components/CrudBtn";
-import PaginationBar from "../../../Components/PaginationBar";
-import ConfirmModal from "../../../Components/Modals/ConfirmModal";
-import EditModal from "../../../Components/Modals/AticleEditModal";
-import CommonButton from "../../../Components/Buttons/CommonButton";
-import { useSelector } from "react-redux";
 import { RootState } from "../../../reducers";
 import "../style.css";
-import staticImg from '../../../assets/png/defaultimg.png'
 
 interface News {
   id: string;
@@ -100,42 +98,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     link: "",
   });
   const handleData = (response: any) => {
-    let newsData: News[] = [];
-    const pages = Math.ceil(response.all / selectedRowsNum);
-    setPageNum(pages.toString());
-
-    response.news.forEach((item: inputNews) => {
-      const inputDate: Date = new Date(item.date);
-      const formattedDate: string = inputDate.toLocaleDateString("en-US", {
-        year: "numeric",
-        day: "numeric",
-        month: "long",
-      });
-
-      // Parse the content and tags
-      let newsContent: Content[] = item.content.map((i: Content) => ({
-        subHead: i.subHead,
-        img: fileUrl + i.img,
-        description: i.description,
-      }));
-
-      const temp: News = {
-        id: item._id,
-        title: item.title,
-        feature: item.tag ?? "",
-        tags: item.tag
-          ? item.tag.split(",").map((tag, index) => ({
-            _id: `${item._id}-${index}`,
-            name: tag.trim(),
-          }))
-          : [],
-        content: newsContent,
-        date: formattedDate,
-        link: item.link,
-      };
-      newsData.push(temp);
-    });
-    setCardData(newsData);
+    
   };
 
   useEffect(() => {

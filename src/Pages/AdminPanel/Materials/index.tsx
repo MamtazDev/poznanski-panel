@@ -92,7 +92,7 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
       filter: filterText,
     }).then((res) => {
       // handleData(res);
-      setMaterialsData(res)
+      // setMaterialsData(res)
     });
   }, [selectedPage, selectedRowsNum, filterText]);
 
