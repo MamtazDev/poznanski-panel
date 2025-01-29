@@ -1,21 +1,21 @@
-import React, { useEffect, useState, useRef } from "react";
 import {
+  Button,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalOverlay,
 } from "@chakra-ui/react";
-import { Button } from "@chakra-ui/react";
-import { fileUrl } from "../../Constant/config";
-import Input from "../TextField/Input";
-import Select from "../TextField/Select";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../reducers";
 import FolderIcon from "../../assets/png/folder_icon.png";
 import { apiPostReq } from "../../Constant/api-functions";
-import "./style.css";
+import { fileUrl } from "../../Constant/config";
+import { RootState } from "../../reducers";
 import CrudBtn from "../CrudBtn";
+import Input from "../TextField/Input";
+import Select from "../TextField/Select";
+import "./style.css";
 
 interface Tag {
   _id: string;
@@ -49,7 +49,7 @@ interface ModalProps {
     star: number;
   };
   setData: React.Dispatch<React.SetStateAction<Data>>;
-  handleOk: () => void;
+  handleOk?: () => void;
   tags: {
     _id: string;
     name: string;
@@ -94,6 +94,7 @@ const ProductEditModal: React.FC<ModalProps> = ({
       reader.readAsDataURL(file);
     }
   };
+
   const onClose = () => {
     setIsOpen(false);
   };
@@ -113,6 +114,7 @@ const ProductEditModal: React.FC<ModalProps> = ({
   const handleChangeTag = (value: string) => {
     setData({ ...data, category: value });
   };
+
   const createNewTag = (value: string) => {
     console.log(value);
     apiPostReq("/tag", { name: value })
@@ -138,12 +140,14 @@ const ProductEditModal: React.FC<ModalProps> = ({
     if (data.title === "") {
       setErrTitle(true);
     } else {
-      handleOk();
+      // handleOk();
     }
   };
 
+
   return (
-    <div>
+
+    <>
       <Modal isCentered={true} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent
@@ -168,7 +172,7 @@ const ProductEditModal: React.FC<ModalProps> = ({
                     data={tags}
                     value={data.category}
                     onChange={handleChangeTag}
-                    handleOk={createNewTag}
+                    // handleOk={createNewTag}
                   />
                 </div>
                 <div className="md:mt-6">
@@ -277,8 +281,9 @@ const ProductEditModal: React.FC<ModalProps> = ({
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </div>
-  );
+    </>
+
+);
 };
 
 export default ProductEditModal;

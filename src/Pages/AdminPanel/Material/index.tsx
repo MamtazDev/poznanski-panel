@@ -1,42 +1,47 @@
+import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { fileUrl } from "../../../Constant/config";
+import { AiOutlineSearch } from "react-icons/ai";
+import { useSelector } from "react-redux";
+import CommonButton from "../../../Components/Buttons/CommonButton";
+import EditModal from "../../../Components/Modals/ConcertModal";
+import ConfirmModal from "../../../Components/Modals/ConfirmModal";
+import ProductTable from "../../../Components/Tables/ConcertTable";
 import {
   apiDeleteReq,
   apiGetReq,
-  apiPutReq,
   apiPostReq,
+  apiPutReq,
 } from "../../../Constant/api-functions";
-import { InputGroup, InputRightElement, Input } from "@chakra-ui/react";
-import { AiOutlineSearch } from "react-icons/ai";
-import ConfirmModal from "../../../Components/Modals/ConfirmModal";
-import { useSelector } from "react-redux";
+import { fileUrl } from "../../../Constant/config";
 import { RootState } from "../../../reducers";
-import ProductTable from "../../../Components/Tables/ProductTable";
-import EditModal from "../../../Components/Modals/ProductEditModal";
-import CommonButton from "../../../Components/Buttons/CommonButton";
 import "../style.css";
 
 interface Product {
   id: string;
-  title: string;
+  name: string;
   img: string;
   category: string;
-  date: string;
+  timeframe: {
+    start: string;
+    end: string;
+  };
   link: string;
   location: string;
-  artist: string;
-  star: number;
+  description: string;
 }
+
 interface inputProducts {
   _id: string;
-  title: string;
+  name: string;
   img: string;
   category: string;
-  date: string | Date;
+  timeframe: {
+    start: string | Date;
+    end: string | Date;
+  };
   link: string;
   location: string;
-  artist: string;
-  star: number;
+  description: string;
 }
 
 interface Tag {
@@ -44,7 +49,7 @@ interface Tag {
   name: string;
 }
 
-interface ProductContentProps {
+interface ConcertProps {
   path: string;
   tagData: {
     _id: string;
@@ -52,18 +57,20 @@ interface ProductContentProps {
   }[];
 }
 
-const ProductContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
+const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
   const [cardData, setCardData] = useState<Product[]>([]);
   const [modalData, setModalData] = useState<Product>({
     id: "",
-    title: "",
+    name: "",
     img: "",
     category: "",
-    date: "",
+    timeframe: {
+      start: "",
+      end: "",
+    },
     link: "",
     location: "",
-    artist: "",
-    star: 0,
+    description: "",
   });
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [selectedPage, setSelectedPage] = useState<string>("1");
@@ -71,39 +78,43 @@ const ProductContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
   const [filterText, setFilterText] = useState<string>("");
   const [pageNum, setPageNum] = useState<string>("1");
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
+  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [tags, setTags] = React.useState<Tag[]>([]);
-
-  useEffect(() => {
-    setTags(tagData);
-  }, [tagData]);
 
   const handleData = (response: any) => {
     let newProducts: Product[] = [];
     const pages = Math.ceil(response.all / selectedRowsNum);
     setPageNum(pages.toString());
     response.products.map((item: inputProducts) => {
-      const inputDate: Date = new Date(item.date);
+      const inputStartDate: Date = new Date(item.timeframe.start);
+      const inputEndDate: Date = new Date(item.timeframe.end);
       const options: object = {
-        year: "numeric",
         day: "numeric",
         month: "long",
+        hour: "numeric",
+        minute: "2-digit",
       };
-      const formattedDate: string = inputDate.toLocaleDateString(
+      const formattedStartDateTime = new Intl.DateTimeFormat(
         "en-US",
         options
-      );
+      ).format(inputStartDate);
+      const formattedEndDateTime = new Intl.DateTimeFormat(
+        "en-US",
+        options
+      ).format(inputEndDate);
       const temp: Product = {
         id: item._id,
-        title: item.title,
+        name: item.name,
         img: fileUrl + item.img,
         category: item.category,
-        date: formattedDate,
+        timeframe: {
+          start: formattedStartDateTime,
+          end: formattedEndDateTime,
+        },
         link: item.link,
         location: item.location,
-        artist: item.artist,
-        star: item.star,
+        description: item.description,
       };
       newProducts.push(temp);
     });
@@ -111,7 +122,11 @@ const ProductContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
   };
 
   useEffect(() => {
-    apiGetReq(`/product${path !== "" ? `/${path}` : ""}/`, {
+    setTags(tagData);
+  }, [tagData]);
+
+  useEffect(() => {
+    apiGetReq(`/concert`, {
       rowsPerPage: selectedRowsNum,
       curPage: selectedPage,
       filter: filterText,
@@ -121,7 +136,7 @@ const ProductContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
   }, []);
 
   useEffect(() => {
-    apiGetReq(`/product${path !== "" ? `/${path}` : ""}/`, {
+    apiGetReq(`/concert`, {
       rowsPerPage: selectedRowsNum,
       curPage: selectedPage,
       filter: filterText,
@@ -138,6 +153,23 @@ const ProductContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
     setFilterText(e.target.value);
   };
 
+  const handleAddConcert = () => {
+    setModalData({
+      id: "",
+      name: "",
+      img: "",
+      category: "",
+      timeframe: {
+        start: "",
+        end: "",
+      },
+      link: "",
+      location: "",
+      description: "",
+    });
+    setOpenAddModal(true);
+  };
+
   const handleEdit = (id: string) => {
     console.log("edit:", id);
     setModalData(cardData.filter((item) => item.id === id)[0]);
@@ -151,33 +183,40 @@ const ProductContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
 
   const handleEditData = () => {
     console.log(modalData);
-    apiPutReq("/product", modalData).then((res) => {
-      console.log(res);
-
-      const inputDate: Date = new Date(res.data.date);
+    apiPutReq("/concert", modalData).then((res) => {
+      const inputStartDate: Date = new Date(res.data.timeframe.start);
+      const inputEndDate: Date = new Date(res.data.timeframe.end);
       const options: object = {
-        year: "numeric",
         day: "numeric",
         month: "long",
+        hour: "numeric",
+        minute: "2-digit",
       };
-      const formattedDate: string = inputDate.toLocaleDateString(
+      const formattedStartDateTime = new Intl.DateTimeFormat(
         "en-US",
         options
-      );
+      ).format(inputStartDate);
+      const formattedEndDateTime = new Intl.DateTimeFormat(
+        "en-US",
+        options
+      ).format(inputEndDate);
+
       if (res.success) {
         setCardData((prevState) =>
           prevState.map((item) =>
             item.id === res.data._id
               ? {
                   ...item,
-                  title: res.data.title,
+                  name: res.data.name,
                   category: res.data.category,
-                  date: formattedDate,
+                  timeframe: {
+                    start: formattedStartDateTime,
+                    end: formattedEndDateTime,
+                  },
                   img: modalData.img,
                   link: res.data.link,
                   location: res.data.location,
-                  artist: res.data.artist,
-                  star: res.data.star,
+                  description: res.data.description,
                 }
               : item
           )
@@ -189,32 +228,40 @@ const ProductContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
   };
 
   const handleAddData = () => {
-    apiPostReq("/product", modalData).then((res) => {
-      console.log(res);
-
-      const inputDate: Date = new Date(res.data.date);
+    apiPostReq("/concert", modalData).then((res) => {
+      console.log(res.data);
+      const inputStartDate: Date = new Date(res.data.timeframe.start);
+      const inputEndDate: Date = new Date(res.data.timeframe.end);
       const options: object = {
-        year: "numeric",
         day: "numeric",
         month: "long",
+        hour: "numeric",
+        minute: "2-digit",
       };
-      const formattedDate: string = inputDate.toLocaleDateString(
+      const formattedStartDateTime = new Intl.DateTimeFormat(
         "en-US",
         options
-      );
+      ).format(inputStartDate);
+      const formattedEndDateTime = new Intl.DateTimeFormat(
+        "en-US",
+        options
+      ).format(inputEndDate);
+
       if (res.success) {
         setCardData((prevState) => [
           ...prevState,
           {
             id: res.data._id,
-            title: res.data.title,
+            name: res.data.name,
             category: res.data.category,
-            date: formattedDate,
+            timeframe: {
+              start: formattedStartDateTime,
+              end: formattedEndDateTime,
+            },
             img: modalData.img,
             link: res.data.link,
             location: res.data.location,
-            artist: res.data.artist,
-            star: res.data.star,
+            description: res.data.description,
           },
         ]);
       }
@@ -224,7 +271,7 @@ const ProductContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
 
   const handleDeleteData = () => {
     console.log("deleting:", modalData);
-    apiDeleteReq("/product", { id: modalData.id }).then((res) => {
+    apiDeleteReq("/concert", { id: modalData.id }).then((res) => {
       if (res.success) {
         if (res.deleted) {
           setCardData((prevState) =>
@@ -240,21 +287,6 @@ const ProductContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
     setOpenDeleteModal(false);
   };
 
-  const handleAdd = () => {
-    setModalData({
-      id: "",
-      title: "",
-      img: "",
-      category: "",
-      date: "",
-      link: "",
-      location: "",
-      artist: "",
-      star: 0,
-    });
-    setOpenAddModal(true);
-  };
-
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex justify-between">
@@ -265,14 +297,16 @@ const ProductContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
               placeholder="Search..."
               backgroundColor="white"
               onChange={handleChangeFilterText}
+              onBlur={handleChangeFilterText}
             />
             <InputRightElement pointerEvents="none">
               <AiOutlineSearch />
             </InputRightElement>
           </InputGroup>
         </div>
-        <CommonButton text="Add New" onClick={handleAdd} />
+        <CommonButton text="Add article" onClick={handleAddConcert} />
       </div>
+
       <ProductTable
         themeMode={themeMode}
         cardData={cardData}
@@ -288,7 +322,7 @@ const ProductContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
         isOpen={openDeleteModal}
         setIsOpen={setOpenDeleteModal}
         handleOk={handleDeleteData}
-        text="Are you sure you want to delete this?"
+        text="Are you sure you want to delete this Concert?"
       />
       <EditModal
         isOpen={openEditModal}
@@ -312,4 +346,4 @@ const ProductContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
   );
 };
 
-export default ProductContent;
+export default MaterialContent;

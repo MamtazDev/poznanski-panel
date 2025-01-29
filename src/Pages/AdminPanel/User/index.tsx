@@ -11,7 +11,7 @@ import {
   Thead,
   Tr
 } from "@chakra-ui/react";
-import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import CommonButton from "../../../Components/Buttons/CommonButton";
@@ -53,7 +53,6 @@ const UserMainPage: React.FC<UserDataProps> = () => {
     })
       .then((res) => {
         setUserAllData(res);
-
       })
       .catch((err) => {
         console.error("Error fetching data:", err);

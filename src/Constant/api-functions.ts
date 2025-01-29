@@ -8,10 +8,24 @@ const axiosAPI = axios.create({
   },
 });
 
-export async function apiPostReq(path: string, body: object): Promise<any> {
+const axiosAPIFormData = axios.create({
+  baseURL: apiBaseUrl,
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
+
+export async function apiPostReq(path: string, body: object, formData: boolean = false ): Promise<any> {
   try {
-    const response = await axiosAPI.post(path, body);
-    return response.data;
+    if(formData){
+      const response = await axiosAPIFormData.post(path, body);
+      return response.data;
+
+    }else{
+      const response = await axiosAPI.post(path, body);
+      return response.data;
+
+    }
   } catch (error) {
     console.error("Error in POST request:", error);
     throw error;

@@ -1,19 +1,19 @@
+import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { fileUrl } from "../../../Constant/config";
-import {
-  apiDeleteReq,
-  apiGetReq,
-  apiPutReq,
-  apiPostReq,
-} from "../../../Constant/api-functions";
-import { InputGroup, InputRightElement, Input } from "@chakra-ui/react";
 import { AiOutlineSearch } from "react-icons/ai";
-import ConfirmModal from "../../../Components/Modals/ConfirmModal";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../reducers";
-import ProductTable from "../../../Components/Tables/ProductTable";
-import EditModal from "../../../Components/Modals/ProductEditModal";
 import CommonButton from "../../../Components/Buttons/CommonButton";
+import ConfirmModal from "../../../Components/Modals/ConfirmModal";
+import EditModal from "../../../Components/Modals/ProductEditModal";
+import ProductTable from "../../../Components/Tables/RadioTv";
+import {
+    apiDeleteReq,
+    apiGetReq,
+    apiPostReq,
+    apiPutReq,
+} from "../../../Constant/api-functions";
+import { fileUrl } from "../../../Constant/config";
+import { RootState } from "../../../reducers";
 import "../style.css";
 
 interface Product {
@@ -27,6 +27,7 @@ interface Product {
   artist: string;
   star: number;
 }
+
 interface inputProducts {
   _id: string;
   title: string;
@@ -52,7 +53,7 @@ interface ProductContentProps {
   }[];
 }
 
-const ProductContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
+const RadioContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
   const [cardData, setCardData] = useState<Product[]>([]);
   const [modalData, setModalData] = useState<Product>({
     id: "",
@@ -312,4 +313,4 @@ const ProductContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
   );
 };
 
-export default ProductContent;
+export default RadioContent;
