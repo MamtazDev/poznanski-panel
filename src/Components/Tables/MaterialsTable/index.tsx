@@ -69,6 +69,7 @@ const MaterialsTable: React.FC<TableProps> = (props) => {
                       <iframe
                         className="absolute top-0 left-0 w-full h-full"
                         src={item.youTube}
+                        // src={item.youTube}
                         title={item.title}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
