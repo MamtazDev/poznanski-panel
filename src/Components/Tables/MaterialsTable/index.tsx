@@ -1,9 +1,10 @@
-import { Select } from "@chakra-ui/react";
+import { border, Select } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { apiGetReq } from "../../../Constant/api-functions";
 import CrudBtn from "../../CrudBtn";
 import PaginationBar from "../../PaginationBar";
 import "./style.css";
+import { table } from "console";
 
 interface TableProps {
   themeMode: boolean;
@@ -49,7 +50,7 @@ const MaterialsTable: React.FC<TableProps> = (props) => {
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
         <table className="w-full table-fixed">
           <thead
-            className={`text-xs uppercase ${props.themeMode ? "text-gray-700 bg-gray-400" : "bg-gray-700 text-gray-400"}`}
+            className={`text - xs uppercase ${props.themeMode ? "text-gray-700 bg-gray-400" : "bg-gray-700 text-gray-400"}`}
           >
             <tr>
               <th className="px-6 py-3" >Youtube </th>
@@ -65,18 +66,25 @@ const MaterialsTable: React.FC<TableProps> = (props) => {
               materials.map((item, idx) => (
                 <tr
                   key={idx}
-                  className={`border-b ${!props.themeMode ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white text-gray-900"}`}
+                  className={`border - b ${!props.themeMode ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white text-gray-900"}`}
                 >
 
                   <td className="w-30 h-24">
                     <div className="relative w-full h-full">
                       <iframe
-                        className="absolute top-0 left-0 w-full h-full"
-                        src={item.youTube}
+                        src={
+                          item.youTube.includes('youtube.com/watch')
+                            ? `https://www.youtube.com/embed/${item.youTube.split('v=')[1]}`
+                            : item.youTube || "https://www.youtube.com/embed/6JYIGclVQdw"
+                        }
                         title={item.title}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      ></iframe>
+                        frameBorder="0"
+                        width="300"
+                        height="150"
+                      >
+
+                      </iframe>
                     </div>
                   </td>
                   <td className="w-20">{item.description}</td>
@@ -115,8 +123,8 @@ const MaterialsTable: React.FC<TableProps> = (props) => {
               </tr>
             )}
           </tbody>
-        </table>
-      </div>
+        </table >
+      </div >
       <div className="flex mt-3 justify-end gap-2">
         <div
           className={`flex items-center gap-2 ${props.themeMode ? " text-gray-700" : "text-gray-100"}`}
@@ -164,8 +172,8 @@ const MaterialsTable: React.FC<TableProps> = (props) => {
           setSelectedPage={props.setSelectedPage}
           pages={props.pageNum}
         />
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 

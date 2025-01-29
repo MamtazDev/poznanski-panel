@@ -4,7 +4,8 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import CommonButton from "../../../Components/Buttons/CommonButton";
 import ConfirmModal from "../../../Components/Modals/ConfirmModal";
-import MaterialsEditModal from "../../../Components/Modals/MaterialsEditModal";
+
+import MaterialsAddModal from "../../../Components/Modals/MaterialsAddModal";
 import MaterialsTable from "../../../Components/Tables/MaterialsTable";
 import {
   apiDeleteReq,
@@ -14,9 +15,17 @@ import {
 } from "../../../Constant/api-functions";
 import { RootState } from "../../../reducers";
 import "../style.css";
+import MaterialsEditModal from "../../../Components/Modals/MaterialsEditModal";
 
 interface Product {
   id: string;
+  date: string;
+  title: string;
+  tags: string;
+  description: string;
+  youTube: string;
+}
+interface materialModal {
   date: string;
   title: string;
   tags: string;
@@ -76,6 +85,14 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
     youTube: "",
     tags: "",
   });
+
+  const [addModalData, setAddModalData] = useState<materialModal>({
+    title: "",
+    description: "",
+    date: "",
+    youTube: "",
+    tags: "",
+  });
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [selectedPage, setSelectedPage] = useState<string>("1");
   const [selectedRowsNum, setSelectedRowsNum] = useState<number>(5);
@@ -85,7 +102,6 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [tags, setTags] = React.useState<Tag[]>([]);
-
 
   useEffect(() => {
     setTags(tagData);
@@ -238,6 +254,9 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
     setOpenDeleteModal(false);
   };
 
+  // add material data from modal  and set the data a state and show the data in console
+
+
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex justify-between">
@@ -284,12 +303,12 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
         tags={tags}
         setTags={setTags}
       />
-      <MaterialsEditModal
+      <MaterialsAddModal
         isOpen={openAddModal}
         setIsOpen={setOpenAddModal}
         handleOk={handleAddData}
-        data={modalData}
-        setData={setModalData}
+        data={addModalData}
+        setData={setAddModalData}
         tags={tags}
         setTags={setTags}
       />
