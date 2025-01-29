@@ -1,20 +1,19 @@
-import React, { Suspense, lazy, useEffect, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { apiGetReq } from "../Constant/api-functions";
 import { Spinner } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
-import { RootState } from "../reducers";
-import { closePlayer } from "../reducers/PlayerReducer";
+import React, { Suspense, lazy, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Modal from "../Components/Modals";
 import ScrollToTopOnPageChange from "../Components/ScrollToTop";
 import YoutubePlayer from "../Components/YoutubePlayer";
-import Modal from "../Components/Modals";
-import { useDispatch } from "react-redux";
+import { apiGetReq } from "../Constant/api-functions";
 import UserMainPage from "../Pages/AdminPanel/User";
+import { RootState } from "../reducers";
+import { closePlayer } from "../reducers/PlayerReducer";
 // import UserMainPage from "../Pages/AdminPanel/User";
 
 const AdminPanel = lazy(() => import("../Pages/AdminPanel"));
 const Article = lazy(() => import("../Pages/AdminPanel/Article"));
-const ProductContent = lazy(() => import("../Pages/AdminPanel/Product"));
+const MaterialContent = lazy(() => import("../Pages/AdminPanel/Materials"));
 const Concert = lazy(() => import("../Pages/AdminPanel/Concert"));
 const Artist = lazy(() => import("../Pages/AdminPanel/Artist"));
 const PartnerLogos = lazy(() => import("../Pages/AdminPanel/Logos"));
@@ -82,7 +81,7 @@ const AppMain: React.FC = () => {
               path="material"
               element={
                 <AdminPanel
-                  component={<ProductContent path="" tagData={tags} />}
+                  component={<MaterialContent tagData={tags} />}
                 />
               }
             />
