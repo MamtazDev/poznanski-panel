@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import CommonButton from "../../../Components/Buttons/CommonButton";
-import EditModal from "../../../Components/Modals/ConcertModal";
 import ConfirmModal from "../../../Components/Modals/ConfirmModal";
+import MaterialsEditModal from "../../../Components/Modals/MaterialsEditModal";
 import MaterialsTable from "../../../Components/Tables/MaterialsTable";
 import {
   apiDeleteReq,
@@ -17,16 +17,11 @@ import "../style.css";
 
 interface Product {
   id: string;
-  name: string;
-  img: string;
-  category: string;
-  timeframe: {
-    start: string;
-    end: string;
-  };
-  link: string;
-  location: string;
+  date: string;
+  title: string;
+  tags: string;
   description: string;
+  youTube: string;
 }
 
 interface inputProducts {
@@ -54,21 +49,32 @@ interface ConcertProps {
     name: string;
   }[];
 }
+export const getFirstTag = (tags: string) => {
+  return tags.split("#")[0];
+};
 
 const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
   const [cardData, setCardData] = useState<Product[]>([]);
+  // const [modalData, setModalData] = useState<Product>({
+  //   id: "",
+  //   name: "",
+  //   img: "",
+  //   category: "",
+  //   timeframe: {
+  //     start: "",
+  //     end: "",
+  //   },
+  //   link: "",
+  //   location: "",
+  //   description: "",
+  // });
   const [modalData, setModalData] = useState<Product>({
     id: "",
-    name: "",
-    img: "",
-    category: "",
-    timeframe: {
-      start: "",
-      end: "",
-    },
-    link: "",
-    location: "",
+    title: "",
     description: "",
+    date: "",
+    youTube: "",
+    tags: "",
   });
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [selectedPage, setSelectedPage] = useState<string>("1");
@@ -107,16 +113,15 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
   const handleAddConcert = () => {
     setModalData({
       id: "",
-      name: "",
-      img: "",
-      category: "",
-      timeframe: {
-        start: "",
-        end: "",
-      },
-      link: "",
-      location: "",
+      title: "",
+      tags: "",
+      date: "",
+      // timeframe: {
+      //   start: "",
+      //   end: "",
+      // },
       description: "",
+      youTube: "",
     });
     setOpenAddModal(true);
   };
@@ -164,7 +169,7 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
                   start: formattedStartDateTime,
                   end: formattedEndDateTime,
                 },
-                img: modalData.img,
+                // img: modalData.img,
                 link: res.data.link,
                 location: res.data.location,
                 description: res.data.description,
@@ -203,16 +208,11 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
           ...prevState,
           {
             id: res.data._id,
-            name: res.data.name,
-            category: res.data.category,
-            timeframe: {
-              start: formattedStartDateTime,
-              end: formattedEndDateTime,
-            },
-            img: modalData.img,
-            link: res.data.link,
-            location: res.data.location,
+            title: res.data.title,
+            tags: res.data.tags,
             description: res.data.description,
+            youTube: res.data.youTube,
+            date: res.data.date,
           },
         ]);
       }
@@ -275,7 +275,7 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
         handleOk={handleDeleteData}
         text="Are you sure you want to delete this Concert?"
       />
-      <EditModal
+      <MaterialsEditModal
         isOpen={openEditModal}
         setIsOpen={setOpenEditModal}
         handleOk={handleEditData}
@@ -284,7 +284,7 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
         tags={tags}
         setTags={setTags}
       />
-      <EditModal
+      <MaterialsEditModal
         isOpen={openAddModal}
         setIsOpen={setOpenAddModal}
         handleOk={handleAddData}

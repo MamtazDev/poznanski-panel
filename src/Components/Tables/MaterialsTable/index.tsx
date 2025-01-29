@@ -9,16 +9,20 @@ interface TableProps {
   themeMode: boolean;
   cardData: {
     id: string;
-    name: string;
-    img: string;
-    category: string;
-    timeframe: {
-      start: string;
-      end: string;
-    };
-    link: string;
-    location: string;
+    // name: string;
+    // img: string;
+    // category: string;
+    // timeframe: {
+    //   start: string;
+    //   end: string;
+    // };
+    // link: string;
+    // location: string;
+    date: string;
+    title: string;
+    tags: string;
     description: string;
+    youTube: string;
   }[];
   handleEdit: (id: string) => void;
   handleDelete: (id: string) => void;
