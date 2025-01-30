@@ -85,7 +85,7 @@ const AppMain: React.FC = () => {
             />
             <Route
               path="concerts"
-              element={<AdminPanel component={<Concert tagData={tags} />} />}
+              element={<AdminPanel component={<Concert />} />}
             />
             <Route
               path="artists"

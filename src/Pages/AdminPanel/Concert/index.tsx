@@ -1,347 +1,559 @@
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Select,
+  Textarea,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { fileUrl } from "../../../Constant/config";
 import {
   apiDeleteReq,
   apiGetReq,
-  apiPutReq,
   apiPostReq,
+  apiPutReq,
 } from "../../../Constant/api-functions";
-import { InputGroup, InputRightElement, Input } from "@chakra-ui/react";
-import { AiOutlineSearch } from "react-icons/ai";
-import ConfirmModal from "../../../Components/Modals/ConfirmModal";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../reducers";
-import ProductTable from "../../../Components/Tables/ConcertTable";
-import EditModal from "../../../Components/Modals/ConcertModal";
-import CommonButton from "../../../Components/Buttons/CommonButton";
-import "../style.css";
+import FolderImage from "../../../assets/png/folder_icon.png";
 
-interface Product {
-  id: string;
-  name: string;
-  img: string;
-  category: string;
-  timeframe: {
-    start: string;
-    end: string;
-  };
-  link: string;
-  location: string;
-  description: string;
-}
-interface inputProducts {
-  _id: string;
-  name: string;
-  img: string;
-  category: string;
-  timeframe: {
-    start: string | Date;
-    end: string | Date;
-  };
-  link: string;
-  location: string;
-  description: string;
-}
-
-interface Tag {
-  _id: string;
-  name: string;
-}
-
-interface ConcertProps {
-  tagData: {
-    _id: string;
-    name: string;
+interface TableProps {
+  themeMode?: boolean;
+  cardData?: {
+    id: string;
+    title: string;
+    img: string;
+    category: string;
+    date: string;
+    link: string;
+    location: string;
+    artist: string;
+    star: number;
   }[];
+  handleEdit?: (id: string) => void;
+  handleDelete?: (id: string) => void;
+  handleChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  selectedPage?: string;
+  setSelectedPage?: React.Dispatch<React.SetStateAction<string>>;
+  pageNum?: string;
 }
 
-const ProductContent: React.FC<ConcertProps> = ({ tagData }) => {
-  const [cardData, setCardData] = useState<Product[]>([]);
-  const [modalData, setModalData] = useState<Product>({
-    id: "",
+const ConcertContent: React.FC<TableProps> = (props) => {
+  const [radioData, setRadioData] = useState<any[]>([]);
+  const [editData, setEditData] = useState<any | null>(null);
+  const [themeMode, setThemeMode] = useState<boolean>(true);
+  const [newData, setNewData] = useState<any>({
+    timeframe: { start: "", end: "" },
     name: "",
     img: "",
-    category: "",
-    timeframe: {
-      start: "",
-      end: "",
-    },
-    link: "",
-    location: "",
     description: "",
+    link: "",
   });
-  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-  const [selectedPage, setSelectedPage] = useState<string>("1");
-  const [selectedRowsNum, setSelectedRowsNum] = useState<number>(5);
-  const [filterText, setFilterText] = useState<string>("");
-  const [pageNum, setPageNum] = useState<string>("1");
-  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const [openAddModal, setOpenAddModal] = useState<boolean>(false);
-  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-  const [tags, setTags] = React.useState<Tag[]>([]);
+  console.log(newData, " new data");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isNewOpen,
+    onOpen: onNewOpen,
+    onClose: onNewClose,
+  } = useDisclosure();
 
-  const handleData = (response: any) => {
-    let newProducts: Product[] = [];
-    const pages = Math.ceil(response.all / selectedRowsNum);
-    setPageNum(pages.toString());
-    response.products.map((item: inputProducts) => {
-      const inputStartDate: Date = new Date(item.timeframe.start);
-      const inputEndDate: Date = new Date(item.timeframe.end);
-      const options: object = {
-        day: "numeric",
-        month: "long",
-        hour: "numeric",
-        minute: "2-digit",
-      };
-      const formattedStartDateTime = new Intl.DateTimeFormat(
-        "en-US",
-        options
-      ).format(inputStartDate);
-      const formattedEndDateTime = new Intl.DateTimeFormat(
-        "en-US",
-        options
-      ).format(inputEndDate);
-      const temp: Product = {
-        id: item._id,
-        name: item.name,
-        img: fileUrl + item.img,
-        category: item.category,
-        timeframe: {
-          start: formattedStartDateTime,
-          end: formattedEndDateTime,
-        },
-        link: item.link,
-        location: item.location,
-        description: item.description,
-      };
-      newProducts.push(temp);
-    });
-    setCardData(newProducts);
-  };
+  const toast = useToast();
 
+  // Fetch data
   useEffect(() => {
-    setTags(tagData);
-  }, [tagData]);
-
-  useEffect(() => {
-    apiGetReq(`/concert`, {
-      rowsPerPage: selectedRowsNum,
-      curPage: selectedPage,
-      filter: filterText,
-    }).then((res) => {
-      handleData(res);
+    apiGetReq("/concert", {}).then((res) => {
+      setRadioData(res.products);
     });
   }, []);
 
-  useEffect(() => {
-    apiGetReq(`/concert`, {
-      rowsPerPage: selectedRowsNum,
-      curPage: selectedPage,
-      filter: filterText,
-    }).then((res) => {
-      handleData(res);
-    });
-  }, [selectedPage, selectedRowsNum, filterText]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedRowsNum(parseInt(e.target.value));
-  };
-
-  const handleChangeFilterText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterText(e.target.value);
-  };
-
-  const handleAddConcert = () => {
-    setModalData({
-      id: "",
-      name: "",
-      img: "",
-      category: "",
-      timeframe: {
-        start: "",
-        end: "",
-      },
-      link: "",
-      location: "",
-      description: "",
-    });
-    setOpenAddModal(true);
-  };
-
+  // Edit item
   const handleEdit = (id: string) => {
-    console.log("edit:", id);
-    setModalData(cardData.filter((item) => item.id === id)[0]);
-    setOpenEditModal(true);
+    const selectedItem = radioData.find((item) => item._id === id);
+    if (selectedItem) {
+      setEditData({ ...selectedItem });
+      onOpen();
+    }
   };
 
-  const handleDelete = (id: string) => {
-    setModalData(cardData.filter((item) => item.id === id)[0]);
-    setOpenDeleteModal(true);
+  const handleDelete = async (id: string) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this item?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      const res = await apiDeleteReq(`/concert/${id}`, {});
+      if (res.message) {
+        toast({
+          title: "Deleted successfully!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setRadioData((prev) => prev.filter((item) => item._id !== id));
+      } else {
+        toast({
+          title: "Failed to delete",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting:", error);
+      toast({
+        title: "Error deleting item",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
-  const handleEditData = () => {
-    console.log(modalData);
-    apiPutReq("/concert", modalData).then((res) => {
-      const inputStartDate: Date = new Date(res.data.timeframe.start);
-      const inputEndDate: Date = new Date(res.data.timeframe.end);
-      const options: object = {
-        day: "numeric",
-        month: "long",
-        hour: "numeric",
-        minute: "2-digit",
-      };
-      const formattedStartDateTime = new Intl.DateTimeFormat(
-        "en-US",
-        options
-      ).format(inputStartDate);
-      const formattedEndDateTime = new Intl.DateTimeFormat(
-        "en-US",
-        options
-      ).format(inputEndDate);
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+    field: string,
+    subField?: string
+  ) => {
+    const { value } = e.target;
 
-      if (res.success) {
-        setCardData((prevState) =>
-          prevState.map((item) =>
-            item.id === res.data._id
-              ? {
-                  ...item,
-                  name: res.data.name,
-                  category: res.data.category,
-                  timeframe: {
-                    start: formattedStartDateTime,
-                    end: formattedEndDateTime,
-                  },
-                  img: modalData.img,
-                  link: res.data.link,
-                  location: res.data.location,
-                  description: res.data.description,
-                }
-              : item
+    setEditData((prev: any) => {
+      if (!prev) return prev;
+      if (subField) {
+        return {
+          ...prev,
+          [field]: {
+            ...prev[field],
+            [subField]: value,
+          },
+        };
+      }
+      return { ...prev, [field]: value };
+    });
+  };
+
+  const handleNewInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+    field: string,
+    subField?: string
+  ) => {
+    const { value } = e.target;
+
+    setNewData((prev: any) => {
+      if (!prev) return prev;
+
+      if (subField) {
+        return {
+          ...prev,
+          [field]: {
+            ...prev[field],
+            [subField]: value,
+          },
+        };
+      }
+
+      return { ...prev, [field]: value };
+    });
+  };
+
+  const uploadImage = async (file: File) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    try {
+      const res = await apiPostReq("/upload", formData, true);
+      return res?.fileUrl || "";
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      return "";
+    }
+  };
+
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const uploadedImageUrl = await uploadImage(file);
+      if (uploadedImageUrl) {
+        setEditData((prevData: any) => ({
+          ...prevData,
+          img: uploadedImageUrl,
+        }));
+      }
+    }
+  };
+
+  const handleNewImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const uploadedImageUrl = await uploadImage(file);
+      if (uploadedImageUrl) {
+        setNewData((prevData: any) => ({
+          ...prevData,
+          img: uploadedImageUrl,
+        }));
+      }
+    }
+  };
+
+  const handleSave = async () => {
+    if (!editData || !editData._id) return;
+    const updatedData = {
+      timeframe: editData.timeframe,
+      name: editData.name,
+      img: editData.img,
+      description: editData.description,
+      location: editData.location,
+      link: editData.link,
+    };
+
+    try {
+      const res = await apiPutReq(`/concert/${editData._id}`, updatedData);
+      if (res) {
+        setRadioData((prev) =>
+          prev.map((item) =>
+            item._id === editData._id ? { ...item, ...res.data } : item
           )
         );
-      }
-    });
-    console.log(cardData);
-    setOpenEditModal(false);
-  };
 
-  const handleAddData = () => {
-    apiPostReq("/concert", modalData).then((res) => {
-      console.log(res.data);
-      const inputStartDate: Date = new Date(res.data.timeframe.start);
-      const inputEndDate: Date = new Date(res.data.timeframe.end);
-      const options: object = {
-        day: "numeric",
-        month: "long",
-        hour: "numeric",
-        minute: "2-digit",
-      };
-      const formattedStartDateTime = new Intl.DateTimeFormat(
-        "en-US",
-        options
-      ).format(inputStartDate);
-      const formattedEndDateTime = new Intl.DateTimeFormat(
-        "en-US",
-        options
-      ).format(inputEndDate);
+        toast({
+          title: "Concert updated successfully!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
 
-      if (res.success) {
-        setCardData((prevState) => [
-          ...prevState,
-          {
-            id: res.data._id,
-            name: res.data.name,
-            category: res.data.category,
-            timeframe: {
-              start: formattedStartDateTime,
-              end: formattedEndDateTime,
-            },
-            img: modalData.img,
-            link: res.data.link,
-            location: res.data.location,
-            description: res.data.description,
-          },
-        ]);
-      }
-    });
-    setOpenAddModal(false);
-  };
-
-  const handleDeleteData = () => {
-    console.log("deleting:", modalData);
-    apiDeleteReq("/concert", { id: modalData.id }).then((res) => {
-      if (res.success) {
-        if (res.deleted) {
-          setCardData((prevState) =>
-            prevState.filter((item) => item.id !== modalData.id)
-          );
-        } else {
-          console.log("No match that news!");
-        }
+        setEditData(null);
+        onClose();
       } else {
-        console.log("server error!");
+        toast({
+          title: "Failed to update concert",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       }
+    } catch (error) {
+      console.error("Error updating concert:", error);
+
+      toast({
+        title: "Error updating concert",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleNewPost = () => {
+    setNewData({
+      timeframe: { start: "", end: "" },
+      name: "",
+      img: "",
+      description: "",
+      link: "",
     });
-    setOpenDeleteModal(false);
+    onNewOpen();
+  };
+
+  const handleCreatePost = async () => {
+    try {
+      const res = await apiPostReq("/concert", newData);
+      if (res.success) {
+        setRadioData((prev) => [...prev, res.data]);
+        onNewClose();
+      }
+    } catch (error) {
+      console.error("Error creating new concert item:", error);
+    }
   };
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
-      <div className="flex justify-between">
-        <div className="mb-4" style={{ width: "300px" }}>
-          <InputGroup>
-            <Input
-              type="text"
-              placeholder="Search..."
-              backgroundColor="white"
-              onChange={handleChangeFilterText}
-              onBlur={handleChangeFilterText}
-            />
-            <InputRightElement pointerEvents="none">
-              <AiOutlineSearch />
-            </InputRightElement>
-          </InputGroup>
-        </div>
-        <CommonButton text="Add article" onClick={handleAddConcert} />
+      <Button colorScheme="green" onClick={handleNewPost}>
+        Add New Item
+      </Button>
+
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+        <table className="w-full h-full" style={{ minWidth: "400px" }}>
+          <thead
+            className={`text-xs uppercase ${
+              themeMode
+                ? "text-gray-700 bg-gray-400"
+                : "bg-gray-700 text-gray-400"
+            }`}>
+            <tr>
+              <th className="px-6 py-3">Image</th>
+              <th className="px-6 py-3">Title</th>
+              <th className="px-6 py-3">Category</th>
+              <th className="px-6 py-3">Location</th>
+              <th className="px-6 py-3">Link</th>
+              <th className="px-6 py-3">Description</th>
+              <th className="px-6 py-3">Start</th>
+              <th className="px-6 py-3">End</th>
+              <th className="px-6 py-3">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {radioData.length ? (
+              radioData.map((item, index) => (
+                <tr
+                  key={index}
+                  className={
+                    themeMode
+                      ? "bg-white text-gray-900"
+                      : "bg-gray-800 text-gray-200"
+                  }>
+                  <td className="text-center">
+                    <img src={item.img || FolderImage} alt={item.name} />
+                  </td>
+                  <td>{item.name}</td>
+                  <td>{item.category}</td>
+                  <td>{item.location}</td>
+                  <td>
+                    <a
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 underline">
+                      View
+                    </a>
+                  </td>
+                  <td className="table-description">{item.description}</td>
+                  <td>{item.timeframe.start}</td>
+                  <td>{item.timeframe.end}</td>
+                  <td className="text-center">
+                    <Button onClick={() => handleEdit(item._id)}>Edit</Button>
+                    <Button onClick={() => handleDelete(item._id)}>
+                      Delete
+                    </Button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={9} className="text-center py-10 text-gray-500">
+                  No concerts available
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
 
-      <ProductTable
-        themeMode={themeMode}
-        cardData={cardData}
-        handleEdit={handleEdit}
-        handleDelete={handleDelete}
-        handleChange={handleChange}
-        selectedPage={selectedPage}
-        setSelectedPage={setSelectedPage}
-        pageNum={pageNum}
-      />
+      {/* Edit Modal */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Item</ModalHeader>
+          <ModalBody>
+            {/* Title */}
+            <FormControl id="title" isRequired mt={4}>
+              <FormLabel>Title</FormLabel>
+              <Input
+                value={editData?.name}
+                onChange={(e) => handleInputChange(e, "name")}
+                placeholder="Enter title"
+              />
+            </FormControl>
 
-      <ConfirmModal
-        isOpen={openDeleteModal}
-        setIsOpen={setOpenDeleteModal}
-        handleOk={handleDeleteData}
-        text="Are you sure you want to delete this Concert?"
-      />
-      <EditModal
-        isOpen={openEditModal}
-        setIsOpen={setOpenEditModal}
-        handleOk={handleEditData}
-        data={modalData}
-        setData={setModalData}
-        tags={tags}
-        setTags={setTags}
-      />
-      <EditModal
-        isOpen={openAddModal}
-        setIsOpen={setOpenAddModal}
-        handleOk={handleAddData}
-        data={modalData}
-        setData={setModalData}
-        tags={tags}
-        setTags={setTags}
-      />
+            {/* Description */}
+            <FormControl id="description" isRequired mt={4}>
+              <FormLabel>Description</FormLabel>
+              <Textarea
+                value={editData?.description}
+                onChange={(e) => handleInputChange(e, "description")}
+                placeholder="Enter description"
+              />
+            </FormControl>
+
+            {/* Link */}
+            <FormControl id="link" mt={4}>
+              <FormLabel>Link</FormLabel>
+              <Input
+                value={editData?.link}
+                onChange={(e) => handleInputChange(e, "link")}
+                placeholder="Enter link"
+              />
+            </FormControl>
+
+            {/* Location */}
+            <FormControl id="location" mt={4}>
+              <FormLabel>Location</FormLabel>
+              <Input
+                value={editData?.location}
+                onChange={(e) => handleInputChange(e, "location")}
+                placeholder="Enter location"
+              />
+            </FormControl>
+
+            {/* Timeframe */}
+            <FormControl id="timeframe" mt={4}>
+              <FormLabel>Start Date</FormLabel>
+              <Input
+                type="datetime-local"
+                value={editData?.timeframe?.start || ""}
+                onChange={(e) => handleInputChange(e, "timeframe", "start")}
+              />
+
+              <FormLabel>End Date</FormLabel>
+              <Input
+                type="datetime-local"
+                value={editData?.timeframe?.end || ""}
+                onChange={(e) => handleInputChange(e, "timeframe", "end")}
+              />
+            </FormControl>
+
+            {/* Thumbnail */}
+            <FormControl id="thumbnail" mt={4}>
+              <FormLabel>Thumbnail</FormLabel>
+              <img
+                width={200}
+                height={200}
+                src={editData?.img || FolderImage}
+                alt="Thumbnail"
+              />
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                mt={2}
+              />
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={handleSave}>
+              Save
+            </Button>
+            <Button variant="ghost" onClick={onClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* New Post Modal */}
+      <Modal isOpen={isNewOpen} onClose={onNewClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add New Item</ModalHeader>
+          <ModalBody>
+            {/* Title */}
+            <FormControl id="title" isRequired mt={4}>
+              <FormLabel>Title</FormLabel>
+              <Input
+                value={newData.name}
+                onChange={(e) => handleNewInputChange(e, "name")}
+                placeholder="Enter title"
+              />
+            </FormControl>
+
+            {/* Description */}
+            <FormControl id="description" isRequired mt={4}>
+              <FormLabel>Description</FormLabel>
+              <Textarea
+                value={newData.description}
+                onChange={(e) => handleNewInputChange(e, "description")}
+                placeholder="Enter description"
+              />
+            </FormControl>
+
+            {/* Link */}
+            <FormControl id="link" mt={4}>
+              <FormLabel>Link</FormLabel>
+              <Input
+                value={newData.link}
+                onChange={(e) => handleNewInputChange(e, "link")}
+                placeholder="Enter link"
+              />
+            </FormControl>
+
+            {/* Location */}
+            <FormControl id="location" mt={4}>
+              <FormLabel>Location</FormLabel>
+              <Input
+                value={newData.location}
+                onChange={(e) => handleNewInputChange(e, "location")}
+                placeholder="Enter location"
+              />
+            </FormControl>
+
+            {/* Timeframe */}
+            {/* <FormControl id="timeframe" mt={4}>
+              <FormLabel>Start Date</FormLabel>
+              <Input
+                type="datetime-local"
+                value={newData.timeframe.start}
+                onChange={(e) => handleNewInputChange(e, "timeframe.start")}
+              />
+              <FormLabel>End Date</FormLabel>
+              <Input
+                type="datetime-local"
+                value={newData.timeframe.end}
+                onChange={(e) => handleNewInputChange(e, "timeframe.end")}
+              />
+            </FormControl> */}
+            <FormControl id="timeframe" mt={4}>
+              <FormLabel>Start Date</FormLabel>
+              <Input
+                type="datetime-local"
+                value={newData?.timeframe?.start || ""}
+                onChange={(e) => handleNewInputChange(e, "timeframe", "start")}
+              />
+
+              <FormLabel>End Date</FormLabel>
+              <Input
+                type="datetime-local"
+                value={newData?.timeframe?.end || ""}
+                onChange={(e) => handleNewInputChange(e, "timeframe", "end")}
+              />
+            </FormControl>
+
+            {/* Thumbnail */}
+            <FormControl id="thumbnail" mt={4}>
+              <FormLabel>Thumbnail</FormLabel>
+              <img
+                width={200}
+                height={200}
+                src={newData.img || FolderImage}
+                alt="Thumbnail"
+              />
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleNewImageUpload}
+                mt={2}
+              />
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={handleCreatePost}>
+              Create
+            </Button>
+            <Button variant="ghost" onClick={onNewClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
 
-export default ProductContent;
+export default ConcertContent;
