@@ -9,7 +9,7 @@ import {
   Td,
   Th,
   Thead,
-  Tr
+  Tr,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -37,7 +37,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
   const [selectedRowsNum, setSelectedRowsNum] = useState<number>(5);
   const [selectedPage, setSelectedPage] = useState<string>("1");
   const [userAllData, setUserAllData] = useState<Users[]>([]);
-  console.log(userAllData)
+  console.log(userAllData);
 
   const handleAddArticle = () => {
     setOpenAddModal(true);
@@ -90,10 +90,10 @@ const UserMainPage: React.FC<UserDataProps> = () => {
           </Thead>
 
           <Tbody>
-            {userAllData?.map((users:any, index:any) => (
+            {userAllData?.map((users: any, index: any) => (
               <Tr key={index}>
                 <Td>
-                  <Avatar name={users.nickname} src="" />
+                  <img src="" alt={users.nickname} />
                 </Td>
                 <Td className="capitalize">{users.nickname}</Td>
                 <Td className="capitalize">{users.role}</Td>
