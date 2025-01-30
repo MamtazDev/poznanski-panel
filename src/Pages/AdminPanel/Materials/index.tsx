@@ -3,31 +3,33 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import CommonButton from "../../../Components/Buttons/CommonButton";
-import EditModal from "../../../Components/Modals/ConcertModal";
 import ConfirmModal from "../../../Components/Modals/ConfirmModal";
-import ProductTable from "../../../Components/Tables/ConcertTable";
+
+import MaterialsAddModal from "../../../Components/Modals/MaterialsAddModal";
+import MaterialsTable from "../../../Components/Tables/MaterialsTable";
 import {
   apiDeleteReq,
   apiGetReq,
   apiPostReq,
   apiPutReq,
 } from "../../../Constant/api-functions";
-import { fileUrl } from "../../../Constant/config";
 import { RootState } from "../../../reducers";
 import "../style.css";
 
 interface Product {
   id: string;
-  name: string;
-  img: string;
-  category: string;
-  timeframe: {
-    start: string;
-    end: string;
-  };
-  link: string;
-  location: string;
+  date: string;
+  title: string;
+  tags: string;
   description: string;
+  youTube: string;
+}
+interface materialModal {
+  date: string;
+  title: string;
+  tags: string;
+  description: string;
+  youTube: string;
 }
 
 interface inputProducts {
@@ -50,100 +52,68 @@ interface Tag {
 }
 
 interface ConcertProps {
-  path: string;
   tagData: {
     _id: string;
     name: string;
   }[];
 }
+export const getFirstTag = (tags: string) => {
+  return tags.split("#")[0];
+};
 
 const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
   const [cardData, setCardData] = useState<Product[]>([]);
+  // const [modalData, setModalData] = useState<Product>({
+  //   id: "",
+  //   name: "",
+  //   img: "",
+  //   category: "",
+  //   timeframe: {
+  //     start: "",
+  //     end: "",
+  //   },
+  //   link: "",
+  //   location: "",
+  //   description: "",
+  // });
   const [modalData, setModalData] = useState<Product>({
     id: "",
-    name: "",
-    img: "",
-    category: "",
-    timeframe: {
-      start: "",
-      end: "",
-    },
-    link: "",
-    location: "",
+    title: "",
     description: "",
+    date: "",
+    youTube: "",
+    tags: "",
+  });
+
+  const [addModalData, setAddModalData] = useState<materialModal>({
+    title: "",
+    description: "",
+    date: "",
+    youTube: "",
+    tags: "",
   });
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [selectedPage, setSelectedPage] = useState<string>("1");
   const [selectedRowsNum, setSelectedRowsNum] = useState<number>(5);
   const [filterText, setFilterText] = useState<string>("");
-  const [materials, setMaterialsData] = useState<Product[]>([])
   const [pageNum, setPageNum] = useState<string>("1");
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [tags, setTags] = React.useState<Tag[]>([]);
 
-  const handleData = (response: any) => {
-    let newProducts: Product[] = [];
-    const pages = Math.ceil(response.all / selectedRowsNum);
-    setPageNum(pages.toString());
-    response.products.map((item: inputProducts) => {
-      const inputStartDate: Date = new Date(item.timeframe.start);
-      const inputEndDate: Date = new Date(item.timeframe.end);
-      const options: object = {
-        day: "numeric",
-        month: "long",
-        hour: "numeric",
-        minute: "2-digit",
-      };
-      const formattedStartDateTime = new Intl.DateTimeFormat(
-        "en-US",
-        options
-      ).format(inputStartDate);
-      const formattedEndDateTime = new Intl.DateTimeFormat(
-        "en-US",
-        options
-      ).format(inputEndDate);
-      const temp: Product = {
-        id: item._id,
-        name: item.name,
-        img: fileUrl + item.img,
-        category: item.category,
-        timeframe: {
-          start: formattedStartDateTime,
-          end: formattedEndDateTime,
-        },
-        link: item.link,
-        location: item.location,
-        description: item.description,
-      };
-      newProducts.push(temp);
-    });
-    setCardData(newProducts);
-  };
-
   useEffect(() => {
     setTags(tagData);
   }, [tagData]);
 
   useEffect(() => {
-    apiGetReq(`/concert`, {
-      rowsPerPage: selectedRowsNum,
-      curPage: selectedPage,
-      filter: filterText,
-    }).then((res) => {
-      handleData(res);
-    });
-  }, []);
-
-  useEffect(() => {
-    apiGetReq(`/concert`, {
+    apiGetReq(`/materials`, {
       rowsPerPage: selectedRowsNum,
       curPage: selectedPage,
       filter: filterText,
     }).then((res) => {
       // handleData(res);
-      setMaterialsData(res)
+      // setMaterialsData(res)
     });
   }, [selectedPage, selectedRowsNum, filterText]);
 
@@ -158,16 +128,15 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
   const handleAddConcert = () => {
     setModalData({
       id: "",
-      name: "",
-      img: "",
-      category: "",
-      timeframe: {
-        start: "",
-        end: "",
-      },
-      link: "",
-      location: "",
+      title: "",
+      tags: "",
+      date: "",
+      // timeframe: {
+      //   start: "",
+      //   end: "",
+      // },
       description: "",
+      youTube: "",
     });
     setOpenAddModal(true);
   };
@@ -185,7 +154,7 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
 
   const handleEditData = () => {
     console.log(modalData);
-    apiPutReq("/concert", modalData).then((res) => {
+    apiPutReq("/materials", modalData).then((res) => {
       const inputStartDate: Date = new Date(res.data.timeframe.start);
       const inputEndDate: Date = new Date(res.data.timeframe.end);
       const options: object = {
@@ -215,7 +184,7 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
                   start: formattedStartDateTime,
                   end: formattedEndDateTime,
                 },
-                img: modalData.img,
+                // img: modalData.img,
                 link: res.data.link,
                 location: res.data.location,
                 description: res.data.description,
@@ -230,7 +199,7 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
   };
 
   const handleAddData = () => {
-    apiPostReq("/concert", modalData).then((res) => {
+    apiPostReq("/materials", modalData).then((res) => {
       console.log(res.data);
       const inputStartDate: Date = new Date(res.data.timeframe.start);
       const inputEndDate: Date = new Date(res.data.timeframe.end);
@@ -254,16 +223,11 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
           ...prevState,
           {
             id: res.data._id,
-            name: res.data.name,
-            category: res.data.category,
-            timeframe: {
-              start: formattedStartDateTime,
-              end: formattedEndDateTime,
-            },
-            img: modalData.img,
-            link: res.data.link,
-            location: res.data.location,
+            title: res.data.title,
+            tags: res.data.tags,
             description: res.data.description,
+            youTube: res.data.youTube,
+            date: res.data.date,
           },
         ]);
       }
@@ -273,7 +237,7 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
 
   const handleDeleteData = () => {
     console.log("deleting:", modalData);
-    apiDeleteReq("/concert", { id: modalData.id }).then((res) => {
+    apiDeleteReq("/materials", { id: modalData.id }).then((res) => {
       if (res.success) {
         if (res.deleted) {
           setCardData((prevState) =>
@@ -288,6 +252,9 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
     });
     setOpenDeleteModal(false);
   };
+
+  // add material data from modal  and set the data a state and show the data in console
+
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
@@ -309,7 +276,7 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
         <CommonButton text="Add article" onClick={handleAddConcert} />
       </div>
 
-      <ProductTable
+      <MaterialsTable
         themeMode={themeMode}
         cardData={cardData}
         handleEdit={handleEdit}
@@ -326,7 +293,7 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
         handleOk={handleDeleteData}
         text="Are you sure you want to delete this Concert?"
       />
-      <EditModal
+      {/* <MaterialsEditModal
         isOpen={openEditModal}
         setIsOpen={setOpenEditModal}
         handleOk={handleEditData}
@@ -334,13 +301,13 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
         setData={setModalData}
         tags={tags}
         setTags={setTags}
-      />
-      <EditModal
+      /> */}
+      <MaterialsAddModal
         isOpen={openAddModal}
         setIsOpen={setOpenAddModal}
         handleOk={handleAddData}
-        data={modalData}
-        setData={setModalData}
+        data={addModalData}
+        setData={setAddModalData}
         tags={tags}
         setTags={setTags}
       />
