@@ -12,7 +12,7 @@ import { closePlayer } from "../reducers/PlayerReducer";
 
 const AdminPanel = lazy(() => import("../Pages/AdminPanel"));
 const Article = lazy(() => import("../Pages/AdminPanel/Article"));
-const MaterialContent = lazy(() => import("../Pages/AdminPanel/Material"));
+const MaterialContent = lazy(() => import("../Pages/AdminPanel/Materials"));
 const Concert = lazy(() => import("../Pages/AdminPanel/Concert"));
 const Artist = lazy(() => import("../Pages/AdminPanel/Artist"));
 const PartnerLogos = lazy(() => import("../Pages/AdminPanel/Logos"));
@@ -79,7 +79,7 @@ const AppMain: React.FC = () => {
               path="material"
               element={
                 <AdminPanel
-                  component={<MaterialContent path="" tagData={tags} />}
+                  component={<MaterialContent tagData={tags} />}
                 />
               }
             />
