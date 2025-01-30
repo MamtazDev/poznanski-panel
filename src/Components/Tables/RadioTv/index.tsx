@@ -92,7 +92,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
 
     try {
       const res = await apiDeleteReq(`/radio/${id} `, {});
-      if (res.success) {
+      if (res) {
         toast({
           title: "Deleted successfully!",
           status: "success",
@@ -187,7 +187,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
 
     try {
       const res = await apiPutReq(`/radio/${editData._id}`, updatedData);
-      if (res.success) {
+      if (res) {
         setRadioData((prev) =>
           prev.map((item) => (item._id === editData._id ? { ...item, ...res.data } : item))
         );
@@ -216,7 +216,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
   const handleCreatePost = async () => {
     try {
       const res = await apiPostReq("/radio", newData);
-      if (res.success) {
+      if (res) {
         setRadioData((prev) => [...prev, res.data]);
         onNewClose();
       }

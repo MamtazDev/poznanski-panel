@@ -63,7 +63,7 @@ const RadioTvPage: React.FC<ProductContentProps> = ({ path, tagData }) => {
             </InputRightElement>
           </InputGroup>
         </div>
-            <button>Add New Items</button>
+            {/* <button>Add New Items</button> */}
       </div>
 
       <RadioTv themeMode={themeMode} />
