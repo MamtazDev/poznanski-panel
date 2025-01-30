@@ -1,5 +1,6 @@
-import React from "react";
-import { Image, Select, Avatar } from "@chakra-ui/react";
+import { Select } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { apiGetReq } from "../../../Constant/api-functions";
 import CrudBtn from "../../CrudBtn";
 import PaginationBar from "../../PaginationBar";
 import "./style.css";
@@ -8,10 +9,20 @@ interface TableProps {
   themeMode: boolean;
   cardData: {
     id: string;
-    name: string;
-    profileImg: string;
-    star: number;
+    // name: string;
+    // img: string;
+    // category: string;
+    // timeframe: {
+    //   start: string;
+    //   end: string;
+    // };
+    // link: string;
+    // location: string;
+    date: string;
+    title: string;
+    tags: string;
     description: string;
+    youTube: string;
   }[];
   handleEdit: (id: string) => void;
   handleDelete: (id: string) => void;
@@ -21,49 +32,66 @@ interface TableProps {
   pageNum: string;
 }
 
-const ArtistTable: React.FC<TableProps> = (props) => {
+const MaterialsTable: React.FC<TableProps> = (props) => {
+
+  const [materials, setMaterialsData] = useState<any[]>([])
+
+  console.log(materials, "materialsmaterialsmaterials")
+  useEffect(() => {
+    apiGetReq(`/materials`, {
+    }).then((res) => {
+      setMaterialsData(res?.materials);
+    });
+  }, []);
+
   return (
     <div>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
-        <table className="w-full h-full" style={{ minWidth: "400px" }}>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
+        <table className="w-full table-fixed">
           <thead
-            className={`text-xs uppercase ${props.themeMode ? " text-gray-700  bg-gray-400" : "bg-gray-700 text-gray-400"}`}
+            className={`text - xs uppercase ${props.themeMode ? "text-gray-700 bg-gray-400" : "bg-gray-700 text-gray-400"}`}
           >
             <tr>
-              <th className="px-6 py-3" style={{ width: "130px" }}>
-                Image
-              </th>
-              <th className="px-6 py-3">Name</th>
-              <th className="px-6 py-3 w-28">Description</th>
-              <th className="px-6 py-3 w-32">star</th>
+              <th className="px-6 py-3">Description</th>
+              <th className="px-6 py-3" >Youtube </th>
+              <th className="px-6 py-3 w-28">Tag</th>
+              <th className="px-6 py-3 w-28">Title</th>
+              <th className="px-6 py-3 w-32">Date</th>
               <th className="px-6 py-3 w-32">Action</th>
             </tr>
           </thead>
           <tbody>
-            {props.cardData?.length ? (
-              props.cardData.map((item, idx) => (
+            {materials?.length ? (
+              materials.map((item, idx) => (
                 <tr
-                  key={`article-table-${idx}`}
-                  className={`border-b ${!props.themeMode ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white text-gray-900"}`}
+                  key={idx}
+                  className={`border - b ${!props.themeMode ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white text-gray-900"}`}
                 >
-                  <td>
-                    <div className="flex justify-center m-3">
-                      <img
-                        className="object-contain rounded-full size-[100px]"
+                  <td className="w-20">{item.description}</td>
+                  <td className="w-30 h-24">
+                    <div className="relative w-full h-full">
+                      <iframe
                         src={
-                          item.profileImg
-                            ? item.profileImg.toString()
-                            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAwLk7BdSBwMGmmO6YCyxEP0otqy_0jXtY6w&s"
+                          item.youTube.includes('youtube.com/watch')
+                            ? `https://www.youtube.com/embed/${item.youTube.split('v=')[1]}`
+                            : item.youTube || "https://www.youtube.com/embed/6JYIGclVQdw"
                         }
-                        alt="avatar"
-                      />
+                        title={item.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        frameBorder="0"
+                        width="300"
+                        height="150"
+                      >
+
+                      </iframe>
                     </div>
                   </td>
-                  <td style={{ width: "200px" }}>{item.name}</td>
-                  <td>
-                    <div className="table-description">{item.description}</div>
-                  </td>
-                  <td>{item.star}</td>
+
+                  <td>{item.tags}</td>
+                  <td>{item.title}</td>
+                  <td>{item.date}</td>
+
+
                   <td>
                     <div className="flex justify-center">
                       <CrudBtn
@@ -94,8 +122,8 @@ const ArtistTable: React.FC<TableProps> = (props) => {
               </tr>
             )}
           </tbody>
-        </table>
-      </div>
+        </table >
+      </div >
       <div className="flex mt-3 justify-end gap-2">
         <div
           className={`flex items-center gap-2 ${props.themeMode ? " text-gray-700" : "text-gray-100"}`}
@@ -103,11 +131,11 @@ const ArtistTable: React.FC<TableProps> = (props) => {
           Rows per page:
         </div>
         <Select
-          width={"80px"}
-          height={"30px"}
           backgroundColor={props.themeMode ? "" : "#242526"}
           color={props.themeMode ? "#252733" : "#FFF"}
           border={props.themeMode ? "1px solid #E9EBF0" : "unset"}
+          height="30"
+          width={"80px"}
           onChange={props.handleChange}
         >
           <option
@@ -143,9 +171,9 @@ const ArtistTable: React.FC<TableProps> = (props) => {
           setSelectedPage={props.setSelectedPage}
           pages={props.pageNum}
         />
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
-export default ArtistTable;
+export default MaterialsTable;

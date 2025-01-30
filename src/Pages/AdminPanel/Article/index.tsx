@@ -19,7 +19,6 @@ import {
   apiPostReq,
   apiPutReq,
 } from "../../../Constant/api-functions";
-import { fileUrl } from "../../../Constant/config";
 import { RootState } from "../../../reducers";
 import "../style.css";
 
@@ -101,42 +100,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   });
 
   const handleData = (response: any) => {
-    let newsData: News[] = [];
-    const pages = Math.ceil(response.all / selectedRowsNum);
-    setPageNum(pages.toString());
 
-    response.news.forEach((item: inputNews) => {
-      const inputDate: Date = new Date(item.date);
-      const formattedDate: string = inputDate.toLocaleDateString("en-US", {
-        year: "numeric",
-        day: "numeric",
-        month: "long",
-      });
-
-      // Parse the content and tags
-      let newsContent: Content[] = item.content.map((i: Content) => ({
-        subHead: i.subHead,
-        img: fileUrl + i.img,
-        description: i.description,
-      }));
-
-      const temp: News = {
-        id: item._id,
-        title: item.title,
-        feature: item.tag ?? "",
-        tags: item.tag
-          ? item.tag.split(",").map((tag, index) => ({
-            _id: `${item._id}-${index}`,
-            name: tag.trim(),
-          }))
-          : [],
-        content: newsContent,
-        date: formattedDate,
-        link: item.link,
-      };
-      newsData.push(temp);
-    });
-    setCardData(newsData);
   };
 
   useEffect(() => {
@@ -352,11 +316,11 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                 <tr key={index}
                   className={`border-b py-3  ${!themeMode ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white text-gray-900"}`}>
                   <td className="flex justify-center mt-3">
-                    <img src={item?.files?.[0] || staticImg} alt={item?.title || "Image related to article"}  className="rounded-full w-[100px] h-[100px]"/>
+                    <img src={item?.files?.[0] || staticImg} alt={item?.title || "Image related to article"} className="rounded-full w-[100px] h-[100px]" />
                   </td>
                   <td style={{ width: "200px" }}>{item.title}</td>
                   <td style={{ width: "200px" }}>
-                        {item?.tags?.split(',')}
+                    {item?.tags?.split(',')}
                   </td>
                   <td>{item.date}</td>
                   <td>
