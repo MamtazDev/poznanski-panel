@@ -39,6 +39,36 @@ interface TableProps {
   pageNum?: string;
 }
 
+interface Artist {
+  _id: string;
+  name: string;
+  profileImg: string;
+  description: string;
+  star: number;
+  __v: number;
+}
+
+interface Product {
+  _id: string;
+  title: string;
+  description: string;
+  youTube: string;
+  artists: string[];
+  userId: string;
+  tags: string;
+  thumbnail: string;
+  date: string;
+  confirmed: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+interface ArtistData {
+  artist: Artist;
+  products: Product[];
+}
+
 const RadioTv: React.FC<TableProps> = (props) => {
   const [radioData, setRadioData] = useState<any[]>([]);
   const [artistData, setArtistData] = useState<any[]>([]);
@@ -60,7 +90,11 @@ const RadioTv: React.FC<TableProps> = (props) => {
     onClose: onNewClose,
   } = useDisclosure();
 
-  const artistAllData = artistData?.data || [];
+  const artistAllData: ArtistData[] = artistData as ArtistData[];
+
+  console.log(artistAllData,"nipaaaa");
+  
+  
   const toast = useToast();
 
   // Fetch data
@@ -73,7 +107,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
   // Fetch artist data
   useEffect(() => {
     apiGetReq("/artist", {}).then((res) => {
-      setArtistData(res);
+      setArtistData(res?.data || []);
     });
   }, []);
 
@@ -380,9 +414,9 @@ const RadioTv: React.FC<TableProps> = (props) => {
               width={200}
               height={200}
                 src={editData?.thumbnail}
-                onChange={(e) => handleInputChange(e, "thumbnail")}
                 alt="Enter thumbnail URL"
               />
+              
               <Input
                 type="file"
                 accept="image/*"
