@@ -283,9 +283,11 @@ const ConcertContent: React.FC<TableProps> = (props) => {
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
+      <div className="flex items-center justify-end py-5">
       <Button colorScheme="green" onClick={handleNewPost}>
         Add New Item
       </Button>
+      </div>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
@@ -318,8 +320,8 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                       ? "bg-white text-gray-900"
                       : "bg-gray-800 text-gray-200"
                   }>
-                  <td className="text-center">
-                    <img src={item.img || FolderImage} alt={item.name} />
+                  <td className="text-center flex items-center justify-center">
+                    <img src={item.img || FolderImage} alt={item.name} className='w-20 h-20 rounded-full'/>
                   </td>
                   <td>{item.name}</td>
                   <td>{item.category}</td>
@@ -336,7 +338,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                   <td className="table-description">{item.description}</td>
                   <td>{item.timeframe.start}</td>
                   <td>{item.timeframe.end}</td>
-                  <td className="text-center">
+                  <td className="text-center space-x-2">
                     <Button onClick={() => handleEdit(item._id)}>Edit</Button>
                     <Button onClick={() => handleDelete(item._id)}>
                       Delete

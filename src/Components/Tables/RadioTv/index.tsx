@@ -277,9 +277,12 @@ const RadioTv: React.FC<TableProps> = (props) => {
 
   return (
     <>
-      <button className="py-2 px-5 bg-green-300" onClick={handleNewPost}>
-        add new item
-      </button>
+
+         <div className="flex items-center justify-end py-5">
+             <Button colorScheme="green" onClick={handleNewPost}>
+               Add New Item
+             </Button>
+             </div>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
@@ -347,11 +350,11 @@ const RadioTv: React.FC<TableProps> = (props) => {
                   <td>{item?.tags}</td>
                   <td>{item?.artists?.map((i: any) => i.star)}</td>
                   <td>
-                    <div className="flex justify-center">
-                      <button onClick={() => handleEdit(item._id)}>Edit</button>
-                      <button onClick={() => handleDelete(item._id)}>
-                        Delete
-                      </button>
+                    <div className="flex justify-center space-x-2">
+                       <Button onClick={() => handleEdit(item._id)}>Edit</Button>
+                                          <Button onClick={() => handleDelete(item._id)}>
+                                            Delete
+                                          </Button>
                     </div>
                   </td>
                 </tr>
