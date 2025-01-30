@@ -93,11 +93,10 @@ const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onDelete }) => {
           <button
             key={index + 1}
             onClick={() => handlePageChange(index + 1)}
-            className={`mx-1 px-3 py-1 rounded ${
-              currentPage === index + 1
+            className={`mx-1 px-3 py-1 rounded ${currentPage === index + 1
                 ? 'bg-blue-500 text-white'
                 : 'bg-gray-200 text-gray-700'
-            }`}
+              }`}
           >
             {index + 1}
           </button>

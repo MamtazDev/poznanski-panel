@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Button,
   Input,
   InputGroup,
@@ -139,7 +138,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
             {userAllData?.map((users: any, index: any) => (
               <Tr key={index}>
                 <Td>
-                  <Avatar name={users.nickname} src="" />
+                  <img src="" alt={users.nickname} />
                 </Td>
                 <Td className="capitalize">{users.nickname}</Td>
                 <Td className="capitalize">{users.role}</Td>
@@ -149,7 +148,11 @@ const UserMainPage: React.FC<UserDataProps> = () => {
                     <h2 style={{ color: users.isVerified ? "green" : "red" }}>
                       {users.isVerified ? "Verified" : "Unverified"}
                     </h2>
-                    <AiOutlineEdit onClick={() => handleEditClick(users.id, users.isVerified)} />
+                    <AiOutlineEdit
+                      onClick={() =>
+                        handleEditClick(users.id, users.isVerified)
+                      }
+                    />
                   </div>
                 </Td>
               </Tr>

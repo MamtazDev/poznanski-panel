@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import CommonButton from "../../../Components/Buttons/CommonButton";
 import EditModal from "../../../Components/Modals/ConcertModal";
 import ConfirmModal from "../../../Components/Modals/ConfirmModal";
-import ProductTable from "../../../Components/Tables/ConcertTable";
 import {
   apiDeleteReq,
   apiGetReq,
@@ -76,7 +75,7 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
   const [selectedPage, setSelectedPage] = useState<string>("1");
   const [selectedRowsNum, setSelectedRowsNum] = useState<number>(5);
   const [filterText, setFilterText] = useState<string>("");
-  const [materials, setMaterialsData] = useState<Product[]>([])
+  const [materials, setMaterialsData] = useState<Product[]>([]);
   const [pageNum, setPageNum] = useState<string>("1");
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
@@ -143,7 +142,7 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
       filter: filterText,
     }).then((res) => {
       // handleData(res);
-      setMaterialsData(res)
+      setMaterialsData(res);
     });
   }, [selectedPage, selectedRowsNum, filterText]);
 
@@ -309,23 +308,13 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
         <CommonButton text="Add article" onClick={handleAddConcert} />
       </div>
 
-      <ProductTable
-        themeMode={themeMode}
-        cardData={cardData}
-        handleEdit={handleEdit}
-        handleDelete={handleDelete}
-        handleChange={handleChange}
-        selectedPage={selectedPage}
-        setSelectedPage={setSelectedPage}
-        pageNum={pageNum}
-      />
-
       <ConfirmModal
         isOpen={openDeleteModal}
         setIsOpen={setOpenDeleteModal}
         handleOk={handleDeleteData}
         text="Are you sure you want to delete this Concert?"
       />
+
       <EditModal
         isOpen={openEditModal}
         setIsOpen={setOpenEditModal}
@@ -335,6 +324,7 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
         tags={tags}
         setTags={setTags}
       />
+
       <EditModal
         isOpen={openAddModal}
         setIsOpen={setOpenAddModal}

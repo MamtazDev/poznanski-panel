@@ -48,10 +48,14 @@ const ArtistTable: React.FC<TableProps> = (props) => {
                 >
                   <td>
                     <div className="flex justify-center m-3">
-                      <Avatar
-                        boxSize="100px"
-                        objectFit="contain"
-                        src={item.profileImg.toString()}
+                      <img
+                        className="object-contain rounded-full size-[100px]"
+                        src={
+                          item.profileImg
+                            ? item.profileImg.toString()
+                            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAwLk7BdSBwMGmmO6YCyxEP0otqy_0jXtY6w&s"
+                        }
+                        alt="avatar"
                       />
                     </div>
                   </td>

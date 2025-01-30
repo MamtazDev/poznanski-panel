@@ -12,11 +12,16 @@ import {
   Select,
   Textarea,
   useDisclosure,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { apiDeleteReq, apiGetReq, apiPostReq, apiPutReq } from "../../../Constant/api-functions";
-import tableIcon from '../../../assets/svg/icons-table.svg';
+import {
+  apiDeleteReq,
+  apiGetReq,
+  apiPostReq,
+  apiPutReq,
+} from "../../../Constant/api-functions";
+import tableIcon from "../../../assets/svg/icons-table.svg";
 
 interface TableProps {
   themeMode?: boolean;
@@ -39,6 +44,36 @@ interface TableProps {
   pageNum?: string;
 }
 
+interface Artist {
+  _id: string;
+  name: string;
+  profileImg: string;
+  description: string;
+  star: number;
+  __v: number;
+}
+
+interface Product {
+  _id: string;
+  title: string;
+  description: string;
+  youTube: string;
+  artists: string[];
+  userId: string;
+  tags: string;
+  thumbnail: string;
+  date: string;
+  confirmed: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+interface ArtistData {
+  artist: Artist;
+  products: Product[];
+}
+
 const RadioTv: React.FC<TableProps> = (props) => {
   const [radioData, setRadioData] = useState<any[]>([]);
   const [artistData, setArtistData] = useState<any[]>([]);
@@ -53,6 +88,9 @@ const RadioTv: React.FC<TableProps> = (props) => {
     tags: "",
     date: new Date().toISOString(),
   });
+
+  console.log(newData, "new datanew datanew datanew data")
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isNewOpen,
@@ -60,20 +98,13 @@ const RadioTv: React.FC<TableProps> = (props) => {
     onClose: onNewClose,
   } = useDisclosure();
 
-  const artistAllData = artistData?.data || [];
+  const artistAllData: ArtistData[] = artistData as ArtistData[];
   const toast = useToast();
-
-  // Fetch data
-  useEffect(() => {
-    apiGetReq("/radio", {}).then((res) => {
-      setRadioData(res);
-    });
-  }, []);
 
   // Fetch artist data
   useEffect(() => {
     apiGetReq("/artist", {}).then((res) => {
-      setArtistData(res);
+      setArtistData(res?.data || []);
     });
   }, []);
 
@@ -87,7 +118,9 @@ const RadioTv: React.FC<TableProps> = (props) => {
   };
 
   const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this item?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this item?"
+    );
     if (!confirmDelete) return;
 
     try {
@@ -120,7 +153,9 @@ const RadioTv: React.FC<TableProps> = (props) => {
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
     field: string
   ) => {
     if (editData) {
@@ -129,7 +164,9 @@ const RadioTv: React.FC<TableProps> = (props) => {
   };
 
   const handleNewInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
     field: string
   ) => {
     setNewData({ ...newData, [field]: e.target.value });
@@ -147,7 +184,9 @@ const RadioTv: React.FC<TableProps> = (props) => {
     }
   };
 
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
       const uploadedImageUrl = await uploadImage(file);
@@ -160,7 +199,9 @@ const RadioTv: React.FC<TableProps> = (props) => {
     }
   };
 
-  const handleNewImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNewImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
       const uploadedImageUrl = await uploadImage(file);
@@ -189,7 +230,9 @@ const RadioTv: React.FC<TableProps> = (props) => {
       const res = await apiPutReq(`/radio/${editData._id}`, updatedData);
       if (res) {
         setRadioData((prev) =>
-          prev.map((item) => (item._id === editData._id ? { ...item, ...res.data } : item))
+          prev.map((item) =>
+            item._id === editData._id ? { ...item, ...res.data } : item
+          )
         );
         onClose();
         setEditData(null);
@@ -217,7 +260,8 @@ const RadioTv: React.FC<TableProps> = (props) => {
     try {
       const res = await apiPostReq("/radio", newData);
       if (res) {
-        setRadioData((prev) => [...prev, res.data]);
+        // addded res.data
+        setRadioData((prev) => [...prev, res]);
         onNewClose();
       }
     } catch (error) {
@@ -225,18 +269,25 @@ const RadioTv: React.FC<TableProps> = (props) => {
     }
   };
 
+  useEffect(() => {
+    apiGetReq("/radio", {}).then((res) => {
+      setRadioData(res);
+    });
+  }, []);
+
   return (
     <>
-      <button className="py-2 px-5 bg-green-300" onClick={handleNewPost}>add new item</button>
+      <button className="py-2 px-5 bg-green-300" onClick={handleNewPost}>
+        add new item
+      </button>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
-            className={`text-xs uppercase ${
-              props.themeMode
-                ? " text-gray-700  bg-gray-400"
-                : "bg-gray-700 text-gray-400"
-            }`}
+            className={`text-xs uppercase ${props.themeMode
+              ? " text-gray-700  bg-gray-400"
+              : "bg-gray-700 text-gray-400"
+              }`}
           >
             <tr>
               <th className="px-6 py-3" style={{ width: "130px" }}>
@@ -263,27 +314,27 @@ const RadioTv: React.FC<TableProps> = (props) => {
               radioData.map((item, idx) => (
                 <tr
                   key={`article-table-${idx}`}
-                  className={`border-b ${
-                    !props.themeMode
-                      ? "bg-gray-800 border-gray-700 text-gray-200"
-                      : "bg-white text-gray-900"
-                  }`}
+                  className={`border-b ${!props.themeMode
+                    ? "bg-gray-800 border-gray-700 text-gray-200"
+                    : "bg-white text-gray-900"
+                    }`}
                 >
-                  <td>{item.artists.map((i: any) => i.name)}</td>
+                  <td>{item?.artists?.map((i: any) => i.name)}</td>
                   <td>
-                      <img
-                        src={item.thumbnail || "https://placehold.co/50x50"}
-                        alt="profile"
-                        className="w-10 h-10 rounded-full"
-                      />
+                    <img
+                      src={item?.thumbnail || "https://placehold.co/50x50"}
+                      alt="profile"
+                      className="w-10 h-10 rounded-full"
+                    />
                   </td>
-                  <td>{item.artists.map((i: any) => i.description)}</td>
+                  <td>{item?.description}</td>
                   <td>
                     <iframe
-                       src={
-                        item.youTube.includes('youtube.com/watch')
-                          ? `https://www.youtube.com/embed/${item.youTube.split('v=')[1]}`
-                          : item.youTube || "https://www.youtube.com/embed/6JYIGclVQdw"
+                      src={
+                        item?.youTube?.includes("youtube.com/watch")
+                          ? `https://www.youtube.com/embed/${item?.youTube?.split("v=")[1]}`
+                          : item?.youTube ||
+                          "https://www.youtube.com/embed/6JYIGclVQdw"
                       }
                       title="YouTube video player"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -292,13 +343,15 @@ const RadioTv: React.FC<TableProps> = (props) => {
                       height="150"
                     ></iframe>
                   </td>
-                  <td style={{ width: "200px" }}>{item.title}</td>
-                  <td>{item.tags}</td>
-                  <td>{item.artists.map((i: any) => i.star)}</td>
+                  <td style={{ width: "200px" }}>{item?.title}</td>
+                  <td>{item?.tags}</td>
+                  <td>{item?.artists?.map((i: any) => i.star)}</td>
                   <td>
                     <div className="flex justify-center">
                       <button onClick={() => handleEdit(item._id)}>Edit</button>
-                      <button onClick={() => handleDelete(item._id)}>Delete</button>
+                      <button onClick={() => handleDelete(item._id)}>
+                        Delete
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -321,8 +374,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
         <ModalContent>
           <ModalHeader>Edit Item</ModalHeader>
           <ModalBody>
-
-          {/* artist */}
+            {/* artist */}
             <FormControl id="artist" isRequired>
               <FormLabel>Artist</FormLabel>
               <Select
@@ -330,11 +382,15 @@ const RadioTv: React.FC<TableProps> = (props) => {
                 value={editData?.artists || ""}
                 onChange={(e) => handleInputChange(e, "artists")}
               >
-                {artistAllData.map((items: any, index: number) => (
-                  <option key={index} value={items.artist._id}>
-                    {items.artist.name}
-                  </option>
-                ))}
+                {
+                  artistAllData.length > 0 ? (
+                    artistAllData.map((items: any, index: number) => (
+                      <option key={index} value={items.artist._id}>
+                        {items.artist.name}
+                      </option>
+                    ))
+                  ) : (<><p>no data found</p></>)
+                }
               </Select>
             </FormControl>
 
@@ -377,12 +433,12 @@ const RadioTv: React.FC<TableProps> = (props) => {
             <FormControl id="thumbnail" mt={4}>
               <FormLabel>Thumbnail</FormLabel>
               <img
-              width={200}
-              height={200}
+                width={200}
+                height={200}
                 src={editData?.thumbnail}
-                onChange={(e) => handleInputChange(e, "thumbnail")}
                 alt="Enter thumbnail URL"
               />
+
               <Input
                 type="file"
                 accept="image/*"
@@ -413,21 +469,23 @@ const RadioTv: React.FC<TableProps> = (props) => {
               <FormLabel>Artist</FormLabel>
               <Select
                 placeholder="Select Artist"
-                value={newData.artists}
+                value={newData?.artists}
                 onChange={(e) => handleNewInputChange(e, "artists")}
               >
-                {artistAllData.map((items: any, index: number) => (
-                  <option key={index} value={items.artist._id}>
-                    {items.artist.name}
-                  </option>
-                ))}
+                {
+                  artistAllData.length > 0 ? (artistAllData?.map((items: any, index: number) => (
+                    <option key={index} value={items.artist._id}>
+                      {items.artist.name}
+                    </option>
+                  ))) : (<p>No data found</p>)
+                }
               </Select>
             </FormControl>
 
             <FormControl isRequired mt={4}>
               <FormLabel>Title</FormLabel>
               <Input
-                value={newData.title}
+                value={newData?.title}
                 onChange={(e) => handleNewInputChange(e, "title")}
                 placeholder="Enter title"
               />
@@ -436,7 +494,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
             <FormControl isRequired mt={4}>
               <FormLabel>Description</FormLabel>
               <Textarea
-                value={newData.description}
+                value={newData?.description}
                 onChange={(e) => handleNewInputChange(e, "description")}
                 placeholder="Enter description"
               />
@@ -445,7 +503,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
             <FormControl mt={4}>
               <FormLabel>YouTube URL</FormLabel>
               <Input
-                value={newData.youTube}
+                value={newData?.youTube}
                 onChange={(e) => handleNewInputChange(e, "youTube")}
                 placeholder="Enter YouTube URL"
               />
@@ -462,8 +520,18 @@ const RadioTv: React.FC<TableProps> = (props) => {
 
             <FormControl mt={4}>
               <FormLabel>Thumbnail</FormLabel>
-              <img width={200} height={200} src={newData.thumbnail || "https://placehold.co/200x200"} alt="Thumbnail Preview" />
-              <Input type="file" accept="image/*" onChange={handleNewImageUpload} mt={2} />
+              <img
+                width={200}
+                height={200}
+                src={newData?.thumbnail || "https://placehold.co/200x200"}
+                alt="Thumbnail Preview"
+              />
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleNewImageUpload}
+                mt={2}
+              />
             </FormControl>
           </ModalBody>
 
