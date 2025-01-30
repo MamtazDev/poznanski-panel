@@ -15,7 +15,6 @@ import {
 } from "../../../Constant/api-functions";
 import { RootState } from "../../../reducers";
 import "../style.css";
-import MaterialsEditModal from "../../../Components/Modals/MaterialsEditModal";
 
 interface Product {
   id: string;
@@ -294,7 +293,7 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
         handleOk={handleDeleteData}
         text="Are you sure you want to delete this Concert?"
       />
-      <MaterialsEditModal
+      {/* <MaterialsEditModal
         isOpen={openEditModal}
         setIsOpen={setOpenEditModal}
         handleOk={handleEditData}
@@ -302,7 +301,7 @@ const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
         setData={setModalData}
         tags={tags}
         setTags={setTags}
-      />
+      /> */}
       <MaterialsAddModal
         isOpen={openAddModal}
         setIsOpen={setOpenAddModal}

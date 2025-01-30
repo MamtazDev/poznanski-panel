@@ -1,10 +1,9 @@
-import { border, Select } from "@chakra-ui/react";
+import { Select } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { apiGetReq } from "../../../Constant/api-functions";
 import CrudBtn from "../../CrudBtn";
 import PaginationBar from "../../PaginationBar";
 import "./style.css";
-import { table } from "console";
 
 interface TableProps {
   themeMode: boolean;
@@ -53,8 +52,8 @@ const MaterialsTable: React.FC<TableProps> = (props) => {
             className={`text - xs uppercase ${props.themeMode ? "text-gray-700 bg-gray-400" : "bg-gray-700 text-gray-400"}`}
           >
             <tr>
-              <th className="px-6 py-3" >Youtube </th>
               <th className="px-6 py-3">Description</th>
+              <th className="px-6 py-3" >Youtube </th>
               <th className="px-6 py-3 w-28">Tag</th>
               <th className="px-6 py-3 w-28">Title</th>
               <th className="px-6 py-3 w-32">Date</th>
@@ -68,7 +67,7 @@ const MaterialsTable: React.FC<TableProps> = (props) => {
                   key={idx}
                   className={`border - b ${!props.themeMode ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white text-gray-900"}`}
                 >
-
+                  <td className="w-20">{item.description}</td>
                   <td className="w-30 h-24">
                     <div className="relative w-full h-full">
                       <iframe
@@ -87,7 +86,7 @@ const MaterialsTable: React.FC<TableProps> = (props) => {
                       </iframe>
                     </div>
                   </td>
-                  <td className="w-20">{item.description}</td>
+
                   <td>{item.tags}</td>
                   <td>{item.title}</td>
                   <td>{item.date}</td>
