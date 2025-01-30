@@ -24,6 +24,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ component }) => {
       setSelectedMenu("logos");
     }
   }, [location.pathname]);
+
   return (
     <div className="h-screen">
       <AdminLayout

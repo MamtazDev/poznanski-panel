@@ -9,15 +9,14 @@ import { apiGetReq } from "../Constant/api-functions";
 import UserMainPage from "../Pages/AdminPanel/User";
 import { RootState } from "../reducers";
 import { closePlayer } from "../reducers/PlayerReducer";
-// import UserMainPage from "../Pages/AdminPanel/User";
 
 const AdminPanel = lazy(() => import("../Pages/AdminPanel"));
 const Article = lazy(() => import("../Pages/AdminPanel/Article"));
-const MaterialContent = lazy(() => import("../Pages/AdminPanel/Materials"));
+const MaterialContent = lazy(() => import("../Pages/AdminPanel/Material"));
 const Concert = lazy(() => import("../Pages/AdminPanel/Concert"));
 const Artist = lazy(() => import("../Pages/AdminPanel/Artist"));
 const PartnerLogos = lazy(() => import("../Pages/AdminPanel/Logos"));
-const Radio = lazy(() => import("../Pages/AdminPanel/Radio"));
+const Radio = lazy(() => import("../Pages/AdminPanel/RadioTv"));
 
 interface Tag {
   _id: string;
@@ -43,7 +42,6 @@ const AppMain: React.FC = () => {
   }, []);
 
   const onClose = () => {
-    // setIsOpen(false);
     dispatch(closePlayer());
   };
 
@@ -81,7 +79,7 @@ const AppMain: React.FC = () => {
               path="material"
               element={
                 <AdminPanel
-                  component={<MaterialContent tagData={tags} />}
+                  component={<MaterialContent path="" tagData={tags} />}
                 />
               }
             />
@@ -104,6 +102,7 @@ const AppMain: React.FC = () => {
           </Route>
         </Routes>
       </Suspense>
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <YoutubePlayer link={selectedLink} />
       </Modal>

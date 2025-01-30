@@ -60,6 +60,7 @@ interface Content {
   img: string;
   description: string;
 }
+
 export const getFirstTag = (tags: string) => {
   return tags.split("#")[0];
 };
@@ -97,8 +98,9 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     ],
     link: "",
   });
+
   const handleData = (response: any) => {
-    
+
   };
 
   useEffect(() => {
@@ -314,11 +316,11 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                 <tr key={index}
                   className={`border-b py-3  ${!themeMode ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white text-gray-900"}`}>
                   <td className="flex justify-center mt-3">
-                    <img src={item?.files?.[0] || staticImg} alt={item?.title || "Image related to article"}  className="rounded-full w-[100px] h-[100px]"/>
+                    <img src={item?.files?.[0] || staticImg} alt={item?.title || "Image related to article"} className="rounded-full w-[100px] h-[100px]" />
                   </td>
                   <td style={{ width: "200px" }}>{item.title}</td>
                   <td style={{ width: "200px" }}>
-                        {item?.tags?.split(',')}
+                    {item?.tags?.split(',')}
                   </td>
                   <td>{item.date}</td>
                   <td>
