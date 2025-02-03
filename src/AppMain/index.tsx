@@ -79,10 +79,11 @@ const AppMain: React.FC = () => {
               path="material"
               element={
                 <AdminPanel
-                  component={<MaterialContent tagData={tags} />}
+                  component={<MaterialContent />}
                 />
               }
             />
+
             <Route
               path="concerts"
               element={<AdminPanel component={<Concert />} />}

@@ -438,6 +438,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                 mt={2}
               />
             </FormControl>
+
           </ModalBody>
 
           <ModalFooter>

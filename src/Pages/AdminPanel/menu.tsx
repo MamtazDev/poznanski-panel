@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BiCircle } from "react-icons/bi";
+import { BiCircle, BiCircleHalf } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 

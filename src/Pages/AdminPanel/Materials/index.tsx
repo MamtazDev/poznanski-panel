@@ -1,317 +1,465 @@
-import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Select,
+  Textarea,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
-import { useSelector } from "react-redux";
-import CommonButton from "../../../Components/Buttons/CommonButton";
-import ConfirmModal from "../../../Components/Modals/ConfirmModal";
-
-import MaterialsAddModal from "../../../Components/Modals/MaterialsAddModal";
-import MaterialsTable from "../../../Components/Tables/MaterialsTable";
 import {
   apiDeleteReq,
   apiGetReq,
   apiPostReq,
   apiPutReq,
 } from "../../../Constant/api-functions";
+import FolderImage from "../../../assets/png/folder_icon.png";
+import { useSelector } from "react-redux";
 import { RootState } from "../../../reducers";
-import "../style.css";
 
-interface Product {
-  id: string;
-  date: string;
-  title: string;
-  tags: string;
-  description: string;
-  youTube: string;
-}
-interface materialModal {
-  date: string;
-  title: string;
-  tags: string;
-  description: string;
-  youTube: string;
-}
-
-interface inputProducts {
+// Define types for the data
+interface Material {
   _id: string;
-  name: string;
-  img: string;
-  category: string;
-  timeframe: {
-    start: string | Date;
-    end: string | Date;
+  title: string;
+  description: string;
+  youTube: string;
+  tags: string[];
+  date: string;
+  commentsSection: {
+    commentsIds: string[];
+    embeddedComments: string[];
   };
-  link: string;
-  location: string;
-  description: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }
 
-interface Tag {
-  _id: string;
-  name: string;
-}
-
-interface ConcertProps {
-  tagData: {
-    _id: string;
-    name: string;
+interface TableProps {
+  // themeMode: boolean;
+  cardData?: {
+    id: string;
+    title: string;
+    description: string;
+    tags: string;
+    date: number;
+    youTube: string;
   }[];
+  handleEdit?: (id: string) => void;
+  handleDelete?: (id: string) => void;
+  handleChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  selectedPage?: string;
+  setSelectedPage?: React.Dispatch<React.SetStateAction<string>>;
+  pageNum?: string;
 }
-export const getFirstTag = (tags: string) => {
-  return tags.split("#")[0];
-};
 
-const MaterialContent: React.FC<ConcertProps> = ({ tagData }) => {
-  const [cardData, setCardData] = useState<Product[]>([]);
-  // const [modalData, setModalData] = useState<Product>({
-  //   id: "",
-  //   name: "",
-  //   img: "",
-  //   category: "",
-  //   timeframe: {
-  //     start: "",
-  //     end: "",
-  //   },
-  //   link: "",
-  //   location: "",
-  //   description: "",
-  // });
-  const [modalData, setModalData] = useState<Product>({
-    id: "",
-    title: "",
-    description: "",
-    date: "",
-    youTube: "",
-    tags: "",
-  });
-
-  const [addModalData, setAddModalData] = useState<materialModal>({
-    title: "",
-    description: "",
-    date: "",
-    youTube: "",
-    tags: "",
-  });
+const MaterialContent: React.FC<TableProps> = (props) => {
+  const [radioData, setRadioData] = useState<{ materials: Material[] }>({ materials: [] });
+  const [editData, setEditData] = useState<Material | null>(null);
+  // const [themeMode, setThemeMode] = useState<boolean>(true);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-  const [selectedPage, setSelectedPage] = useState<string>("1");
-  const [selectedRowsNum, setSelectedRowsNum] = useState<number>(5);
-  const [filterText, setFilterText] = useState<string>("");
-  const [pageNum, setPageNum] = useState<string>("1");
-  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const [openAddModal, setOpenAddModal] = useState<boolean>(false);
-  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-  const [tags, setTags] = React.useState<Tag[]>([]);
+  const [newData, setNewData] = useState<any>({
+    title: "",
+    youTube: "",
+    description: "",
+    tags: "",
+    date: "",
+  });
+  console.log(newData, " new data");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isNewOpen,
+    onOpen: onNewOpen,
+    onClose: onNewClose,
+  } = useDisclosure();
+
+  const toast = useToast();
+
+  // Fetch data
+  const [materials, setMaterials] = useState<Material[]>([]);
 
   useEffect(() => {
-    setTags(tagData);
-  }, [tagData]);
+    apiGetReq("/materials", {}).then((res) => {
+      console.log(res, "materials data");
 
-  useEffect(() => {
-    apiGetReq(`/materials`, {
-      rowsPerPage: selectedRowsNum,
-      curPage: selectedPage,
-      filter: filterText,
-    }).then((res) => {
-      // handleData(res);
-      // setMaterialsData(res)
+      if (res && Array.isArray(res.materials)) {
+        setMaterials(res.materials);
+      } else {
+        setMaterials([]);
+        console.error("Invalid response format:", res);
+      }
     });
-  }, [selectedPage, selectedRowsNum, filterText]);
+  }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedRowsNum(parseInt(e.target.value));
+  // Edit item
+  const handleEdit = (id: string) => {
+    console.log("Editing item:", id);
+    const selectedItem = materials.find((item) => item._id === id);
+    if (selectedItem) {
+      console.log("Found item:", selectedItem);
+      setEditData({ ...selectedItem });
+      onOpen();
+    } else {
+      console.log("Item not found");
+    }
   };
 
-  const handleChangeFilterText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterText(e.target.value);
+  const handleDelete = async (id: string) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this item?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      const res = await apiDeleteReq(`/materials/${id}`, {});
+      if (res.message) {
+        toast({
+          title: "Deleted successfully!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setRadioData((prev) => ({
+          materials: prev.materials.filter((item) => item._id !== id),
+        }));
+      } else {
+        toast({
+          title: "Failed to delete",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting:", error);
+      toast({
+        title: "Error deleting item",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
-  const handleAddConcert = () => {
-    setModalData({
-      id: "",
+  const handleSave = async () => {
+    if (!editData || !editData._id) return;
+    const updatedData = {
+      title: editData.title,
+      description: editData.description,
+      youTube: editData.youTube,
+      tags: editData.tags,
+      date: editData.date,
+    };
+
+    try {
+      const res = await apiPutReq(`/materials/${editData._id}`, updatedData);
+      if (res) {
+        setRadioData((prev) => ({
+          materials: prev.materials.map((item) =>
+            item._id === editData._id ? { ...item, ...res.data } : item
+          ),
+        }));
+
+        toast({
+          title: "Material updated successfully!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+
+        setEditData(null);
+        onClose();
+      } else {
+        toast({
+          title: "Failed to update material",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("Error updating material:", error);
+
+      toast({
+        title: "Error updating material",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleNewPost = () => {
+    setNewData({
       title: "",
-      tags: "",
-      date: "",
-      // timeframe: {
-      //   start: "",
-      //   end: "",
-      // },
       description: "",
       youTube: "",
+      tags: "",
+      date: "",
     });
-    setOpenAddModal(true);
+    onNewOpen();
   };
 
-  const handleEdit = (id: string) => {
-    console.log("edit:", id);
-    setModalData(cardData.filter((item) => item.id === id)[0]);
-    setOpenEditModal(true);
-  };
-
-  const handleDelete = (id: string) => {
-    setModalData(cardData.filter((item) => item.id === id)[0]);
-    setOpenDeleteModal(true);
-  };
-
-  const handleEditData = () => {
-    console.log(modalData);
-    apiPutReq("/materials", modalData).then((res) => {
-      const inputStartDate: Date = new Date(res.data.timeframe.start);
-      const inputEndDate: Date = new Date(res.data.timeframe.end);
-      const options: object = {
-        day: "numeric",
-        month: "long",
-        hour: "numeric",
-        minute: "2-digit",
-      };
-      const formattedStartDateTime = new Intl.DateTimeFormat(
-        "en-US",
-        options
-      ).format(inputStartDate);
-      const formattedEndDateTime = new Intl.DateTimeFormat(
-        "en-US",
-        options
-      ).format(inputEndDate);
-
+  const handleCreatePost = async () => {
+    try {
+      const res = await apiPostReq("/materials", newData);
       if (res.success) {
-        setCardData((prevState) =>
-          prevState.map((item) =>
-            item.id === res.data._id
-              ? {
-                ...item,
-                name: res.data.name,
-                category: res.data.category,
-                timeframe: {
-                  start: formattedStartDateTime,
-                  end: formattedEndDateTime,
-                },
-                // img: modalData.img,
-                link: res.data.link,
-                location: res.data.location,
-                description: res.data.description,
-              }
-              : item
-          )
-        );
+        setRadioData((prev) => ({
+          materials: [...prev.materials, res.data],
+        }));
+        onNewClose();
       }
-    });
-    console.log(cardData);
-    setOpenEditModal(false);
+    } catch (error) {
+      console.error("Error creating new material:", error);
+    }
   };
 
-  const handleAddData = () => {
-    apiPostReq("/materials", modalData).then((res) => {
-      console.log(res.data);
-      const inputStartDate: Date = new Date(res.data.timeframe.start);
-      const inputEndDate: Date = new Date(res.data.timeframe.end);
-      const options: object = {
-        day: "numeric",
-        month: "long",
-        hour: "numeric",
-        minute: "2-digit",
-      };
-      const formattedStartDateTime = new Intl.DateTimeFormat(
-        "en-US",
-        options
-      ).format(inputStartDate);
-      const formattedEndDateTime = new Intl.DateTimeFormat(
-        "en-US",
-        options
-      ).format(inputEndDate);
 
-      if (res.success) {
-        setCardData((prevState) => [
-          ...prevState,
-          {
-            id: res.data._id,
-            title: res.data.title,
-            tags: res.data.tags,
-            description: res.data.description,
-            youTube: res.data.youTube,
-            date: res.data.date,
+  const handleNewInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+    field: string,
+    subField?: string
+  ) => {
+    const { value } = e.target;
+
+    setNewData((prev: any) => {
+      if (!prev) return prev;
+
+      if (subField) {
+        return {
+          ...prev,
+          [field]: {
+            ...prev[field],
+            [subField]: value,
           },
-        ]);
+        };
       }
+
+      return { ...prev, [field]: value };
     });
-    setOpenAddModal(false);
   };
 
-  const handleDeleteData = () => {
-    console.log("deleting:", modalData);
-    apiDeleteReq("/materials", { id: modalData.id }).then((res) => {
-      if (res.success) {
-        if (res.deleted) {
-          setCardData((prevState) =>
-            prevState.filter((item) => item.id !== modalData.id)
-          );
-        } else {
-          console.log("No match that news!");
-        }
-      } else {
-        console.log("server error!");
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+    field: string,
+    subField?: string
+  ) => {
+    const { value } = e.target;
+
+    setEditData((prev: any) => {
+      if (!prev) return prev;
+      if (subField) {
+        return {
+          ...prev,
+          [field]: {
+            ...prev[field],
+            [subField]: value,
+          },
+        };
       }
+      return { ...prev, [field]: value };
     });
-    setOpenDeleteModal(false);
   };
-
-  // add material data from modal  and set the data a state and show the data in console
-
-
   return (
+
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
-      <div className="flex justify-between">
-        <div className="mb-4" style={{ width: "300px" }}>
-          <InputGroup>
-            <Input
-              type="text"
-              placeholder="Search..."
-              backgroundColor="white"
-              onChange={handleChangeFilterText}
-              onBlur={handleChangeFilterText}
-            />
-            <InputRightElement pointerEvents="none">
-              <AiOutlineSearch />
-            </InputRightElement>
-          </InputGroup>
-        </div>
-        <CommonButton text="Add article" onClick={handleAddConcert} />
+      <div className="flex items-center justify-end py-5">
+        <Button colorScheme="green" onClick={handleNewPost}>
+          Add New Item
+        </Button>
       </div>
 
-      <MaterialsTable
-        themeMode={themeMode}
-        cardData={cardData}
-        handleEdit={handleEdit}
-        handleDelete={handleDelete}
-        handleChange={handleChange}
-        selectedPage={selectedPage}
-        setSelectedPage={setSelectedPage}
-        pageNum={pageNum}
-      />
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+        <table className="w-full h-full" >
+          <thead
+            className={`text-xs uppercase ${themeMode
+              ? " text-gray-700  bg-gray-400"
+              : "bg-gray-700 text-gray-400"
+              }`}
+          >
+            <tr>
+            <th className="px-6 py-3" style={{ width: "130px" }}>Link</th>
+              <th className="px-6 py-3" style={{ width: "130px" }}>Title</th>
+              <th className="px-6 py-3" style={{ width: "130px" }}>Tags</th>
+              <th className="px-6 py-3" style={{ width: "130px" }}>Date</th>
+              <th className="px-6 py-3" style={{ width: "130px" }}>Description</th>
+              <th className="px-6 py-3" style={{ width: "130px" }}>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {materials.length > 0 ? (
+              materials.map((item: Material, index: number) => (
+                <tr key={index}
+                  className={` p-4 ${!themeMode && "back-dark text-white"}`}
+                >
+                  <td>
+                    <a
+                      href={item.youTube}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 underline">
+                      View
+                    </a>
+                  </td>
+                  <td>{item.title}</td>
+                  <td>{item.tags}</td>
+                  <td>{item.date}</td>
+                  <td>{item.description}</td>
+                  <td className="text-center py-2">
+                    <div className="flex justify-center space-x-2">
+                      <Button onClick={() => handleEdit(item._id)}>Edit</Button>
+                      <Button onClick={() => handleDelete(item._id)}>
+                        Delete
+                      </Button>
+                    </div>
 
-      <ConfirmModal
-        isOpen={openDeleteModal}
-        setIsOpen={setOpenDeleteModal}
-        handleOk={handleDeleteData}
-        text="Are you sure you want to delete this Concert?"
-      />
-      {/* <MaterialsEditModal
-        isOpen={openEditModal}
-        setIsOpen={setOpenEditModal}
-        handleOk={handleEditData}
-        data={modalData}
-        setData={setModalData}
-        tags={tags}
-        setTags={setTags}
-      /> */}
-      <MaterialsAddModal
-        isOpen={openAddModal}
-        setIsOpen={setOpenAddModal}
-        handleOk={handleAddData}
-        data={addModalData}
-        setData={setAddModalData}
-        tags={tags}
-        setTags={setTags}
-      />
+                  </td>
+                </tr>
+
+              ))
+            ) : (
+              <tr><td colSpan={8} className="text-center">No data available</td></tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+      {/* Edit Modal */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Item</ModalHeader>
+          <ModalBody>
+            {/* Title */}
+            <FormControl id="title" isRequired mt={4}>
+              <FormLabel>Title</FormLabel>
+              <Input
+                value={editData?.title}
+                onChange={(e) => handleInputChange(e, "title")}
+                placeholder="Enter title"
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalBody>
+            {/* Title */}
+            <FormControl id="youTube" isRequired mt={4}>
+              <FormLabel>Link</FormLabel>
+              <Input
+                value={editData?.youTube}
+                onChange={(e) => handleInputChange(e, "youTube")}
+                placeholder="Enter YouTube Link"
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalBody>
+            {/* description */}
+            <FormControl id="description" isRequired mt={4}>
+              <FormLabel>Description</FormLabel>
+              <Input
+                value={editData?.description }
+                onChange={(e) => handleInputChange(e, "description")}
+                placeholder="Enter description"
+              />
+            </FormControl>
+
+            <FormControl id="tags" isRequired mt={4}>
+              <FormLabel>Tags</FormLabel>
+              <Input
+                value={editData?.tags }
+                onChange={(e) => handleInputChange(e, "tags")}
+                placeholder="Enter tags"
+              />
+            </FormControl>
+            <FormControl id="date" isRequired mt={4}>
+              <FormLabel>Date</FormLabel>
+              <Input
+                value={editData?.date }
+                onChange={(e) => handleInputChange(e, "date")}
+                placeholder="Enter date"
+              />
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={handleSave}>
+              Save
+            </Button>
+            <Button variant="ghost" onClick={onClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      {/* New Post Modal */}
+      <Modal isOpen={isNewOpen} onClose={onNewClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add New Item</ModalHeader>
+          <ModalBody>
+            {/* Title */}
+            <FormControl id="title" isRequired mt={4}>
+              <FormLabel>Title</FormLabel>
+              <Input
+                value={newData.name}
+                onChange={(e) => handleNewInputChange(e, "name")}
+                placeholder="Enter title"
+              />
+            </FormControl>
+
+            {/* Description */}
+            <FormControl id="description" isRequired mt={4}>
+              <FormLabel>Description</FormLabel>
+              <Textarea
+                value={newData.description}
+                onChange={(e) => handleNewInputChange(e, "description")}
+                placeholder="Enter description"
+              />
+            </FormControl>
+
+            {/* Link */}
+            <FormControl id="youTube" mt={4}>
+              <FormLabel>Link</FormLabel>
+              <Input
+                value={newData.youTube}
+                onChange={(e) => handleNewInputChange(e, "youTube")}
+                placeholder="Enter link"
+              />
+            </FormControl>
+
+            <FormControl id="date" mt={4}>
+              <FormLabel>Start Date</FormLabel>
+              <Input
+                value={editData?.date }
+                onChange={(e) => handleInputChange(e, "date")}
+                placeholder="Enter date"
+              />
+            </FormControl>
+
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={handleCreatePost}>
+              Create
+            </Button>
+            <Button variant="ghost" onClick={onNewClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
+
   );
 };
 
