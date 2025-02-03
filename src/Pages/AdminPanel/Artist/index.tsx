@@ -122,8 +122,7 @@ const ArticleContent = () => {
   };
 
   const handleEditData = () => {
-    console.log(modalData);
-    apiPutReq("/artist/admin", modalData).then((res) => {
+    apiPutReq(`/artist/${modalData.id}`, modalData).then((res) => {
       if (res.success) {
         setCardData((prevState) =>
           prevState.map((item) =>
@@ -140,7 +139,6 @@ const ArticleContent = () => {
         );
       }
     });
-    console.log(cardData);
     setOpenEditModal(false);
   };
 

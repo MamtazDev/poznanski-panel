@@ -282,7 +282,8 @@ const ConcertContent: React.FC<TableProps> = (props) => {
   };
 
   return (
-    <div className="p-3 overflow-y-auto w-full h-full pb-28">
+    <div className="p-3 overflow-y-auto w-full h-full pb-28"
+    style={{}}>
       <div className="flex items-center justify-end py-5">
       <Button colorScheme="green" onClick={handleNewPost}>
         Add New Item
@@ -315,11 +316,12 @@ const ConcertContent: React.FC<TableProps> = (props) => {
               radioData.map((item, index) => (
                 <tr
                   key={index}
-                  className={
-                    themeMode
+                  className={`
+
+                    ${themeMode
                       ? "bg-white text-gray-900"
-                      : "bg-gray-800 text-gray-200"
-                  }>
+                      : "bg-gray-800 text-gray-200"}
+                  `}>
                   <td className="text-center flex items-center justify-center">
                     <img src={item.img || FolderImage} alt={item.name} className='w-20 h-20 rounded-full'/>
                   </td>
@@ -335,7 +337,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                       View
                     </a>
                   </td>
-                  <td className="table-description">{item.description}</td>
+                  <td className="text-center">{item.description}</td>
                   <td>{item.timeframe.start}</td>
                   <td>{item.timeframe.end}</td>
                   <td className="text-center space-x-2">
