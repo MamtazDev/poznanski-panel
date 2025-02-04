@@ -202,7 +202,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       title: "",
       description: "",
       youTube: "",
-      tags: "",
+      tags: [],  // Should be an array
       date: "",
     });
     onNewOpen();
@@ -210,43 +210,46 @@ const MaterialContent: React.FC<TableProps> = (props) => {
 
   const handleCreatePost = async () => {
     try {
+      console.log("Sending Data:", newData);
       const res = await apiPostReq("/materials", newData);
+      console.log("API Response:", res);
+
       if (res.success) {
         setRadioData((prev) => ({
           materials: [...prev.materials, res.data],
         }));
+        toast({
+          title: "Post created successfully!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
         onNewClose();
+      } else {
+        toast({
+          title: "Failed to create post",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       }
     } catch (error) {
       console.error("Error creating new material:", error);
+      toast({
+        title: "Server error while creating post",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
 
-  const handleNewInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-    field: string,
-    subField?: string
-  ) => {
-    const { value } = e.target;
-
-    setNewData((prev: any) => {
-      if (!prev) return prev;
-
-      if (subField) {
-        return {
-          ...prev,
-          [field]: {
-            ...prev[field],
-            [subField]: value,
-          },
-        };
-      }
-
-      return { ...prev, [field]: value };
-    });
+  const handleNewInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>, field: string) => {
+    setNewData((prev:any) => ({
+      ...prev,
+      [field]: field === "tags" ? e.target.value.split(",") : e.target.value,
+    }));
   };
 
   const handleInputChange = (
@@ -411,9 +414,17 @@ const MaterialContent: React.FC<TableProps> = (props) => {
             <FormControl id="title" isRequired mt={4}>
               <FormLabel>Title</FormLabel>
               <Input
-                value={newData.name}
-                onChange={(e) => handleNewInputChange(e, "name")}
+                value={newData.title}
+                onChange={(e) => handleNewInputChange(e, "title")}
                 placeholder="Enter title"
+              />
+            </FormControl>
+            <FormControl id="tags" isRequired mt={4}>
+              <FormLabel>tags</FormLabel>
+              <Input
+                value={newData.tags}
+                onChange={(e) => handleNewInputChange(e, "tags")}
+                placeholder="Enter tags"
               />
             </FormControl>
 
