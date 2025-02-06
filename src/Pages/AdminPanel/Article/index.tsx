@@ -73,7 +73,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
 
   // Then, access it like this:
   const fetchNesAllData = newsDataAll?.news || [];
-  console.log(fetchNesAllData, "fetchNesAllData")
+  console.log(fetchNesAllData, "fetchNesAllData j")
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [selectedPage, setSelectedPage] = useState<string>("1");
   const [selectedRowsNum, setSelectedRowsNum] = useState<number>(5);
@@ -116,15 +116,16 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   }, []);
 
 
-  useEffect(() => {
-    apiGetReq("/news/all", {
-      rowsPerPage: selectedRowsNum,
-      curPage: selectedPage,
-      filter: filterText,
-    }).then((res) => {
-      handleData(res);
-    });
-  }, [selectedPage, selectedRowsNum, filterText]);
+ useEffect(() => {
+  apiGetReq("/news/all", {
+    rowsPerPage: selectedRowsNum,
+    curPage: selectedPage,
+    filter: filterText,
+  }).then((res) => {
+    setNewsDataAll(res);
+  });
+}, [selectedPage, selectedRowsNum, filterText]);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRowsNum(parseInt(e.target.value));
