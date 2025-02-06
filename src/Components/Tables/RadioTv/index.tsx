@@ -89,8 +89,6 @@ const RadioTv: React.FC<TableProps> = (props) => {
     date: new Date().toISOString(),
   });
 
-  console.log(newData, "new datanew datanew datanew data")
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isNewOpen,
@@ -277,7 +275,6 @@ const RadioTv: React.FC<TableProps> = (props) => {
 
   return (
     <>
-
       <div className="flex items-center justify-end py-5">
         <Button colorScheme="green" onClick={handleNewPost}>
           Add New Item
@@ -287,11 +284,11 @@ const RadioTv: React.FC<TableProps> = (props) => {
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
-            className={`text-xs uppercase ${props.themeMode
-              ? " text-gray-700  bg-gray-400"
-              : "bg-gray-700 text-gray-400"
-              }`}
-          >
+            className={`text-xs uppercase ${
+              props.themeMode
+                ? " text-gray-700  bg-gray-400"
+                : "bg-gray-700 text-gray-400"
+            }`}>
             <tr>
               <th className="px-6 py-3" style={{ width: "130px" }}>
                 Name
@@ -317,11 +314,11 @@ const RadioTv: React.FC<TableProps> = (props) => {
               radioData.map((item, idx) => (
                 <tr
                   key={`article-table-${idx}`}
-                  className={`border-b ${!props.themeMode
-                    ? "bg-gray-800 border-gray-700 text-gray-200"
-                    : "bg-white text-gray-900"
-                    }`}
-                >
+                  className={`border-b ${
+                    !props.themeMode
+                      ? "bg-gray-800 border-gray-700 text-gray-200"
+                      : "bg-white text-gray-900"
+                  }`}>
                   <td>{item?.artists?.map((i: any) => i.name)}</td>
                   <td>
                     <img
@@ -337,14 +334,13 @@ const RadioTv: React.FC<TableProps> = (props) => {
                         item?.youTube?.includes("youtube.com/watch")
                           ? `https://www.youtube.com/embed/${item?.youTube?.split("v=")[1]}`
                           : item?.youTube ||
-                          "https://www.youtube.com/embed/6JYIGclVQdw"
+                            "https://www.youtube.com/embed/6JYIGclVQdw"
                       }
                       title="YouTube video player"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       frameBorder="0"
                       width="300"
-                      height="150"
-                    ></iframe>
+                      height="150"></iframe>
                   </td>
                   <td style={{ width: "200px" }}>{item?.title}</td>
                   <td>{item?.tags}</td>
@@ -383,17 +379,18 @@ const RadioTv: React.FC<TableProps> = (props) => {
               <Select
                 placeholder="Select Artist"
                 value={editData?.artists || ""}
-                onChange={(e) => handleInputChange(e, "artists")}
-              >
-                {
-                  artistAllData.length > 0 ? (
-                    artistAllData.map((items: any, index: number) => (
-                      <option key={index} value={items.artist._id}>
-                        {items.artist.name}
-                      </option>
-                    ))
-                  ) : (<><p>no data found</p></>)
-                }
+                onChange={(e) => handleInputChange(e, "artists")}>
+                {artistAllData.length > 0 ? (
+                  artistAllData.map((items: any, index: number) => (
+                    <option key={index} value={items.artist._id}>
+                      {items.artist.name}
+                    </option>
+                  ))
+                ) : (
+                  <>
+                    <p>no data found</p>
+                  </>
+                )}
               </Select>
             </FormControl>
 
@@ -473,15 +470,16 @@ const RadioTv: React.FC<TableProps> = (props) => {
               <Select
                 placeholder="Select Artist"
                 value={newData?.artists}
-                onChange={(e) => handleNewInputChange(e, "artists")}
-              >
-                {
-                  artistAllData.length > 0 ? (artistAllData?.map((items: any, index: number) => (
+                onChange={(e) => handleNewInputChange(e, "artists")}>
+                {artistAllData.length > 0 ? (
+                  artistAllData?.map((items: any, index: number) => (
                     <option key={index} value={items.artist._id}>
                       {items.artist.name}
                     </option>
-                  ))) : (<p>No data found</p>)
-                }
+                  ))
+                ) : (
+                  <p>No data found</p>
+                )}
               </Select>
             </FormControl>
 

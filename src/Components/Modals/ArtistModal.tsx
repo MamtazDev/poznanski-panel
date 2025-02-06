@@ -15,6 +15,7 @@ import { RootState } from "../../reducers";
 import FolderIcon from "../../assets/png/folder_icon.png";
 import "./style.css";
 import CrudBtn from "../CrudBtn";
+import { apiPostReq } from "../../Constant/api-functions";
 
 interface Data {
   id: string;
@@ -51,7 +52,7 @@ const ArtistModal: React.FC<ModalProps> = ({
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.click(); // Trigger the file selection dialog
+      fileInputRef.current.click();
     }
   };
 
@@ -59,20 +60,37 @@ const ArtistModal: React.FC<ModalProps> = ({
     setData({ ...data, profileImg: "" });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        // setEditedData({ ...editedData, profileImg: reader.result });
-        setData({
-          ...data,
-          profileImg: reader.result ? reader.result.toString() : "",
-        });
-      };
-      reader.readAsDataURL(file);
+  const uploadImage = async (file: File) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    try {
+      const res = await apiPostReq("/upload", formData, true);
+      if (res && res.fileUrl) {
+        return res.fileUrl;
+      }
+      return "";
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      return "";
     }
   };
+
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const uploadedImageUrl = await uploadImage(file);
+
+      if (uploadedImageUrl) {
+        setData((prevData) => ({
+          ...prevData,
+          profileImg: uploadedImageUrl,
+        }));
+      }
+    }
+  };
+
   const onClose = () => {
     setIsOpen(false);
   };
@@ -100,14 +118,13 @@ const ArtistModal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div>
+    <>
       <Modal isCentered={true} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent
           maxWidth={"100vh"}
           backgroundColor={themeMode ? "#E9E9EB" : "#242526"}
-          padding={6}
-        >
+          padding={6}>
           <ModalBody>
             <div className="flex gap-2 w-full">
               <div className="w-3/5">
@@ -136,7 +153,7 @@ const ArtistModal: React.FC<ModalProps> = ({
                 </div>
               </div>
               <div className="image-field w-2/5">
-                {data?.profileImg === fileUrl || data?.profileImg === "" ? (
+                {!data.profileImg ? (
                   <div className="flex items-center justify-center h-full">
                     <div className="flex flex-col gap-2">
                       <div className="flex justify-center">
@@ -152,8 +169,7 @@ const ArtistModal: React.FC<ModalProps> = ({
                         />
                         <button
                           className="add-file-btn"
-                          onClick={handleButtonClick}
-                        >
+                          onClick={handleButtonClick}>
                           + Select File
                         </button>
                       </div>
@@ -161,10 +177,8 @@ const ArtistModal: React.FC<ModalProps> = ({
                   </div>
                 ) : (
                   <div className="flex justify-center items-center w-full h-full relative">
-                    <img src={data.profileImg.toString()} alt="new img" />
-                    <div
-                      className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 `}
-                    >
+                    <img src={data.profileImg} alt="Uploaded Image" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                       <input
                         type="file"
                         accept="image/*"
@@ -173,8 +187,7 @@ const ArtistModal: React.FC<ModalProps> = ({
                         style={{ display: "none" }}
                       />
                       <div
-                        className={`rounded-lg opacity-70 ${themeMode ? "bg-gray-400" : "bg-gray-50"}`}
-                      >
+                        className={`rounded-lg opacity-70 ${themeMode ? "bg-gray-400" : "bg-gray-50"}`}>
                         <CrudBtn
                           value=""
                           onClickDelete={handleDelete}
@@ -194,14 +207,13 @@ const ArtistModal: React.FC<ModalProps> = ({
             <Button
               variant="ghost"
               color={themeMode ? "black" : "white"}
-              onClick={handleClickAdd}
-            >
+              onClick={handleClickAdd}>
               Yes, I'm sure
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </div>
+    </>
   );
 };
 

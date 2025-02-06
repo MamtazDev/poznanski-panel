@@ -198,6 +198,7 @@ const ArticleContent = () => {
         </div>
         <CommonButton text="Add artist" onClick={handleAddArtist} />
       </div>
+
       <ArtistTable
         themeMode={themeMode}
         cardData={cardData}
@@ -215,6 +216,7 @@ const ArticleContent = () => {
         handleOk={handleDeleteData}
         text="Are you sure you want to delete this artist?"
       />
+
       <ArtistModal
         isOpen={openEditModal}
         setIsOpen={setOpenEditModal}
@@ -222,6 +224,7 @@ const ArticleContent = () => {
         data={modalData}
         setData={setModalData}
       />
+
       <ArtistModal
         isOpen={openAddModal}
         setIsOpen={setOpenAddModal}
