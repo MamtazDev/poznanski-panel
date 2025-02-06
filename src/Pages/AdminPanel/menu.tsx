@@ -12,6 +12,11 @@ const mainMenu = [
   },
   {
     icon: <BiCircle />,
+    text: "Propossed Article",
+    link: "propossedArticle",
+  },
+  {
+    icon: <BiCircle />,
     text: "TV/Radio",
     link: "radio",
   },

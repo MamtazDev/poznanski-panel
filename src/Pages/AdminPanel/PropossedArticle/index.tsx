@@ -1,32 +1,28 @@
-import {
-  Input,
-  InputGroup,
-  InputRightElement,
-  Select
-} from "@chakra-ui/react";
+import { Input, InputGroup, InputRightElement, Select } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useSelector } from "react-redux";
-import staticImg from '../../../assets/png/defaultimg.png';
-import CommonButton from "../../../Components/Buttons/CommonButton";
-import CrudBtn from "../../../Components/CrudBtn";
-import EditModal from "../../../Components/Modals/AticleEditModal";
-import ConfirmModal from "../../../Components/Modals/ConfirmModal";
-import PaginationBar from "../../../Components/PaginationBar";
+import staticImg from "../../../assets/png/defaultimg.png";
+
+import "../style.css";
+import { RootState } from "../../../reducers";
 import {
   apiDeleteReq,
   apiGetReq,
   apiPostReq,
   apiPutReq,
 } from "../../../Constant/api-functions";
-import { RootState } from "../../../reducers";
-import "../style.css";
+import CommonButton from "../../../Components/Buttons/CommonButton";
+import CrudBtn from "../../../Components/CrudBtn";
+import ConfirmModal from "../../../Components/Modals/ConfirmModal";
+import PaginationBar from "../../../Components/PaginationBar";
+import EditModal from "../../../Components/Modals/AticleEditModal";
 
 interface News {
   id: string;
   title: string;
   feature: string;
-  tags?: any
+  tags?: any;
   date: string;
   files?: string[];
   content: Content[];
@@ -65,19 +61,19 @@ export const getFirstTag = (tags: string) => {
   return tags.split("#")[0];
 };
 interface NewsDataAll {
-  news: News[];  // Assuming the `news` property holds the actual news data.
+  news: News[]; // Assuming the `news` property holds the actual news data.
 }
-const Article: React.FC<ArticleProps> = ({ tagData }) => {
+const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
   const [cardData, setCardData] = useState<News[]>([]);
   const [newsDataAll, setNewsDataAll] = useState<NewsDataAll | null>(null);
 
   // Then, access it like this:
   const fetchNesAllData = newsDataAll?.news || [];
-  console.log(fetchNesAllData, "fetchNesAllData j")
+  console.log(fetchNesAllData, "fetchNesAllData");
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [selectedPage, setSelectedPage] = useState<string>("1");
   const [selectedRowsNum, setSelectedRowsNum] = useState<number>(5);
-  const [filterText, setFilterText] = useState<string>("");
+  const [filterText, setFilterText] = useState<string>();
   const [pageNum, setPageNum] = useState<string>("1");
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
@@ -99,33 +95,16 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     link: "",
   });
 
-  const handleData = (response: any) => {
-
-  };
-
   useEffect(() => {
-    apiGetReq("/news/all", {
+    apiGetReq("/news/all?type=proposed", {
       rowsPerPage: selectedRowsNum,
       curPage: selectedPage,
       filter: filterText,
-
     }).then((res) => {
       // handleData(res);
-      setNewsDataAll(res)
+      setNewsDataAll(res);
     });
   }, []);
-
-
- useEffect(() => {
-  apiGetReq("/news/all", {
-    rowsPerPage: selectedRowsNum,
-    curPage: selectedPage,
-    filter: filterText,
-  }).then((res) => {
-    setNewsDataAll(res);
-  });
-}, [selectedPage, selectedRowsNum, filterText]);
-
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRowsNum(parseInt(e.target.value));
@@ -160,7 +139,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     }
 
     const selectedData = cardData.find((item) => item.id === id);
-    console.log(selectedData);  // Log selected data
+    console.log(selectedData); // Log selected data
 
     if (selectedData) {
       setModalData(selectedData);
@@ -170,44 +149,45 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     }
   };
 
-
   const handleDelete = (id: string) => {
     setModalData(cardData.filter((item) => item.id === id)[0]);
     setOpenDeleteModal(true);
   };
 
   const handleEditNews = () => {
-    apiPutReq("/news/all", { ...modalData, ...modalData.content[0] }).then((res) => {
-      console.log(res);
+    apiPutReq("/news/all", { ...modalData, ...modalData.content[0] }).then(
+      (res) => {
+        console.log(res);
 
-      const inputDate: Date = new Date(res.data.date);
-      const options: object = {
-        year: "numeric",
-        day: "numeric",
-        month: "long",
-      };
-      const formattedDate: string = inputDate.toLocaleDateString(
-        "en-US",
-        options
-      );
-      if (res.success) {
-        setCardData((prevState) =>
-          prevState.map((item) =>
-            item.id === res.data._id
-              ? {
-                ...item,
-                title: res.data.title,
-                feature: res.data.tag,
-                date: formattedDate,
-                img: modalData.content[0].img,
-                link: res.data.link,
-                description: res.data.description,
-              }
-              : item
-          )
+        const inputDate: Date = new Date(res.data.date);
+        const options: object = {
+          year: "numeric",
+          day: "numeric",
+          month: "long",
+        };
+        const formattedDate: string = inputDate.toLocaleDateString(
+          "en-US",
+          options
         );
+        if (res.success) {
+          setCardData((prevState) =>
+            prevState.map((item) =>
+              item.id === res.data._id
+                ? {
+                    ...item,
+                    title: res.data.title,
+                    feature: res.data.tag,
+                    date: formattedDate,
+                    img: modalData.content[0].img,
+                    link: res.data.link,
+                    description: res.data.description,
+                  }
+                : item
+            )
+          );
+        }
       }
-    });
+    );
     setOpenEditModal(false);
   };
 
@@ -241,24 +221,6 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     });
     setOpenAddModal(false);
   };
-
-  // const handleDeleteNews = () => {
-  //   console.log("deleting:", modalData);
-  //   apiDeleteReq("/news/all", { id: modalData.id }).then((res) => {
-  //     if (res.success) {
-  //       if (res.deleted) {
-  //         setCardData((prevState) =>
-  //           prevState.filter((item) => item.id !== modalData.id)
-  //         );
-  //       } else {
-  //         console.log("No match that news!");
-  //       }
-  //     } else {
-  //       console.log("server error!");
-  //     }
-  //   });
-  //   setOpenDeleteModal(false);
-  // };
 
   const handleDeleteNews = async () => {
     try {
@@ -314,15 +276,19 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
             {fetchNesAllData?.map((item: News, index: number) => {
               // console.log(item.tags, "itemsdkfjdkfjd")
               return (
-                <tr key={index}
-                  className={`border-b py-3  ${!themeMode ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white text-gray-900"}`}>
+                <tr
+                  key={index}
+                  className={`border-b py-3  ${!themeMode ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white text-gray-900"}`}
+                >
                   <td className="flex justify-center mt-3">
-                    <img src={item?.files?.[0] || staticImg} alt={item?.title || "Image related to article"} className="rounded-full w-[100px] h-[100px]" />
+                    <img
+                      src={item?.files?.[0] || staticImg}
+                      alt={item?.title || "Image related to article"}
+                      className="rounded-full w-[100px] h-[100px]"
+                    />
                   </td>
                   <td style={{ width: "200px" }}>{item.title}</td>
-                  <td style={{ width: "200px" }}>
-                    {item?.tags?.split(',')}
-                  </td>
+                  <td style={{ width: "200px" }}>{item?.tags?.split(",")}</td>
                   <td>{item.date}</td>
                   <td>
                     <div className="flex justify-center">
@@ -334,13 +300,15 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                     </div>
                   </td>
                 </tr>
-              )
+              );
             })}
           </tbody>
         </table>
       </div>
       <div className="flex mt-3 justify-end gap-2">
-        <div className={`flex items-center gap-2 ${themeMode ? " text-gray-700" : "text-gray-100"}`}>
+        <div
+          className={`flex items-center gap-2 ${themeMode ? " text-gray-700" : "text-gray-100"}`}
+        >
           Rows per page:
         </div>
         <Select
@@ -414,4 +382,4 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   );
 };
 
-export default Article;
+export default PropossedArticle;
