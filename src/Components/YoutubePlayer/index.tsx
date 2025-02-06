@@ -13,7 +13,6 @@ const YoutubePlayer: React.FC<PlayerProps> = ({ link }) => {
   const [dataLink, setDataLink] = useState<string>(link);
 
   useEffect(() => {
-    console.log("input Link:", link);
     const regExp =
       /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = link.match(regExp);
@@ -62,7 +61,7 @@ const YoutubePlayer: React.FC<PlayerProps> = ({ link }) => {
           console.log("test");
         }}
         opts={opts}
-        onReady={(event) => {
+        onReady={(event: any) => {
           event.target.pauseVideo();
         }}
       />

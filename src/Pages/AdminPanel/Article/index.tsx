@@ -339,9 +339,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
         </table>
       </div>
       <div className="flex mt-3 justify-end gap-2">
-        <div
-          className={`flex items-center gap-2 ${themeMode ? " text-gray-700" : "text-gray-100"}`}
-        >
+        <div className={`flex items-center gap-2 ${themeMode ? " text-gray-700" : "text-gray-100"}`}>
           Rows per page:
         </div>
         <Select
