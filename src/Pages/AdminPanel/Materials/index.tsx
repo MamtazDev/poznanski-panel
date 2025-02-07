@@ -61,7 +61,9 @@ interface TableProps {
 }
 
 const MaterialContent: React.FC<TableProps> = (props) => {
-  const [radioData, setRadioData] = useState<{ materials: Material[] }>({ materials: [] });
+  const [radioData, setRadioData] = useState<{ materials: Material[] }>({
+    materials: [],
+  });
   const [editData, setEditData] = useState<Material | null>(null);
   // const [themeMode, setThemeMode] = useState<boolean>(true);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
@@ -202,7 +204,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       title: "",
       description: "",
       youTube: "",
-      tags: [],  // Should be an array
+      tags: [], // Should be an array
       date: "",
     });
     onNewOpen();
@@ -244,9 +246,13 @@ const MaterialContent: React.FC<TableProps> = (props) => {
     }
   };
 
-
-  const handleNewInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>, field: string) => {
-    setNewData((prev:any) => ({
+  const handleNewInputChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
+    field: string
+  ) => {
+    setNewData((prev: any) => ({
       ...prev,
       [field]: field === "tags" ? e.target.value.split(",") : e.target.value,
     }));
@@ -260,7 +266,6 @@ const MaterialContent: React.FC<TableProps> = (props) => {
     subField?: string
   ) => {
     const { value } = e.target;
-
     setEditData((prev: any) => {
       if (!prev) return prev;
       if (subField) {
@@ -275,8 +280,8 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       return { ...prev, [field]: value };
     });
   };
-  return (
 
+  return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex items-center justify-end py-5">
         <Button colorScheme="green" onClick={handleNewPost}>
@@ -285,28 +290,40 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       </div>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
-        <table className="w-full h-full" >
+        <table className="w-full h-full">
           <thead
-            className={`text-xs uppercase ${themeMode
-              ? " text-gray-700  bg-gray-400"
-              : "bg-gray-700 text-gray-400"
-              }`}
-          >
+            className={`text-xs uppercase ${
+              themeMode
+                ? " text-gray-700  bg-gray-400"
+                : "bg-gray-700 text-gray-400"
+            }`}>
             <tr>
-            <th className="px-6 py-3" style={{ width: "130px" }}>Link</th>
-              <th className="px-6 py-3" style={{ width: "130px" }}>Title</th>
-              <th className="px-6 py-3" style={{ width: "130px" }}>Tags</th>
-              <th className="px-6 py-3" style={{ width: "130px" }}>Date</th>
-              <th className="px-6 py-3" style={{ width: "130px" }}>Description</th>
-              <th className="px-6 py-3" style={{ width: "130px" }}>Action</th>
+              <th className="px-6 py-3" style={{ width: "130px" }}>
+                Link
+              </th>
+              <th className="px-6 py-3" style={{ width: "130px" }}>
+                Title
+              </th>
+              <th className="px-6 py-3" style={{ width: "130px" }}>
+                Tags
+              </th>
+              <th className="px-6 py-3" style={{ width: "130px" }}>
+                Date
+              </th>
+              <th className="px-6 py-3" style={{ width: "130px" }}>
+                Description
+              </th>
+              <th className="px-6 py-3" style={{ width: "130px" }}>
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
             {materials.length > 0 ? (
               materials.map((item: Material, index: number) => (
-                <tr key={index}
-                  className={` p-4 ${!themeMode && "back-dark text-white"}`}
-                >
+                <tr
+                  key={index}
+                  className={` p-4 ${!themeMode && "back-dark text-white"}`}>
                   <td>
                     <a
                       href={item.youTube}
@@ -327,13 +344,15 @@ const MaterialContent: React.FC<TableProps> = (props) => {
                         Delete
                       </Button>
                     </div>
-
                   </td>
                 </tr>
-
               ))
             ) : (
-              <tr><td colSpan={8} className="text-center">No data available</td></tr>
+              <tr>
+                <td colSpan={8} className="text-center">
+                  No data available
+                </td>
+              </tr>
             )}
           </tbody>
         </table>
@@ -370,7 +389,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
             <FormControl id="description" isRequired mt={4}>
               <FormLabel>Description</FormLabel>
               <Input
-                value={editData?.description }
+                value={editData?.description}
                 onChange={(e) => handleInputChange(e, "description")}
                 placeholder="Enter description"
               />
@@ -379,7 +398,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
             <FormControl id="tags" isRequired mt={4}>
               <FormLabel>Tags</FormLabel>
               <Input
-                value={editData?.tags }
+                value={editData?.tags}
                 onChange={(e) => handleInputChange(e, "tags")}
                 placeholder="Enter tags"
               />
@@ -387,7 +406,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
             <FormControl id="date" isRequired mt={4}>
               <FormLabel>Date</FormLabel>
               <Input
-                value={editData?.date }
+                value={editData?.date}
                 onChange={(e) => handleInputChange(e, "date")}
                 placeholder="Enter date"
               />
@@ -404,6 +423,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
       {/* New Post Modal */}
       <Modal isOpen={isNewOpen} onClose={onNewClose}>
         <ModalOverlay />
@@ -451,12 +471,11 @@ const MaterialContent: React.FC<TableProps> = (props) => {
             <FormControl id="date" mt={4}>
               <FormLabel>Start Date</FormLabel>
               <Input
-                value={editData?.date }
+                value={editData?.date}
                 onChange={(e) => handleInputChange(e, "date")}
                 placeholder="Enter date"
               />
             </FormControl>
-
           </ModalBody>
 
           <ModalFooter>
@@ -470,7 +489,6 @@ const MaterialContent: React.FC<TableProps> = (props) => {
         </ModalContent>
       </Modal>
     </div>
-
   );
 };
 

@@ -35,6 +35,7 @@ interface TableProps {
     location: string;
     artist: string;
     star: number;
+    isFeatured: boolean;
   }[];
   handleEdit?: (id: string) => void;
   handleDelete?: (id: string) => void;
@@ -54,15 +55,14 @@ const ConcertContent: React.FC<TableProps> = (props) => {
     img: "",
     description: "",
     link: "",
+    isFeatured: false,
   });
-  console.log(newData, " new data");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isNewOpen,
     onOpen: onNewOpen,
     onClose: onNewClose,
   } = useDisclosure();
-
   const toast = useToast();
 
   // Fetch data
@@ -209,6 +209,20 @@ const ConcertContent: React.FC<TableProps> = (props) => {
     }
   };
 
+  const handleFeaturedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditData((prev: any) => ({
+      ...prev,
+      isFeatured: e.target.value === "true",
+    }));
+  };
+
+  const handleNewFeaturedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewData((prev: any) => ({
+      ...prev,
+      isFeatured: e.target.value === "true",
+    }));
+  };
+
   const handleSave = async () => {
     if (!editData || !editData._id) return;
     const updatedData = {
@@ -218,6 +232,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       description: editData.description,
       location: editData.location,
       link: editData.link,
+      isFeatured: editData.isFeatured,
     };
 
     try {
@@ -282,12 +297,11 @@ const ConcertContent: React.FC<TableProps> = (props) => {
   };
 
   return (
-    <div className="p-3 overflow-y-auto w-full h-full pb-28"
-    style={{}}>
+    <div className="p-3 overflow-y-auto w-full h-full pb-28" style={{}}>
       <div className="flex items-center justify-end py-5">
-      <Button colorScheme="green" onClick={handleNewPost}>
-        Add New Item
-      </Button>
+        <Button colorScheme="green" onClick={handleNewPost}>
+          Add New Item
+        </Button>
       </div>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
@@ -305,6 +319,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
               <th className="px-6 py-3">Location</th>
               <th className="px-6 py-3">Link</th>
               <th className="px-6 py-3">Description</th>
+              <th className="px-6 py-3">isFeatured</th>
               <th className="px-6 py-3">Start</th>
               <th className="px-6 py-3">End</th>
               <th className="px-6 py-3">Action</th>
@@ -317,13 +332,18 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                 <tr
                   key={index}
                   className={`
-
-                    ${themeMode
-                      ? "bg-white text-gray-900"
-                      : "bg-gray-800 text-gray-200"}
+                    ${
+                      themeMode
+                        ? "bg-white text-gray-900"
+                        : "bg-gray-800 text-gray-200"
+                    }
                   `}>
                   <td className="text-center flex items-center justify-center">
-                    <img src={item.img || FolderImage} alt={item.name} className='w-20 h-20 rounded-full'/>
+                    <img
+                      src={item.img || FolderImage}
+                      alt={item.name}
+                      className="w-20 h-20 rounded-full"
+                    />
                   </td>
                   <td>{item.name}</td>
                   <td>{item.category}</td>
@@ -338,6 +358,9 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                     </a>
                   </td>
                   <td className="text-center">{item.description}</td>
+                  <td className="text-center">
+                    {item.isFeatured === true ? "Featured" : "Not Featured"}
+                  </td>
                   <td>{item.timeframe.start}</td>
                   <td>{item.timeframe.end}</td>
                   <td className="text-center space-x-2">
@@ -439,6 +462,30 @@ const ConcertContent: React.FC<TableProps> = (props) => {
               />
             </FormControl>
 
+            {/* isFeatured */}
+            <FormControl id="isFeatured" mt={4}>
+              <FormLabel>Featured Status</FormLabel>
+              <label>
+                <input
+                  type="radio"
+                  name="editIsFeatured"
+                  value="true"
+                  checked={editData?.isFeatured === true}
+                  onChange={handleFeaturedChange}
+                />
+                Featured
+              </label>
+              <label className="ml-4">
+                <input
+                  type="radio"
+                  name="editIsFeatured"
+                  value="false"
+                  checked={editData?.isFeatured === false}
+                  onChange={handleFeaturedChange}
+                />
+                Not Featured
+              </label>
+            </FormControl>
           </ModalBody>
 
           <ModalFooter>
@@ -498,21 +545,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
               />
             </FormControl>
 
-            {/* Timeframe */}
-            {/* <FormControl id="timeframe" mt={4}>
-              <FormLabel>Start Date</FormLabel>
-              <Input
-                type="datetime-local"
-                value={newData.timeframe.start}
-                onChange={(e) => handleNewInputChange(e, "timeframe.start")}
-              />
-              <FormLabel>End Date</FormLabel>
-              <Input
-                type="datetime-local"
-                value={newData.timeframe.end}
-                onChange={(e) => handleNewInputChange(e, "timeframe.end")}
-              />
-            </FormControl> */}
+            {/* Time frame */}
             <FormControl id="timeframe" mt={4}>
               <FormLabel>Start Date</FormLabel>
               <Input
@@ -544,6 +577,31 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                 onChange={handleNewImageUpload}
                 mt={2}
               />
+            </FormControl>
+
+            {/* Is Featured */}
+            <FormControl id="isFeatured" mt={4}>
+              <FormLabel>Featured Status</FormLabel>
+              <label>
+                <input
+                  type="radio"
+                  name="newIsFeatured"
+                  value="true"
+                  checked={newData.isFeatured === true}
+                  onChange={handleNewFeaturedChange}
+                />
+                Featured
+              </label>
+              <label className="ml-4">
+                <input
+                  type="radio"
+                  name="newIsFeatured"
+                  value="false"
+                  checked={newData.isFeatured === false}
+                  onChange={handleNewFeaturedChange}
+                />
+                Not Featured
+              </label>
             </FormControl>
           </ModalBody>
 

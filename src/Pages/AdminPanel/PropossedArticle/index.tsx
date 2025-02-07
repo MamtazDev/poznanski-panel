@@ -67,7 +67,7 @@ interface ArticleProps {
   tagData: any[];
 }
 
-const Article: React.FC<ArticleProps> = ({ tagData }) => {
+const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
   const [cardData, setCardData] = useState<News[]>([]);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [editData, setEditData] = useState<News | null>(null);
@@ -96,7 +96,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   const toast = useToast();
 
   const fetchArticles = () => {
-    apiGetReq("/news/all", {})
+    apiGetReq("/news/all?type=proposed", {})
       .then((res) => {
         if (res?.news) {
           setCardData(res.news);
@@ -117,7 +117,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
 
     try {
       const res = await apiPostReq("/upload", formData, true);
-      return res?.fileUrl || ""; // Make sure this matches API response
+      return res?.fileUrl || "";
     } catch (error) {
       console.error("Error uploading image:", error);
       return "";
@@ -190,20 +190,58 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     }
   };
 
+  // const handleSave = async () => {
+  //   if (!editData || !editData._id) return;
+
+  //   try {
+  //     const res = await apiPutReq(`/news/${editData._id}`, editData);
+  //     if (res.success) {
+  //       fetchArticles();
+  //       toast({
+  //         title: "Article updated successfully!",
+  //         status: "success",
+  //         duration: 3000,
+  //         isClosable: true,
+  //       });
+  //       onClose();
+  //     } else {
+  //       toast({
+  //         title: "Failed to update article",
+  //         status: "error",
+  //         duration: 3000,
+  //         isClosable: true,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error updating article:", error);
+  //     toast({
+  //       title: "Error updating article",
+  //       status: "error",
+  //       duration: 3000,
+  //       isClosable: true,
+  //     });
+  //   }
+  // };
+
   const handleSave = async () => {
-    if (!editData || !editData._id) return;
+    if (!editData || !editData._id) {
+      console.error("No data to update");
+      return;
+    }
 
     try {
+      console.log("Saving data:", editData); // Debug log to ensure the data is correct
+
       const res = await apiPutReq(`/news/${editData._id}`, editData);
       if (res.success) {
-        fetchArticles(); // Refetch data after update
+        fetchArticles(); // Fetch updated articles after save
         toast({
           title: "Article updated successfully!",
           status: "success",
           duration: 3000,
           isClosable: true,
         });
-        onClose();
+        onClose(); // Close modal
       } else {
         toast({
           title: "Failed to update article",
@@ -274,6 +312,19 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     }
   };
 
+  // const handleInputChange = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  //   field: string,
+  //   isNew: boolean = false
+  // ) => {
+  //   const { value } = e.target;
+
+  //   if (isNew) {
+  //     setNewData((prev) => ({ ...prev, [field]: value }));
+  //   } else {
+  //     setEditData((prev) => (prev ? { ...prev, [field]: value } : null));
+  //   }
+  // };
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field: string,
@@ -282,9 +333,17 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     const { value } = e.target;
 
     if (isNew) {
-      setNewData((prev) => ({ ...prev, [field]: value }));
+      setNewData((prev) => {
+        const updated = { ...prev, [field]: value };
+        console.log("Updated newData:", updated); // Debug log
+        return updated;
+      });
     } else {
-      setEditData((prev) => (prev ? { ...prev, [field]: value } : null));
+      setEditData((prev) => {
+        const updated = prev ? { ...prev, [field]: value } : null;
+        console.log("Updated editData:", updated); // Debug log
+        return updated;
+      });
     }
   };
 
@@ -503,4 +562,4 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   );
 };
 
-export default Article;
+export default PropossedArticle;

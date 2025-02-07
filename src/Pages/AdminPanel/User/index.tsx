@@ -20,15 +20,16 @@ import {
   Th,
   Thead,
   Tr,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { AiOutlineEdit, AiOutlineSearch } from "react-icons/ai";
 import { useSelector } from "react-redux";
-import { apiGetReq } from "../../../Constant/api-functions";
+import { apiGetReq, apiPutReq } from "../../../Constant/api-functions";
 import { RootState } from "../../../reducers";
 
 interface Users {
+  _id: string;
   id: string;
   nickname: string;
   role: string;
@@ -42,18 +43,11 @@ interface UserDataProps {
 
 const UserMainPage: React.FC<UserDataProps> = () => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-  const [openAddModal, setOpenAddModal] = useState<boolean>(false);
   const [filterText, setFilterText] = useState<string>("");
-  const [selectedRowsNum, setSelectedRowsNum] = useState<number>(5);
-  const [selectedPage, setSelectedPage] = useState<string>("1");
-  const [userAllData, setUserAllData] = useState<Users[]>([]);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedUserId, setSelectedUserId] = useState<string>("");
   const [verificationStatus, setVerificationStatus] = useState<string>("");
-
-  const handleAddArticle = () => {
-    setOpenAddModal(true);
-  };
+  const [userAllData, setUserAllData] = useState<Users[]>([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleChangeFilterText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(e.target.value);
@@ -69,41 +63,30 @@ const UserMainPage: React.FC<UserDataProps> = () => {
     setVerificationStatus(status);
   };
 
-  const handleSaveVerification = () => {
-    // Debugging logs
-    console.log("selectedUserId:", selectedUserId);
-    console.log("verificationStatus:", verificationStatus);
-    console.log("userAllData before update:", userAllData);
+  const handleSaveVerification = async () => {
+    try {
+      await apiPutReq(`/auth/users/${selectedUserId}`, {
+        isVerified: verificationStatus === "Verified",
+      });
+      setUserAllData((prevData) =>
+        prevData.map((user) =>
+          user.id === selectedUserId
+            ? { ...user, isVerified: verificationStatus === "Verified" }
+            : user
+        )
+      );
 
-    setUserAllData((prevData) =>
-      prevData.map((user) =>
-        user.id === selectedUserId
-          ? { ...user, isVerified: verificationStatus === "Verified" }
-          : user
-      )
-    );
-
-    // Debugging after the update
-    console.log("userAllData after update:", userAllData);
-
-    onClose(); // Close the modal after saving
+      onClose();
+    } catch (error) {
+      console.error("Error updating user verification status:", error);
+    }
   };
 
   useEffect(() => {
-    apiGetReq("/auth/users", {
-      filter: filterText,
-    })
-      .then((res) => {
-        setUserAllData(res);
-      })
-      .catch((err) => {
-        console.error("Error fetching data:", err);
-      });
-  }, [selectedRowsNum, selectedPage, filterText]);
-
-  useEffect(() => {
-    console.log("Updated userAllData:", userAllData);
-  }, [userAllData]);
+    apiGetReq("/auth/users", { filter: filterText })
+      .then((res) => setUserAllData(res))
+      .catch((err) => console.error("Error fetching data:", err));
+  }, [filterText]);
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
@@ -122,36 +105,31 @@ const UserMainPage: React.FC<UserDataProps> = () => {
           </InputGroup>
         </div>
       </div>
+
       <TableContainer>
         <Table variant="striped" colorScheme="gray">
           <Thead>
             <Tr>
-              <Th>Image</Th>
               <Th>Title</Th>
               <Th>Role</Th>
               <Th>Email</Th>
               <Th>Is Verified</Th>
             </Tr>
           </Thead>
-
           <Tbody>
-            {userAllData?.map((users: any, index: any) => (
-              <Tr key={index}>
-                <Td>
-                  <img src="" alt={users.nickname} />
-                </Td>
-                <Td className="capitalize">{users.nickname}</Td>
-                <Td className="capitalize">{users.role}</Td>
-                <Td>{users.email}</Td>
+            {userAllData?.map((user) => (
+              <Tr>
+                <Td className="capitalize">{user.nickname}</Td>
+                <Td className="capitalize">{user.role}</Td>
+                <Td>{user.email}</Td>
                 <Td>
                   <div className="flex gap-2 items-center">
-                    <h2 style={{ color: users.isVerified ? "green" : "red" }}>
-                      {users.isVerified ? "Verified" : "Unverified"}
+                    <h2 style={{ color: user.isVerified ? "green" : "red" }}>
+                      {user.isVerified ? "Verified" : "Unverified"}
                     </h2>
                     <AiOutlineEdit
-                      onClick={() =>
-                        handleEditClick(users.id, users.isVerified)
-                      }
+                      onClick={() => handleEditClick(user._id, user.isVerified)}
+                      className="cursor-pointer"
                     />
                   </div>
                 </Td>
@@ -161,7 +139,6 @@ const UserMainPage: React.FC<UserDataProps> = () => {
         </Table>
       </TableContainer>
 
-      {/* Modal for editing verification status */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -170,15 +147,13 @@ const UserMainPage: React.FC<UserDataProps> = () => {
           <ModalBody>
             <RadioGroup
               onChange={handleVerificationChange}
-              value={verificationStatus}
-            >
+              value={verificationStatus}>
               <Stack direction="column">
                 <Radio value="Verified">Verified</Radio>
                 <Radio value="Unverified">Unverified</Radio>
               </Stack>
             </RadioGroup>
           </ModalBody>
-
           <ModalFooter className="space-x-2">
             <Button colorScheme="blue" onClick={handleSaveVerification}>
               Save
