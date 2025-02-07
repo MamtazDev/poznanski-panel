@@ -115,7 +115,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
 
   const handleDelete = async (id: string) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this item?"
+      "Are you sure you want to delete this item?",
     );
 
     if (!confirmDelete) return;
@@ -166,7 +166,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       if (res) {
         setRadioData((prev) => ({
           materials: prev.materials.map((item) =>
-            item._id === editData._id ? { ...item, ...res.data } : item
+            item._id === editData._id ? { ...item, ...res.data } : item,
           ),
         }));
 
@@ -250,7 +250,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
     e:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>,
-    field: string
+    field: string,
   ) => {
     setNewData((prev: any) => ({
       ...prev,
@@ -263,7 +263,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
     field: string,
-    subField?: string
+    subField?: string,
   ) => {
     const { value } = e.target;
     setEditData((prev: any) => {
@@ -296,7 +296,8 @@ const MaterialContent: React.FC<TableProps> = (props) => {
               themeMode
                 ? " text-gray-700  bg-gray-400"
                 : "bg-gray-700 text-gray-400"
-            }`}>
+            }`}
+          >
             <tr>
               <th className="px-6 py-3" style={{ width: "130px" }}>
                 Link
@@ -323,13 +324,15 @@ const MaterialContent: React.FC<TableProps> = (props) => {
               materials.map((item: Material, index: number) => (
                 <tr
                   key={index}
-                  className={` p-4 ${!themeMode && "back-dark text-white"}`}>
+                  className={` p-4 ${!themeMode && "back-dark text-white"}`}
+                >
                   <td>
                     <a
                       href={item.youTube}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-500 underline">
+                      className="text-blue-500 underline"
+                    >
                       View
                     </a>
                   </td>

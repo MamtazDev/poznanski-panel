@@ -7,10 +7,10 @@ import ConfirmModal from "../../../Components/Modals/ConfirmModal";
 import EditModal from "../../../Components/Modals/ProductEditModal";
 import ProductTable from "../../../Components/Tables/RadioTv";
 import {
-    apiDeleteReq,
-    apiGetReq,
-    apiPostReq,
-    apiPutReq,
+  apiDeleteReq,
+  apiGetReq,
+  apiPostReq,
+  apiPutReq,
 } from "../../../Constant/api-functions";
 import { fileUrl } from "../../../Constant/config";
 import { RootState } from "../../../reducers";
@@ -93,7 +93,7 @@ const RadioContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
       };
       const formattedDate: string = inputDate.toLocaleDateString(
         "en-US",
-        options
+        options,
       );
       const temp: Product = {
         id: item._id,
@@ -163,7 +163,7 @@ const RadioContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
       };
       const formattedDate: string = inputDate.toLocaleDateString(
         "en-US",
-        options
+        options,
       );
       if (res.success) {
         setCardData((prevState) =>
@@ -180,8 +180,8 @@ const RadioContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
                   artist: res.data.artist,
                   star: res.data.star,
                 }
-              : item
-          )
+              : item,
+          ),
         );
       }
     });
@@ -201,7 +201,7 @@ const RadioContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
       };
       const formattedDate: string = inputDate.toLocaleDateString(
         "en-US",
-        options
+        options,
       );
       if (res.success) {
         setCardData((prevState) => [
@@ -229,7 +229,7 @@ const RadioContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
       if (res.success) {
         if (res.deleted) {
           setCardData((prevState) =>
-            prevState.filter((item) => item.id !== modalData.id)
+            prevState.filter((item) => item.id !== modalData.id),
           );
         } else {
           console.log("No match that news!");

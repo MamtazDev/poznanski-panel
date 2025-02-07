@@ -142,7 +142,8 @@ const EditModal: React.FC<ModalProps> = ({
   const handleChangeDate = (payload: Object) => {
     console.log({ payload });
     setData({
-      ...data, ...payload,
+      ...data,
+      ...payload,
     });
   };
 
@@ -185,7 +186,8 @@ const EditModal: React.FC<ModalProps> = ({
                 </div>
               </div>
               <div className="image-field w-2/5">
-                {data?.content[0].img === fileUrl || data?.content[0].img === "" ? (
+                {data?.content[0].img === fileUrl ||
+                data?.content[0].img === "" ? (
                   <div className="flex items-center justify-center h-full">
                     <div className="flex flex-col gap-2">
                       <div className="flex justify-center">

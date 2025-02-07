@@ -144,9 +144,7 @@ const ProductEditModal: React.FC<ModalProps> = ({
     }
   };
 
-
   return (
-
     <>
       <Modal isCentered={true} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -282,8 +280,7 @@ const ProductEditModal: React.FC<ModalProps> = ({
         </ModalContent>
       </Modal>
     </>
-
-);
+  );
 };
 
 export default ProductEditModal;

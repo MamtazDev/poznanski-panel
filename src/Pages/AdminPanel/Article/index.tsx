@@ -126,7 +126,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
 
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
-    isNew: boolean = false
+    isNew: boolean = false,
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -139,7 +139,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
           }));
         } else {
           setEditData((prev) =>
-            prev ? { ...prev, files: [uploadedImageUrl] } : null
+            prev ? { ...prev, files: [uploadedImageUrl] } : null,
           );
         }
       }
@@ -156,7 +156,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
 
   const handleDelete = async (id: string) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this item?"
+      "Are you sure you want to delete this item?",
     );
 
     if (!confirmDelete) return;
@@ -277,7 +277,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field: string,
-    isNew: boolean = false
+    isNew: boolean = false,
   ) => {
     const { value } = e.target;
 
@@ -313,7 +313,8 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
               themeMode
                 ? "text-gray-700 bg-gray-400"
                 : "bg-gray-700 text-gray-400"
-            }`}>
+            }`}
+          >
             <tr>
               <th className="px-6 py-3">Image</th>
               <th className="px-6 py-3">Title</th>
@@ -330,7 +331,8 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                   !themeMode
                     ? "bg-gray-800 text-gray-200"
                     : "bg-white text-gray-900"
-                }`}>
+                }`}
+              >
                 <td>
                   <img
                     src={item?.files?.[0] || staticImg}
@@ -404,14 +406,15 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
               id="confirmed"
               mt={4}
               display="flex"
-              alignItems="center">
+              alignItems="center"
+            >
               <FormLabel>Confirmed</FormLabel>
               <input
                 type="checkbox"
                 checked={editData?.confirmed || false}
                 onChange={(e) =>
                   setEditData((prev) =>
-                    prev ? { ...prev, confirmed: e.target.checked } : null
+                    prev ? { ...prev, confirmed: e.target.checked } : null,
                   )
                 }
               />
@@ -475,7 +478,8 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
               id="confirmed"
               mt={4}
               display="flex"
-              alignItems="center">
+              alignItems="center"
+            >
               <FormLabel>Confirmed</FormLabel>
               <input
                 type="checkbox"

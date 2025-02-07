@@ -24,7 +24,7 @@ export const changeData1 = (date: string) => {
     };
     const formattedDate: string = inputDate.toLocaleDateString(
       "en-US",
-      options
+      options,
     );
     return formattedDate;
   } else {

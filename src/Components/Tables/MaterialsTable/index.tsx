@@ -33,13 +33,11 @@ interface TableProps {
 }
 
 const MaterialsTable: React.FC<TableProps> = (props) => {
+  const [materials, setMaterialsData] = useState<any[]>([]);
 
-  const [materials, setMaterialsData] = useState<any[]>([])
-
-  console.log(materials, "materialsmaterialsmaterials")
+  console.log(materials, "materialsmaterialsmaterials");
   useEffect(() => {
-    apiGetReq(`/materials`, {
-    }).then((res) => {
+    apiGetReq(`/materials`, {}).then((res) => {
       setMaterialsData(res?.materials);
     });
   }, []);
@@ -53,7 +51,7 @@ const MaterialsTable: React.FC<TableProps> = (props) => {
           >
             <tr>
               <th className="px-6 py-3">Description</th>
-              <th className="px-6 py-3" >Youtube </th>
+              <th className="px-6 py-3">Youtube </th>
               <th className="px-6 py-3 w-28">Tag</th>
               <th className="px-6 py-3 w-28">Title</th>
               <th className="px-6 py-3 w-32">Date</th>
@@ -72,25 +70,23 @@ const MaterialsTable: React.FC<TableProps> = (props) => {
                     <div className="relative w-full h-full">
                       <iframe
                         src={
-                          item.youTube.includes('youtube.com/watch')
-                            ? `https://www.youtube.com/embed/${item.youTube.split('v=')[1]}`
-                            : item.youTube || "https://www.youtube.com/embed/6JYIGclVQdw"
+                          item.youTube.includes("youtube.com/watch")
+                            ? `https://www.youtube.com/embed/${item.youTube.split("v=")[1]}`
+                            : item.youTube ||
+                              "https://www.youtube.com/embed/6JYIGclVQdw"
                         }
                         title={item.title}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         frameBorder="0"
                         width="300"
                         height="150"
-                      >
-
-                      </iframe>
+                      ></iframe>
                     </div>
                   </td>
 
                   <td>{item.tags}</td>
                   <td>{item.title}</td>
                   <td>{item.date}</td>
-
 
                   <td>
                     <div className="flex justify-center">
@@ -122,8 +118,8 @@ const MaterialsTable: React.FC<TableProps> = (props) => {
               </tr>
             )}
           </tbody>
-        </table >
-      </div >
+        </table>
+      </div>
       <div className="flex mt-3 justify-end gap-2">
         <div
           className={`flex items-center gap-2 ${props.themeMode ? " text-gray-700" : "text-gray-100"}`}
@@ -171,8 +167,8 @@ const MaterialsTable: React.FC<TableProps> = (props) => {
           setSelectedPage={props.setSelectedPage}
           pages={props.pageNum}
         />
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 

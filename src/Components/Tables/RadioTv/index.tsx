@@ -117,7 +117,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
 
   const handleDelete = async (id: string) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this item?"
+      "Are you sure you want to delete this item?",
     );
     if (!confirmDelete) return;
 
@@ -154,7 +154,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
-    field: string
+    field: string,
   ) => {
     if (editData) {
       setEditData({ ...editData, [field]: e.target.value });
@@ -165,7 +165,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
-    field: string
+    field: string,
   ) => {
     setNewData({ ...newData, [field]: e.target.value });
   };
@@ -183,7 +183,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
   };
 
   const handleImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -198,7 +198,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
   };
 
   const handleNewImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -229,8 +229,8 @@ const RadioTv: React.FC<TableProps> = (props) => {
       if (res) {
         setRadioData((prev) =>
           prev.map((item) =>
-            item._id === editData._id ? { ...item, ...res.data } : item
-          )
+            item._id === editData._id ? { ...item, ...res.data } : item,
+          ),
         );
         onClose();
         setEditData(null);
@@ -269,7 +269,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
 
   useEffect(() => {
     apiGetReq("/radio", {}).then((res) => {
-      console.log(res.records)
+      console.log(res.records);
       setRadioData(res.records);
     });
   }, []);
@@ -289,7 +289,8 @@ const RadioTv: React.FC<TableProps> = (props) => {
               props.themeMode
                 ? " text-gray-700  bg-gray-400"
                 : "bg-gray-700 text-gray-400"
-            }`}>
+            }`}
+          >
             <tr>
               <th className="px-6 py-3" style={{ width: "130px" }}>
                 Name
@@ -373,7 +374,8 @@ const RadioTv: React.FC<TableProps> = (props) => {
                   !props.themeMode
                     ? "bg-gray-800 border-gray-700 text-gray-200"
                     : "bg-white text-gray-900"
-                }`}>
+                }`}
+              >
                 <td>{item?.artists?.map((i: any) => i.name)}</td>
                 <td>
                   <img
@@ -395,7 +397,8 @@ const RadioTv: React.FC<TableProps> = (props) => {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     frameBorder="0"
                     width="300"
-                    height="150"></iframe>
+                    height="150"
+                  ></iframe>
                 </td>
                 <td style={{ width: "200px" }}>{item?.title}</td>
                 <td>{item?.tags}</td>
@@ -426,7 +429,8 @@ const RadioTv: React.FC<TableProps> = (props) => {
               <Select
                 placeholder="Select Artist"
                 value={editData?.artists || ""}
-                onChange={(e) => handleInputChange(e, "artists")}>
+                onChange={(e) => handleInputChange(e, "artists")}
+              >
                 {artistAllData.length > 0 ? (
                   artistAllData.map((items: any, index: number) => (
                     <option key={index} value={items.artist._id}>
@@ -517,7 +521,8 @@ const RadioTv: React.FC<TableProps> = (props) => {
               <Select
                 placeholder="Select Artist"
                 value={newData?.artists}
-                onChange={(e) => handleNewInputChange(e, "artists")}>
+                onChange={(e) => handleNewInputChange(e, "artists")}
+              >
                 {artistAllData.length > 0 ? (
                   artistAllData?.map((items: any, index: number) => (
                     <option key={index} value={items.artist._id}>

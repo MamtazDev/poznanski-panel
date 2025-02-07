@@ -83,7 +83,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
 
   const handleDelete = async (id: string) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this item?"
+      "Are you sure you want to delete this item?",
     );
 
     if (!confirmDelete) return;
@@ -122,7 +122,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
     field: string,
-    subField?: string
+    subField?: string,
   ) => {
     const { value } = e.target;
 
@@ -146,7 +146,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
     field: string,
-    subField?: string
+    subField?: string,
   ) => {
     const { value } = e.target;
 
@@ -180,7 +180,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
   };
 
   const handleImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -195,7 +195,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
   };
 
   const handleNewImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -240,8 +240,8 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       if (res) {
         setRadioData((prev) =>
           prev.map((item) =>
-            item._id === editData._id ? { ...item, ...res.data } : item
-          )
+            item._id === editData._id ? { ...item, ...res.data } : item,
+          ),
         );
 
         toast({
@@ -311,7 +311,8 @@ const ConcertContent: React.FC<TableProps> = (props) => {
               themeMode
                 ? "text-gray-700 bg-gray-400"
                 : "bg-gray-700 text-gray-400"
-            }`}>
+            }`}
+          >
             <tr>
               <th className="px-6 py-3">Image</th>
               <th className="px-6 py-3">Title</th>
@@ -337,7 +338,8 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                         ? "bg-white text-gray-900"
                         : "bg-gray-800 text-gray-200"
                     }
-                  `}>
+                  `}
+                >
                   <td className="text-center flex items-center justify-center">
                     <img
                       src={item.img || FolderImage}
@@ -353,7 +355,8 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                       href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-500 underline">
+                      className="text-blue-500 underline"
+                    >
                       View
                     </a>
                   </td>

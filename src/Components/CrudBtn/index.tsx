@@ -10,7 +10,6 @@ interface CrudBtnProps {
   mode?: boolean;
   onClickEdit: (value: string, mode?: boolean) => void;
   onClickDelete: (value: string, mode?: boolean) => void;
-
 }
 
 const CrudBtn: React.FC<CrudBtnProps> = ({

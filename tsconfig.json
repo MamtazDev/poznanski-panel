@@ -14,7 +14,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "react-jsx"
   },
-  "include": ["src", "node_modules/react-slick", "node_modules/react-datepicker"],
+  "include": [
+    "src",
+    "node_modules/react-slick",
+    "node_modules/react-datepicker"
+  ]
 }

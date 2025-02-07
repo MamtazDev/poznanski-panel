@@ -44,11 +44,10 @@ interface ProductContentProps {
 }
 
 const RadioTvPage: React.FC<ProductContentProps> = ({ path, tagData }) => {
- const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
-
       <div className="flex justify-between">
         <div className="mb-4" style={{ width: "300px" }}>
           <InputGroup>
@@ -63,11 +62,10 @@ const RadioTvPage: React.FC<ProductContentProps> = ({ path, tagData }) => {
             </InputRightElement>
           </InputGroup>
         </div>
-            {/* <button>Add New Items</button> */}
+        {/* <button>Add New Items</button> */}
       </div>
 
       <RadioTv themeMode={themeMode} />
-
     </div>
   );
 };

@@ -12,7 +12,9 @@ import { closePlayer } from "../reducers/PlayerReducer";
 
 const AdminPanel = lazy(() => import("../Pages/AdminPanel"));
 const Article = lazy(() => import("../Pages/AdminPanel/Article"));
-const PropossedArticle = lazy(() => import("../Pages/AdminPanel/PropossedArticle"));
+const PropossedArticle = lazy(
+  () => import("../Pages/AdminPanel/PropossedArticle"),
+);
 const MaterialContent = lazy(() => import("../Pages/AdminPanel/Materials"));
 const Concert = lazy(() => import("../Pages/AdminPanel/Concert"));
 const Artist = lazy(() => import("../Pages/AdminPanel/Artist"));
@@ -72,7 +74,9 @@ const AppMain: React.FC = () => {
             />
             <Route
               path="propossedArticle"
-              element={<AdminPanel component={<PropossedArticle tagData={tags} />} />}
+              element={
+                <AdminPanel component={<PropossedArticle tagData={tags} />} />
+              }
             />
             <Route
               path="radio"
@@ -82,11 +86,7 @@ const AppMain: React.FC = () => {
             />
             <Route
               path="material"
-              element={
-                <AdminPanel
-                  component={<MaterialContent />}
-                />
-              }
+              element={<AdminPanel component={<MaterialContent />} />}
             />
 
             <Route

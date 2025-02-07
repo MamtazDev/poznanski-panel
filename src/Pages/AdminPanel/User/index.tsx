@@ -72,8 +72,8 @@ const UserMainPage: React.FC<UserDataProps> = () => {
         prevData.map((user) =>
           user.id === selectedUserId
             ? { ...user, isVerified: verificationStatus === "Verified" }
-            : user
-        )
+            : user,
+        ),
       );
 
       onClose();
@@ -147,7 +147,8 @@ const UserMainPage: React.FC<UserDataProps> = () => {
           <ModalBody>
             <RadioGroup
               onChange={handleVerificationChange}
-              value={verificationStatus}>
+              value={verificationStatus}
+            >
               <Stack direction="column">
                 <Radio value="Verified">Verified</Radio>
                 <Radio value="Unverified">Unverified</Radio>

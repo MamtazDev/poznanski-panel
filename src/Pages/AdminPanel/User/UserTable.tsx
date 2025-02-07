@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 // Define types for user and props
 interface User {
@@ -16,7 +16,7 @@ interface UserTableProps {
 }
 
 const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onDelete }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 5;
 
@@ -24,7 +24,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onDelete }) => {
   const filteredUsers = users.filter(
     (user) =>
       user.nickname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // Pagination
@@ -67,7 +67,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onDelete }) => {
               <td className="border px-4 py-2">{user.email}</td>
               <td className="border px-4 py-2">{user.role}</td>
               <td className="border px-4 py-2">
-                {user.isVerified ? 'Yes' : 'No'}
+                {user.isVerified ? "Yes" : "No"}
               </td>
               <td className="border px-4 py-2">
                 <button
@@ -93,10 +93,11 @@ const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onDelete }) => {
           <button
             key={index + 1}
             onClick={() => handlePageChange(index + 1)}
-            className={`mx-1 px-3 py-1 rounded ${currentPage === index + 1
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700'
-              }`}
+            className={`mx-1 px-3 py-1 rounded ${
+              currentPage === index + 1
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700"
+            }`}
           >
             {index + 1}
           </button>

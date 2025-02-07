@@ -3,7 +3,7 @@
   height: 79px !important;
 }
 
-.back-dark{
+.back-dark {
   background-color: #111217 !important;
 }
 
@@ -40,30 +40,30 @@
   line-height: normal;
   text-transform: capitalize;
   justify-content: center;
-  background-color: #5A1073;
+  background-color: #5a1073;
   border-radius: 8px;
 }
 
-.submit-btn-dark{
-  background-color: #3BD6C6;
-  color: #5A1073;
+.submit-btn-dark {
+  background-color: #3bd6c6;
+  color: #5a1073;
 }
 
 .submit-btn-2 {
-    border-radius: 8px;
-    background: var(--Primary-Purple-primary-purple-500, #5A1073);
-    height: 48px;
-    padding: 18px 34px;
-    color: #FFF;
-    text-align: center;
-    font-family: Urbanist;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    text-transform: capitalize;
-    justify-content: center;
-    align-items: center;
+  border-radius: 8px;
+  background: var(--Primary-Purple-primary-purple-500, #5a1073);
+  height: 48px;
+  padding: 18px 34px;
+  color: #fff;
+  text-align: center;
+  font-family: Urbanist;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: capitalize;
+  justify-content: center;
+  align-items: center;
 }
 
 .filter-box {
@@ -79,7 +79,7 @@
 }
 
 .filter-box-dark {
-  background-color: #14151C;
+  background-color: #14151c;
 }
 
 .filter-box input {
@@ -115,11 +115,11 @@
   color: var(--Primary-Purple-primary-purple-500, #5a1073);
 }
 
-.Nav-btn-dark{
-  color: #6D6E76;
+.Nav-btn-dark {
+  color: #6d6e76;
 }
-.Nav-btn-dark:hover{
-  color: #21E3CE;
+.Nav-btn-dark:hover {
+  color: #21e3ce;
 }
 .selected-menu {
   color: var(--Primary-Purple-primary-purple-500, #5a1073) !important;
@@ -127,31 +127,32 @@
 }
 
 .selected-menu-dark {
-  color: #21E3CE !important;
+  color: #21e3ce !important;
   font-weight: 700 !important;
 }
 
-.breadcrumb-text{
-    color: var(--Base-base-200, #9B9CA1);
-    font-feature-settings: 'clig' off, 'liga' off;
-    font-family: Urbanist;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+.breadcrumb-text {
+  color: var(--Base-base-200, #9b9ca1);
+  font-feature-settings:
+    "clig" off,
+    "liga" off;
+  font-family: Urbanist;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .selected-text-color {
-    color: var(--Primary-Purple-primary-purple-500, #5A1073);
-    font-weight: 600 !important;
+  color: var(--Primary-Purple-primary-purple-500, #5a1073);
+  font-weight: 600 !important;
 }
 
 .Nav-vertical-btn {
-    color: var(--Base-base-100, #BBBCC0);
-    font-family: Urbanist;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
+  color: var(--Base-base-100, #bbbcc0);
+  font-family: Urbanist;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
-

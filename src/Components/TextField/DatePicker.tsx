@@ -26,10 +26,10 @@ const DatePicker: React.FC<InputProps> = ({
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if(onChange){
+    if (onChange) {
       onChange({
-        [e.target.name]: formatDateToMonthDayYear(e.target.value)
-      })
+        [e.target.name]: formatDateToMonthDayYear(e.target.value),
+      });
     }
   };
   return (

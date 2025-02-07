@@ -21,7 +21,6 @@ interface Tag {
 }
 
 interface Data {
-
   date: string;
   title: string;
   feature?: string;
@@ -44,7 +43,14 @@ interface ModalProps {
 
 const MaterialsAddModal: React.FC<ModalProps> = ({
   isOpen,
-  data = { date: "", title: "", tags: "", description: "", youTube: "", comment: "" },
+  data = {
+    date: "",
+    title: "",
+    tags: "",
+    description: "",
+    youTube: "",
+    comment: "",
+  },
   setData,
   handleOk,
   setIsOpen,
@@ -85,15 +91,13 @@ const MaterialsAddModal: React.FC<ModalProps> = ({
 
   const createNewTag = (value: string) => {
     console.log(value);
-    setTags((prevTags) => [
-      ...prevTags,
-      { _id: `${Date.now()}`, name: value },
-    ]);
+    setTags((prevTags) => [...prevTags, { _id: `${Date.now()}`, name: value }]);
   };
 
   const handleChangeDate = (value: any) => {
     // Validate if value is a valid date
-    const selectedDate = value instanceof Date && !isNaN(value.getTime()) ? value : null;
+    const selectedDate =
+      value instanceof Date && !isNaN(value.getTime()) ? value : null;
 
     if (selectedDate) {
       const formattedDate = selectedDate.toISOString().split("T")[0]; // "yyyy-MM-dd"
@@ -109,7 +113,6 @@ const MaterialsAddModal: React.FC<ModalProps> = ({
       }));
     }
   };
-
 
   const handleSaveMaterial = () => {
     console.log("Current Material Data: ", data);
@@ -170,7 +173,9 @@ const MaterialsAddModal: React.FC<ModalProps> = ({
                     name="link"
                     label="YouTube Video Link"
                     value={data.youTube}
-                    onChange={(e) => setData({ ...data, youTube: e.target.value })}
+                    onChange={(e) =>
+                      setData({ ...data, youTube: e.target.value })
+                    }
                   />
                 </div>
               </div>
@@ -181,7 +186,6 @@ const MaterialsAddModal: React.FC<ModalProps> = ({
                 label="Date"
                 value={data.date}
                 onChange={handleChangeDate}
-
               />
             </div>
             <div className="space-y-3 w-full md:mt-6">
@@ -195,7 +199,9 @@ const MaterialsAddModal: React.FC<ModalProps> = ({
                 style={{ color: themeMode ? "#333" : "#FFF" }}
                 className="w-full bg-transparent border rounded-lg h-10 pl-3"
                 defaultValue={data.description}
-                onChange={(e) => setData({ ...data, description: e.target.value })}
+                onChange={(e) =>
+                  setData({ ...data, description: e.target.value })
+                }
               />
             </div>
             <div className="md:mt-6">

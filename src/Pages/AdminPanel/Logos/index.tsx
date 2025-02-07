@@ -119,8 +119,8 @@ const PartnerLogos = () => {
                   img1: modalData.img1,
                   img2: modalData.img2,
                 }
-              : item
-          )
+              : item,
+          ),
         );
       }
     });
@@ -165,7 +165,7 @@ const PartnerLogos = () => {
       if (res.success) {
         if (res.deleted) {
           setCardData((prevState) =>
-            prevState.filter((item) => item.id !== modalData.id)
+            prevState.filter((item) => item.id !== modalData.id),
           );
         } else {
           console.log("No match that news!");

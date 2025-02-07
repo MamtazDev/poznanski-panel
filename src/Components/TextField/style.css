@@ -1,114 +1,119 @@
 .image-field {
-    flex-shrink: 0;
-    border-radius: 8px;
-    border: 0.767px dashed #E1E1E1;
-    background-color: rgb(156 163 175);
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 0.767px dashed #e1e1e1;
+  background-color: rgb(156 163 175);
 }
 
 .add-file-btn {
-    display: inline-flex;
-    padding: 7.672px 18.413px 7.672px 12.275px;
-    justify-content: center;
-    align-items: center;
-    gap: 6.138px;
-    border-radius: 9.206px;
-    text-align: center;
-    font-feature-settings: 'clig' off, 'liga' off;
-    font-family: Urbanist;
-    font-size: 10.741px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 15.344px; /* 142.857% */
-    text-transform: capitalize;
+  display: inline-flex;
+  padding: 7.672px 18.413px 7.672px 12.275px;
+  justify-content: center;
+  align-items: center;
+  gap: 6.138px;
+  border-radius: 9.206px;
+  text-align: center;
+  font-feature-settings:
+    "clig" off,
+    "liga" off;
+  font-family: Urbanist;
+  font-size: 10.741px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 15.344px; /* 142.857% */
+  text-transform: capitalize;
 }
 
-
-.input-light{
-    border-radius: 8px;
-    opacity: 0.5;
-    background: var(--Base-base-50, #E9E9EB);
-    padding: 5px 16px;
-    color: black;
+.input-light {
+  border-radius: 8px;
+  opacity: 0.5;
+  background: var(--Base-base-50, #e9e9eb);
+  padding: 5px 16px;
+  color: black;
 }
 
 .input-dark {
-    border-radius: 8px;
-    background: #242526;
-    outline: unset;
-    color: #BBBCC0 !important;
-    padding: 5px;
+  border-radius: 8px;
+  background: #242526;
+  outline: unset;
+  color: #bbbcc0 !important;
+  padding: 5px;
 }
 
-.label-text{
-    font-family: Urbanist;
-    font-style: normal;
-    font-weight: 600;
+.label-text {
+  font-family: Urbanist;
+  font-style: normal;
+  font-weight: 600;
 }
 
 .add-btn-light {
-    background: var(--Base-base-100, #BBBCC0);
+  background: var(--Base-base-100, #bbbcc0);
 }
 
 .add-btn-dark {
-    background: #2FC4B2 !important;
+  background: #2fc4b2 !important;
 }
 
 .add-btn-web {
-    width: 30.688px;
-    height: 30.688px;
-    flex-shrink: 0;
-    border-radius: 4.21px;
+  width: 30.688px;
+  height: 30.688px;
+  flex-shrink: 0;
+  border-radius: 4.21px;
 }
 
 .add-btn-mobile {
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-    border-radius: 4.21px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 4.21px;
 }
 
 .add-btn {
-    position: absolute;
-    right: 3px;
-    top: 3px;
-    color: var(--Base-base-500, #252733);
-    text-align: center;
-    font-family: "Font Awesome 6 Free";
-    font-style: normal;
-    font-weight: 900;
-    line-height: normal;
-    padding: 0px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 1 !important;
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  color: var(--Base-base-500, #252733);
+  text-align: center;
+  font-family: "Font Awesome 6 Free";
+  font-style: normal;
+  font-weight: 900;
+  line-height: normal;
+  padding: 0px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1 !important;
 }
 
-.textarea-light{
-    outline: unset !important;
-    background: var(--Base-base-50, #E9E9EB);
-    font-feature-settings: 'clig' off, 'liga' off;
-    font-family: Urbanist;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    text-transform: capitalize;
-    padding: 16px;
-    border-radius: 8px !important;
-    resize: none;
+.textarea-light {
+  outline: unset !important;
+  background: var(--Base-base-50, #e9e9eb);
+  font-feature-settings:
+    "clig" off,
+    "liga" off;
+  font-family: Urbanist;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+  padding: 16px;
+  border-radius: 8px !important;
+  resize: none;
 }
 
 .textarea-dark {
-    background: #242526;
-    outline: unset !important;
-    color: var(--Base-base-300, #BBBCC0);
-    font-feature-settings: 'clig' off, 'liga' off;
-    font-family: Urbanist;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    text-transform: capitalize;
-    padding: 16px;
-    border-radius: 8px !important;
-    resize: none;
+  background: #242526;
+  outline: unset !important;
+  color: var(--Base-base-300, #bbbcc0);
+  font-feature-settings:
+    "clig" off,
+    "liga" off;
+  font-family: Urbanist;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+  padding: 16px;
+  border-radius: 8px !important;
+  resize: none;
 }
