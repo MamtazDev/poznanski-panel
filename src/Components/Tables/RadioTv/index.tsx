@@ -269,7 +269,8 @@ const RadioTv: React.FC<TableProps> = (props) => {
 
   useEffect(() => {
     apiGetReq("/radio", {}).then((res) => {
-      setRadioData(res);
+      console.log(res.records)
+      setRadioData(res.records);
     });
   }, []);
 
@@ -310,8 +311,8 @@ const RadioTv: React.FC<TableProps> = (props) => {
           </thead>
 
           <tbody>
-            {radioData.length ? (
-              radioData.map((item, idx) => (
+            {/* {radioData.length ? (
+              radioData?.map((item, idx) => (
                 <tr
                   key={`article-table-${idx}`}
                   className={`border-b ${
@@ -355,14 +356,60 @@ const RadioTv: React.FC<TableProps> = (props) => {
                   </td>
                 </tr>
               ))
-            ) : (
+            )
+            : (
               <tr className="relative" style={{ height: "400px" }}>
                 <div className="absolute top-1/2 left-1/2 w-32 -translate-x-1/2 -translate-y-1/2">
                   <img src={tableIcon} alt="table-icon" />
                   <p>No content available</p>
                 </div>
               </tr>
-            )}
+            )
+            } */}
+            {radioData?.map((item, idx) => (
+              <tr
+                key={`article-table-${idx}`}
+                className={`border-b ${
+                  !props.themeMode
+                    ? "bg-gray-800 border-gray-700 text-gray-200"
+                    : "bg-white text-gray-900"
+                }`}>
+                <td>{item?.artists?.map((i: any) => i.name)}</td>
+                <td>
+                  <img
+                    src={item?.thumbnail || "https://placehold.co/50x50"}
+                    alt="profile"
+                    className="w-20 h-20 rounded-full"
+                  />
+                </td>
+                <td>{item?.description}</td>
+                <td>
+                  <iframe
+                    src={
+                      item?.youTube?.includes("youtube.com/watch")
+                        ? `https://www.youtube.com/embed/${item?.youTube?.split("v=")[1]}`
+                        : item?.youTube ||
+                          "https://www.youtube.com/embed/6JYIGclVQdw"
+                    }
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    frameBorder="0"
+                    width="300"
+                    height="150"></iframe>
+                </td>
+                <td style={{ width: "200px" }}>{item?.title}</td>
+                <td>{item?.tags}</td>
+                <td>{item?.artists?.map((i: any) => i.star)}</td>
+                <td>
+                  <div className="flex justify-center space-x-2">
+                    <Button onClick={() => handleEdit(item._id)}>Edit</Button>
+                    <Button onClick={() => handleDelete(item._id)}>
+                      Delete
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

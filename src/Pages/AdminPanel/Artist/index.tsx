@@ -56,40 +56,39 @@ const ArticleContent = () => {
 
   const handleData = (response: any) => {
     let newProducts: Product[] = [];
-    const pages = Math.ceil(response.all / selectedRowsNum);
+    const pages = Math.ceil(response.total / selectedRowsNum);
     setPageNum(pages.toString());
-    response.products.map((item: inputProducts) => {
+
+    response.data.forEach((item: any) => {
+      const artist = item.artist;
+      const profileImg = artist.profileImg.startsWith("http")
+        ? artist.profileImg
+        : fileUrl + artist.profileImg;
+
       const temp: Product = {
-        id: item._id,
-        name: item.name,
-        profileImg: fileUrl + item.profileImg,
-        description: item.description,
-        star: item.star,
+        id: artist._id,
+        name: artist.name,
+        profileImg, // Use corrected profileImg
+        description: artist.description,
+        star: artist.star,
       };
       newProducts.push(temp);
     });
+
     setCardData(newProducts);
   };
 
   useEffect(() => {
-    apiGetReq(`/artist/data`, {
-      rowsPerPage: selectedRowsNum,
-      curPage: selectedPage,
-      filter: filterText,
-    }).then((res) => {
-      handleData(res);
-    });
+    apiGetReq(`/artist`, {})
+      .then((res) => {
+        if (res.success) {
+          handleData(res);
+        } else {
+          console.error("Failed to fetch data:", res);
+        }
+      })
+      .catch((err) => console.error("API error:", err));
   }, []);
-
-  useEffect(() => {
-    apiGetReq(`/artist/data`, {
-      rowsPerPage: selectedRowsNum,
-      curPage: selectedPage,
-      filter: filterText,
-    }).then((res) => {
-      handleData(res);
-    });
-  }, [selectedPage, selectedRowsNum, filterText]);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRowsNum(parseInt(e.target.value));
@@ -100,7 +99,6 @@ const ArticleContent = () => {
   };
 
   const handleEdit = (id: string) => {
-    console.log("edit:", id);
     setModalData(cardData.filter((item) => item.id === id)[0]);
     setOpenEditModal(true);
   };
@@ -143,7 +141,6 @@ const ArticleContent = () => {
   };
 
   const handleAddData = () => {
-    console.log(modalData);
     apiPostReq("/artist", modalData).then((res) => {
       if (res.success) {
         setCardData((prevState) => [
@@ -158,12 +155,10 @@ const ArticleContent = () => {
         ]);
       }
     });
-    console.log(cardData);
     setOpenAddModal(false);
   };
 
   const handleDeleteData = () => {
-    console.log("deleting:", modalData);
     apiDeleteReq("/artist", { id: modalData.id }).then((res) => {
       if (res.success) {
         if (res.deleted) {
@@ -171,10 +166,10 @@ const ArticleContent = () => {
             prevState.filter((item) => item.id !== modalData.id)
           );
         } else {
-          console.log("No match that news!");
+          console.error("No match that news!");
         }
       } else {
-        console.log("server error!");
+        console.error("server error!");
       }
     });
     setOpenDeleteModal(false);

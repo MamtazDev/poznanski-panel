@@ -1,9 +1,24 @@
-import { Input, InputGroup, InputRightElement, Select } from "@chakra-ui/react";
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Textarea,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import staticImg from "../../../assets/png/defaultimg.png";
-
 import "../style.css";
 import { RootState } from "../../../reducers";
 import {
@@ -13,42 +28,33 @@ import {
   apiPutReq,
 } from "../../../Constant/api-functions";
 import CommonButton from "../../../Components/Buttons/CommonButton";
-import CrudBtn from "../../../Components/CrudBtn";
-import ConfirmModal from "../../../Components/Modals/ConfirmModal";
 import PaginationBar from "../../../Components/PaginationBar";
-import EditModal from "../../../Components/Modals/AticleEditModal";
+
+interface Comment {
+  author: string;
+  text: string;
+  date: string;
+}
+
+interface CommentsSection {
+  comments: Comment[];
+}
 
 interface News {
-  id: string;
+  _id: string;
   title: string;
+  intro: string;
   feature: string;
-  tags?: any;
+  tags: string;
   date: string;
   files?: string[];
   content: Content[];
   link: string;
-}
-interface inputNews {
-  tag: string;
-  _id: string;
-  title: string;
-  feature: string;
-  tags?: any;
-  date: string;
-  content: Content[];
-  link: string;
-}
-
-interface Tag {
-  _id: string;
-  name: any;
-}
-
-interface ArticleProps {
-  tagData: {
-    _id: string;
-    name: string;
-  }[];
+  nickname: string;
+  email: string;
+  confirmed: boolean;
+  confirmationToken: string;
+  commentsSection: CommentsSection;
 }
 
 interface Content {
@@ -57,185 +63,288 @@ interface Content {
   description: string;
 }
 
-export const getFirstTag = (tags: string) => {
-  return tags.split("#")[0];
-};
-interface NewsDataAll {
-  news: News[]; // Assuming the `news` property holds the actual news data.
+interface ArticleProps {
+  tagData: any[];
 }
+
 const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
   const [cardData, setCardData] = useState<News[]>([]);
-  const [newsDataAll, setNewsDataAll] = useState<NewsDataAll | null>(null);
-
-  // Then, access it like this:
-  const fetchNesAllData = newsDataAll?.news || [];
-  console.log(fetchNesAllData, "fetchNesAllData");
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-  const [selectedPage, setSelectedPage] = useState<string>("1");
-  const [selectedRowsNum, setSelectedRowsNum] = useState<number>(5);
-  const [filterText, setFilterText] = useState<string>();
-  const [pageNum, setPageNum] = useState<string>("1");
-  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-  const [openAddModal, setOpenAddModal] = useState<boolean>(false);
-  const [tags, setTags] = React.useState<Tag[]>([]);
-
-  const [modalData, setModalData] = useState<News>({
-    id: "",
+  const [editData, setEditData] = useState<News | null>(null);
+  const [newData, setNewData] = useState<News>({
+    _id: "",
     title: "",
+    intro: "",
     feature: "",
+    files: [""],
     date: "",
-    content: [
-      {
-        subHead: "",
-        img: "",
-        description: "",
-      },
-    ],
+    content: [{ subHead: "", img: "", description: "" }],
     link: "",
+    nickname: "",
+    email: "",
+    confirmed: false,
+    confirmationToken: "",
+    commentsSection: { comments: [] },
+    tags: "",
   });
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isNewOpen,
+    onOpen: onNewOpen,
+    onClose: onNewClose,
+  } = useDisclosure();
+  const toast = useToast();
+
+  const fetchArticles = () => {
+    apiGetReq("/news/all?type=proposed", {})
+      .then((res) => {
+        if (res?.news) {
+          setCardData(res.news);
+        } else {
+          console.error("No news data found in API response", res);
+        }
+      })
+      .catch((err) => console.error("API fetch error:", err));
+  };
 
   useEffect(() => {
-    apiGetReq("/news/all?type=proposed", {
-      rowsPerPage: selectedRowsNum,
-      curPage: selectedPage,
-      filter: filterText,
-    }).then((res) => {
-      // handleData(res);
-      setNewsDataAll(res);
-    });
+    fetchArticles();
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedRowsNum(parseInt(e.target.value));
-  };
+  const uploadImage = async (file: File) => {
+    const formData = new FormData();
+    formData.append("image", file);
 
-  const handleChangeFilterText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterText(e.target.value);
-  };
-
-  const handleAddArticle = () => {
-    setModalData({
-      id: "",
-      title: "",
-      feature: "",
-      date: "",
-      content: [
-        {
-          subHead: "",
-          img: "",
-          description: "",
-        },
-      ],
-      link: "",
-    });
-    setOpenAddModal(true);
-  };
-
-  const handleEdit = (id: string | undefined) => {
-    if (!id) {
-      console.error("Edit clicked: ID is undefined");
-      return;
-    }
-
-    const selectedData = cardData.find((item) => item.id === id);
-    console.log(selectedData); // Log selected data
-
-    if (selectedData) {
-      setModalData(selectedData);
-      setOpenEditModal(true);
-    } else {
-      console.error(`Item with id ${id} not found in cardData`);
+    try {
+      const res = await apiPostReq("/upload", formData, true);
+      return res?.fileUrl || "";
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      return "";
     }
   };
 
-  const handleDelete = (id: string) => {
-    setModalData(cardData.filter((item) => item.id === id)[0]);
-    setOpenDeleteModal(true);
-  };
-
-  const handleEditNews = () => {
-    apiPutReq("/news/all", { ...modalData, ...modalData.content[0] }).then(
-      (res) => {
-        console.log(res);
-
-        const inputDate: Date = new Date(res.data.date);
-        const options: object = {
-          year: "numeric",
-          day: "numeric",
-          month: "long",
-        };
-        const formattedDate: string = inputDate.toLocaleDateString(
-          "en-US",
-          options
-        );
-        if (res.success) {
-          setCardData((prevState) =>
-            prevState.map((item) =>
-              item.id === res.data._id
-                ? {
-                    ...item,
-                    title: res.data.title,
-                    feature: res.data.tag,
-                    date: formattedDate,
-                    img: modalData.content[0].img,
-                    link: res.data.link,
-                    description: res.data.description,
-                  }
-                : item
-            )
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+    isNew: boolean = false
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const uploadedImageUrl = await uploadImage(file);
+      if (uploadedImageUrl) {
+        if (isNew) {
+          setNewData((prev) => ({
+            ...prev,
+            files: [uploadedImageUrl], // Store the uploaded file in `files`
+          }));
+        } else {
+          setEditData((prev) =>
+            prev ? { ...prev, files: [uploadedImageUrl] } : null
           );
         }
       }
+    }
+  };
+
+  const handleEdit = (id: string) => {
+    const selectedItem = cardData.find((item) => item._id === id);
+    if (selectedItem) {
+      setEditData({ ...selectedItem });
+      onOpen();
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this item?"
     );
-    setOpenEditModal(false);
-  };
 
-  const handleAddData = () => {
-    apiPostReq("/news/all", modalData).then((res) => {
-      console.log(res);
+    if (!confirmDelete) return;
 
-      const inputDate: Date = new Date(res.data.date);
-      const options: object = {
-        year: "numeric",
-        day: "numeric",
-        month: "long",
-      };
-      const formattedDate: string = inputDate.toLocaleDateString(
-        "en-US",
-        options
-      );
-      if (res.success) {
-        setCardData((prevState) => [
-          ...prevState,
-          {
-            id: res.data._id,
-            title: res.data.title,
-            feature: res.data.tag,
-            date: formattedDate,
-            content: res.data.content,
-            link: res.data.link,
-          },
-        ]);
-      }
-    });
-    setOpenAddModal(false);
-  };
-
-  const handleDeleteNews = async () => {
     try {
-      const res = await apiDeleteReq("/news/all", { id: modalData.id });
-      if (res.success && res.deleted) {
-        setCardData((prevState) =>
-          prevState.filter((item) => item.id !== modalData.id)
-        );
+      const res = await apiDeleteReq(`/news/${id}`, {});
+      if (res.success) {
+        toast({
+          title: "Deleted successfully!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        fetchArticles();
       } else {
-        console.error("Error deleting article:", res.message);
+        toast({
+          title: "Failed to delete",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       }
     } catch (error) {
-      console.error("Server error:", error);
+      console.error("Error deleting:", error);
+      toast({
+        title: "Error deleting item",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
-    setOpenDeleteModal(false);
+  };
+
+  // const handleSave = async () => {
+  //   if (!editData || !editData._id) return;
+
+  //   try {
+  //     const res = await apiPutReq(`/news/${editData._id}`, editData);
+  //     if (res.success) {
+  //       fetchArticles();
+  //       toast({
+  //         title: "Article updated successfully!",
+  //         status: "success",
+  //         duration: 3000,
+  //         isClosable: true,
+  //       });
+  //       onClose();
+  //     } else {
+  //       toast({
+  //         title: "Failed to update article",
+  //         status: "error",
+  //         duration: 3000,
+  //         isClosable: true,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error updating article:", error);
+  //     toast({
+  //       title: "Error updating article",
+  //       status: "error",
+  //       duration: 3000,
+  //       isClosable: true,
+  //     });
+  //   }
+  // };
+
+  const handleSave = async () => {
+    if (!editData || !editData._id) {
+      console.error("No data to update");
+      return;
+    }
+
+    try {
+      console.log("Saving data:", editData); // Debug log to ensure the data is correct
+
+      const res = await apiPutReq(`/news/${editData._id}`, editData);
+      if (res.success) {
+        fetchArticles(); // Fetch updated articles after save
+        toast({
+          title: "Article updated successfully!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        onClose(); // Close modal
+      } else {
+        toast({
+          title: "Failed to update article",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("Error updating article:", error);
+      toast({
+        title: "Error updating article",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleAddArticle = () => {
+    setNewData({
+      _id: "",
+      title: "",
+      intro: "",
+      feature: "",
+      files: [""],
+      date: "",
+      content: [{ subHead: "", img: "", description: "" }],
+      link: "",
+      nickname: "",
+      email: "",
+      confirmed: false,
+      confirmationToken: "",
+      commentsSection: { comments: [] },
+      tags: "",
+    });
+    onNewOpen();
+  };
+
+  const handleCreateArticle = async () => {
+    try {
+      const res = await apiPostReq("/news", newData);
+      if (res.success) {
+        fetchArticles(); // Refetch data after creation
+        toast({
+          title: "Article created successfully!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        onNewClose();
+      } else {
+        toast({
+          title: "Failed to create article",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("Error creating article:", error);
+      toast({
+        title: "Error creating article",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  // const handleInputChange = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  //   field: string,
+  //   isNew: boolean = false
+  // ) => {
+  //   const { value } = e.target;
+
+  //   if (isNew) {
+  //     setNewData((prev) => ({ ...prev, [field]: value }));
+  //   } else {
+  //     setEditData((prev) => (prev ? { ...prev, [field]: value } : null));
+  //   }
+  // };
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    field: string,
+    isNew: boolean = false
+  ) => {
+    const { value } = e.target;
+
+    if (isNew) {
+      setNewData((prev) => {
+        const updated = { ...prev, [field]: value };
+        console.log("Updated newData:", updated); // Debug log
+        return updated;
+      });
+    } else {
+      setEditData((prev) => {
+        const updated = prev ? { ...prev, [field]: value } : null;
+        console.log("Updated editData:", updated); // Debug log
+        return updated;
+      });
+    }
   };
 
   return (
@@ -247,9 +356,8 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
               type="text"
               placeholder="Search..."
               backgroundColor="white"
-              onChange={handleChangeFilterText}
             />
-            <InputRightElement pointerEvents="none">
+            <InputRightElement>
               <AiOutlineSearch />
             </InputRightElement>
           </InputGroup>
@@ -260,124 +368,196 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
-            className={`text-xs uppercase ${themeMode ? " text-gray-700  bg-gray-400" : "bg-gray-700 text-gray-400"}`}
-          >
+            className={`text-xs uppercase ${
+              themeMode
+                ? "text-gray-700 bg-gray-400"
+                : "bg-gray-700 text-gray-400"
+            }`}>
             <tr>
-              <th className="px-6 py-3" style={{ width: "130px" }}>
-                Image
-              </th>
+              <th className="px-6 py-3">Image</th>
               <th className="px-6 py-3">Title</th>
-              <th className="px-6 py-3 w-28">Tag</th>
-              <th className="px-6 py-3 w-32">Date</th>
-              <th className="px-6 py-3 w-32">Action</th>
+              <th className="px-6 py-3">Tag</th>
+              <th className="px-6 py-3">Date</th>
+              <th className="px-6 py-3">Action</th>
             </tr>
           </thead>
           <tbody>
-            {fetchNesAllData?.map((item: News, index: number) => {
-              // console.log(item.tags, "itemsdkfjdkfjd")
-              return (
-                <tr
-                  key={index}
-                  className={`border-b py-3  ${!themeMode ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white text-gray-900"}`}
-                >
-                  <td className="flex justify-center mt-3">
-                    <img
-                      src={item?.files?.[0] || staticImg}
-                      alt={item?.title || "Image related to article"}
-                      className="rounded-full w-[100px] h-[100px]"
-                    />
-                  </td>
-                  <td style={{ width: "200px" }}>{item.title}</td>
-                  <td style={{ width: "200px" }}>{item?.tags?.split(",")}</td>
-                  <td>{item.date}</td>
-                  <td>
-                    <div className="flex justify-center">
-                      <CrudBtn
-                        onClickEdit={() => handleEdit(item.id)}
-                        value={item.id}
-                        onClickDelete={() => handleDelete(item.id)}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+            {cardData.map((item) => (
+              <tr
+                key={item._id}
+                className={`border-b py-3 ${
+                  !themeMode
+                    ? "bg-gray-800 text-gray-200"
+                    : "bg-white text-gray-900"
+                }`}>
+                <td>
+                  <img
+                    src={item?.files?.[0] || staticImg}
+                    className="rounded-full w-[100px] h-[100px]"
+                  />
+                </td>
+                <td>{item.title}</td>
+                <td>{item.tags}</td>
+                <td>{item.date}</td>
+                <td>
+                  <div className="flex justify-center space-x-2">
+                    <Button onClick={() => handleEdit(item._id)}>Edit</Button>
+                    <Button onClick={() => handleDelete(item._id)}>
+                      Delete
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
-      <div className="flex mt-3 justify-end gap-2">
-        <div
-          className={`flex items-center gap-2 ${themeMode ? " text-gray-700" : "text-gray-100"}`}
-        >
-          Rows per page:
-        </div>
-        <Select
-          backgroundColor={themeMode ? "" : "#242526"}
-          color={themeMode ? "#252733" : "#FFF"}
-          border={themeMode ? "1px solid #E9EBF0" : "unset"}
-          height="30"
-          width={"80px"}
-          onChange={handleChange}
-        >
-          <option
-            style={{
-              color: themeMode ? "black" : "white",
-              backgroundColor: themeMode ? "white" : "#242526",
-            }}
-            value="5"
-          >
-            5
-          </option>
-          <option
-            style={{
-              color: themeMode ? "black" : "white",
-              backgroundColor: themeMode ? "white" : "#242526",
-            }}
-            value="10"
-          >
-            10
-          </option>
-          <option
-            style={{
-              color: themeMode ? "black" : "white",
-              backgroundColor: themeMode ? "white" : "#242526",
-            }}
-            value="15"
-          >
-            15
-          </option>
-        </Select>
-        <PaginationBar
-          selectedPage={selectedPage}
-          setSelectedPage={setSelectedPage}
-          pages={pageNum}
-        />
-      </div>
-      <ConfirmModal
-        isOpen={openDeleteModal}
-        setIsOpen={setOpenDeleteModal}
-        handleOk={handleDeleteNews}
-        text="Are you sure you want to delete this News?"
-      />
 
-      <EditModal
-        isOpen={openEditModal}
-        setIsOpen={setOpenEditModal}
-        handleOk={handleEditNews}
-        data={modalData}
-        setData={setModalData}
-        tags={tags}
-        setTags={setTags}
-      />
-      <EditModal
-        isOpen={openAddModal}
-        setIsOpen={setOpenAddModal}
-        handleOk={handleAddData}
-        data={modalData}
-        setData={setModalData}
-        tags={tags}
-        setTags={setTags}
-      />
+      {/* Edit Modal */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Article</ModalHeader>
+          <ModalBody>
+            <FormControl id="title" isRequired mt={4}>
+              <FormLabel>Title</FormLabel>
+              <Input
+                value={editData?.title || ""}
+                onChange={(e) => handleInputChange(e, "title")}
+                placeholder="Enter title"
+              />
+            </FormControl>
+            <FormControl id="intro" isRequired mt={4}>
+              <FormLabel>Introduction</FormLabel>
+              <Textarea
+                value={editData?.intro || ""}
+                onChange={(e) => handleInputChange(e, "intro")}
+                placeholder="Enter introduction"
+              />
+            </FormControl>
+            <FormControl id="tags" isRequired mt={4}>
+              <FormLabel>Tags</FormLabel>
+              <Input
+                value={editData?.tags || ""}
+                onChange={(e) => handleInputChange(e, "tags")}
+                placeholder="Enter tags"
+              />
+            </FormControl>
+            <FormControl id="email" isRequired mt={4}>
+              <FormLabel>Email</FormLabel>
+              <Input
+                type="email"
+                value={editData?.email || ""}
+                onChange={(e) => handleInputChange(e, "email")}
+                placeholder="Enter email"
+              />
+            </FormControl>
+            <FormControl id="files" mt={4}>
+              <FormLabel>Change Image</FormLabel>
+              <Input
+                type="file"
+                onChange={(e) => handleImageUpload(e, false)}
+              />
+            </FormControl>
+            <FormControl
+              id="confirmed"
+              mt={4}
+              display="flex"
+              alignItems="center">
+              <FormLabel>Confirmed</FormLabel>
+              <input
+                type="checkbox"
+                checked={editData?.confirmed || false}
+                onChange={(e) =>
+                  setEditData((prev) =>
+                    prev ? { ...prev, confirmed: e.target.checked } : null
+                  )
+                }
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={handleSave}>
+              Save
+            </Button>
+            <Button variant="ghost" onClick={onClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* New Article Modal */}
+      <Modal isOpen={isNewOpen} onClose={onNewClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Create New Article</ModalHeader>
+          <ModalBody>
+            <FormControl id="title" isRequired mt={4}>
+              <FormLabel>Title</FormLabel>
+              <Input
+                value={newData?.title || ""}
+                onChange={(e) => handleInputChange(e, "title", true)}
+                placeholder="Enter title"
+              />
+            </FormControl>
+            <FormControl id="intro" isRequired mt={4}>
+              <FormLabel>Introduction</FormLabel>
+              <Textarea
+                value={newData?.intro || ""}
+                onChange={(e) => handleInputChange(e, "intro", true)}
+                placeholder="Enter introduction"
+              />
+            </FormControl>
+            <FormControl id="tags" isRequired mt={4}>
+              <FormLabel>Tags</FormLabel>
+              <Input
+                value={newData?.tags || ""}
+                onChange={(e) => handleInputChange(e, "tags", true)}
+                placeholder="Enter tags"
+              />
+            </FormControl>
+            <FormControl id="email" isRequired mt={4}>
+              <FormLabel>Email</FormLabel>
+              <Input
+                type="email"
+                value={newData?.email || ""}
+                onChange={(e) => handleInputChange(e, "email", true)}
+                placeholder="Enter email"
+              />
+            </FormControl>
+            <FormControl id="files" isRequired mt={4}>
+              <FormLabel>Image</FormLabel>
+              <Input type="file" onChange={(e) => handleImageUpload(e, true)} />
+            </FormControl>
+            <FormControl
+              id="confirmed"
+              mt={4}
+              display="flex"
+              alignItems="center">
+              <FormLabel>Confirmed</FormLabel>
+              <input
+                type="checkbox"
+                checked={newData?.confirmed}
+                onChange={(e) =>
+                  setNewData((prev) => ({
+                    ...prev,
+                    confirmed: e.target.checked,
+                  }))
+                }
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={handleCreateArticle}>
+              Create
+            </Button>
+            <Button variant="ghost" onClick={onNewClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };

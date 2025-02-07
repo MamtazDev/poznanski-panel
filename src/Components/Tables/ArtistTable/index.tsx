@@ -22,6 +22,7 @@ interface TableProps {
 }
 
 const ArtistTable: React.FC<TableProps> = (props) => {
+  console.log(props, "props")
   return (
     <>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
