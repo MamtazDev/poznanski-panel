@@ -29,6 +29,7 @@ import {
 } from "../../../Constant/api-functions";
 import CommonButton from "../../../Components/Buttons/CommonButton";
 import PaginationBar from "../../../Components/PaginationBar";
+import TipTapPage from "../../../Components/TipTapPage";
 
 interface Comment {
   author: string;
@@ -291,6 +292,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex justify-between">
+    
         <div className="mb-4" style={{ width: "300px" }}>
           <InputGroup>
             <Input
@@ -305,6 +307,8 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
         </div>
         <CommonButton text="Add article" onClick={handleAddArticle} />
       </div>
+
+      <TipTapPage/>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
