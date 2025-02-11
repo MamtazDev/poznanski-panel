@@ -165,7 +165,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
   };
 
   const confirmDelete = async (id: string, onClose: () => void) => {
-    onClose();  // Close the confirmation toast
+    onClose(); // Close the confirmation toast
 
     try {
       const res = await apiDeleteReq(`/materials/${id}`, {});
@@ -201,7 +201,6 @@ const MaterialContent: React.FC<TableProps> = (props) => {
     }
   };
 
-
   const handleSave = async () => {
     if (!editData || !editData._id) return;
     const updatedData = {
@@ -217,7 +216,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       if (res) {
         setRadioData((prev) => ({
           materials: prev.materials.map((item) =>
-            item._id === editData._id ? { ...item, ...res.data } : item,
+            item._id === editData._id ? { ...item, ...res.data } : item
           ),
         }));
 
@@ -301,7 +300,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
     e:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>,
-    field: string,
+    field: string
   ) => {
     setNewData((prev: any) => ({
       ...prev,
@@ -314,7 +313,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
     field: string,
-    subField?: string,
+    subField?: string
   ) => {
     const { value } = e.target;
     setEditData((prev: any) => {
@@ -361,8 +360,8 @@ const MaterialContent: React.FC<TableProps> = (props) => {
           <thead
             className={`text-xs uppercase ${
               themeMode
-              ? "text-white bg-[#5A1073]"
-              : "bg-[#3bd6c6] text-[#5A1073]"
+                ? "text-white bg-[#5A1073]"
+                : "bg-[#3bd6c6] text-[#5A1073]"
             }`}
           >
             <tr>
@@ -397,33 +396,37 @@ const MaterialContent: React.FC<TableProps> = (props) => {
                       : "bg-white text-gray-900 hover:bg-gray-200"
                   }`}
                 >
-                   <td className="px-4 py-3">
-                  <div className="flex justify-center">
-                    <iframe
-                      src={
-                        item?.youTube?.includes("youtube.com/watch")
-                          ? `https://www.youtube.com/embed/${
-                              item?.youTube?.split("v=")[1].split("&")[0]
-                            }`
-                          : item?.youTube ||
-                            "https://www.youtube.com/embed/6JYIGclVQdw"
-                      }
-                      title="YouTube video player"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      frameBorder="0"
-                      className="w-40 h-24 md: rounded-lg shadow-lg"
-                    ></iframe>
-                  </div>
-                </td>
+                  <td className="px-4 py-3">
+                    <div className="flex justify-center">
+                      <iframe
+                        src={
+                          item?.youTube?.includes("youtube.com/watch")
+                            ? `https://www.youtube.com/embed/${
+                                item?.youTube?.split("v=")[1].split("&")[0]
+                              }`
+                            : item?.youTube ||
+                              "https://www.youtube.com/embed/6JYIGclVQdw"
+                        }
+                        title="YouTube video player"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        frameBorder="0"
+                        className="w-40 h-24 md: rounded-lg shadow-lg"
+                      ></iframe>
+                    </div>
+                  </td>
                   <td className="py-4">{item.title}</td>
                   <td className="py-4">{item.tags}</td>
-                  <td className="py-4">{new Date(item.date).toISOString().split('T')[0]}</td>
+                  <td className="py-4">
+                    {new Date(item.date).toISOString().split("T")[0]}
+                  </td>
                   <td className="py-4">{item.description}</td>
                   <td className="text-center py-4">
                     <div className="flex justify-center space-x-2">
-                      <button onClick={() => handleEdit(item._id)}><FaRegEdit /></button>
+                      <button onClick={() => handleEdit(item._id)}>
+                        <FaRegEdit />
+                      </button>
                       <button onClick={() => handleDelete(item._id)}>
-                      <RiDeleteBin6Line />
+                        <RiDeleteBin6Line />
                       </button>
                     </div>
                   </td>
@@ -443,6 +446,9 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
+          <div className={` ${
+            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}>
           <ModalHeader>Edit Item</ModalHeader>
           <ModalBody>
             {/* Title */}
@@ -499,10 +505,11 @@ const MaterialContent: React.FC<TableProps> = (props) => {
             <Button colorScheme="blue" onClick={handleSave} className="mr-3">
               Save
             </Button>
-            <Button variant="ghost" onClick={onClose}>
+            <Button variant="red" onClick={onClose}>
               Cancel
             </Button>
           </ModalFooter>
+          </div>
         </ModalContent>
       </Modal>
 
@@ -510,7 +517,10 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       <Modal isOpen={isNewOpen} onClose={onNewClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add New Item</ModalHeader>
+         <div className={`${
+            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}>
+         <ModalHeader>Add New Item</ModalHeader>
           <ModalBody>
             {/* Title */}
             <FormControl id="title" isRequired mt={4}>
@@ -561,13 +571,18 @@ const MaterialContent: React.FC<TableProps> = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleCreatePost} className="mr-3">
+            <Button
+              colorScheme="blue"
+              onClick={handleCreatePost}
+              className="mr-3"
+            >
               Create
             </Button>
-            <Button variant="ghost" onClick={onNewClose}>
+            <Button variant="red" onClick={onNewClose}>
               Cancel
             </Button>
           </ModalFooter>
+         </div>
         </ModalContent>
       </Modal>
     </div>

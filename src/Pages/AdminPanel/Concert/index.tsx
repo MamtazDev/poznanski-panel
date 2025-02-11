@@ -463,7 +463,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       {/* Edit Modal */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent >
+        <ModalContent    >
           <ModalHeader>Edit Item</ModalHeader>
           <ModalBody>
             {/* Title */}
