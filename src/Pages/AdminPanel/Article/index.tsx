@@ -30,6 +30,8 @@ import {
 import CommonButton from "../../../Components/Buttons/CommonButton";
 import PaginationBar from "../../../Components/PaginationBar";
 import TipTapPage from "../../../Components/TipTapPage";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { FaRegEdit } from "react-icons/fa";
 
 interface Comment {
   author: string;
@@ -349,8 +351,8 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
           <thead
             className={`text-xs uppercase ${
               themeMode
-                ? "text-gray-700 bg-gray-400"
-                : "bg-gray-700 text-gray-400"
+                ? "text-white bg-[#5A1073]"
+                : "bg-[#3bd6c6] text-[#5A1073]"
             }`}
           >
             <tr>
@@ -365,7 +367,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
             {cardData.map((item) => (
               <tr
                 key={item._id}
-                className={`border-b py-3 ${
+                className={`border-b py-3 hover:bg-gray-200 ${
                   !themeMode
                     ? "bg-gray-800 text-gray-200"
                     : "bg-white text-gray-900"
@@ -374,7 +376,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                 <td>
                   <img
                     src={item?.files?.[0] || staticImg}
-                    className="rounded-full w-[100px] h-[100px] my-2 flex items-center mx-auto"
+                    className="rounded-full w-[50px] h-[50px] my-2 flex items-center mx-auto"
                   />
                 </td>
                 <td>{item.title}</td>
@@ -382,10 +384,10 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                 <td>{new Date(item.date).toISOString().split('T')[0]}</td>
                 <td>
                   <div className="flex justify-center space-x-2">
-                    <Button colorScheme="blue" onClick={() => handleEdit(item._id)}>Edit</Button>
-                    <Button colorScheme="red" onClick={() => handleDelete(item._id)}>
-                      Delete
-                    </Button>
+                    <button  onClick={() => handleEdit(item._id)}><FaRegEdit /></button>
+                    <button  onClick={() => handleDelete(item._id)}>
+                    <RiDeleteBin6Line />
+                    </button>
                   </div>
                 </td>
               </tr>
