@@ -380,10 +380,10 @@ const RadioTv: React.FC<TableProps> = (props) => {
             {radioData?.map((item, idx) => (
               <tr
                 key={`article-table-${idx}`}
-                className={`border-b hover:bg-gray-200 ${
+                className={`border-b  ${
                   !props.themeMode
-                    ? "bg-gray-800 border-gray-700 text-gray-200"
-                    : "bg-white text-gray-900"
+                    ? "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700"
+                    : "bg-white text-gray-900 hover:bg-gray-200"
                 }`}
               >
                <td className="px-4 py-3">{item?.title}</td>
