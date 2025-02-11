@@ -378,10 +378,10 @@ const ConcertContent: React.FC<TableProps> = (props) => {
               radioData.map((item, index) => (
                 <tr
                   key={index}
-                 className={`border-b py-4 hover:bg-gray-200 ${
-                  !themeMode
-                    ? "bg-gray-800 text-gray-200"
-                    : "bg-white text-gray-900"
+                 className={`border-b py-4  ${
+                  themeMode
+                    ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
+                    : "bg-white text-gray-900 hover:bg-gray-200"
                 }`}
                 >
                   <td>

@@ -91,12 +91,16 @@ const UserMainPage: React.FC<UserDataProps> = () => {
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex justify-between">
-        <div className="mb-4" style={{ width: "300px" }}>
+        <div
+          className={`mb-4 ${
+            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}
+          style={{ width: "300px" }}
+        >
           <InputGroup>
             <Input
               type="text"
               placeholder="Search..."
-              backgroundColor="white"
               onChange={handleChangeFilterText}
             />
             <InputRightElement pointerEvents="none">
@@ -108,11 +112,13 @@ const UserMainPage: React.FC<UserDataProps> = () => {
 
       <TableContainer>
         <Table variant="striped" colorScheme="gray">
-          <Thead  className={`text-xs uppercase ${
+          <Thead
+            className={`text-xs uppercase ${
               themeMode
-              ? "text-white bg-[#5A1073]"
-              : "bg-[#3bd6c6] text-[#5A1073]"
-            }`}>
+                ? "text-white bg-[#5A1073]"
+                : "bg-[#3bd6c6] text-[#5A1073]"
+            }`}
+          >
             <Tr>
               <Th>Title</Th>
               <Th>Role</Th>
