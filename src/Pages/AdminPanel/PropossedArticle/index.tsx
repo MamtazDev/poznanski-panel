@@ -71,6 +71,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
   const [cardData, setCardData] = useState<News[]>([]);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [editData, setEditData] = useState<News | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [newData, setNewData] = useState<News>({
     _id: "",
     title: "",
@@ -155,12 +156,30 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
   };
 
   const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this item?",
-    );
+    setDeleteId(id);
+    toast({
+      title: "Confirm Deletion",
+      description: "Are you sure you want to delete this item?",
+      status: "warning",
+      duration: null,
+      isClosable: false,
+      position: "top",
+      render: ({ onClose }) => (
+        <div style={{ padding: "10px", background: "white", borderRadius: "8px", boxShadow: "lg" }}>
+          <p>Are you sure you want to delete this item?</p>
+          <div style={{ marginTop: "10px", display: "flex", justifyContent: "space-between" }}>
+            <Button colorScheme="red" size="sm" onClick={() => confirmDelete(id, onClose)}>
+              Yes, Delete
+            </Button>
+            <Button size="sm" onClick={onClose}>Cancel</Button>
+          </div>
+        </div>
+      ),
+    });
+  };
 
-    if (!confirmDelete) return;
-
+  const confirmDelete = async (id: string, onClose: () => void) => {
+    onClose(); 
     try {
       const res = await apiDeleteReq(`/news/${id}`, {});
       if (res.success) {
@@ -386,7 +405,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
             {cardData.map((item) => (
               <tr
                 key={item._id}
-                className={`border-b py-3 ${
+                className={`border-b py-4 ${
                   !themeMode
                     ? "bg-gray-800 text-gray-200"
                     : "bg-white text-gray-900"
@@ -395,7 +414,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                 <td>
                   <img
                     src={item?.files?.[0] || staticImg}
-                    className="rounded-full w-[100px] h-[100px]"
+                    className="rounded-full w-[100px] h-[100px] my-2 flex items-center mx-auto"
                   />
                 </td>
                 <td>{item.title}</td>
