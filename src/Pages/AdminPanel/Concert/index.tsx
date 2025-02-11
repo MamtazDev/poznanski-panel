@@ -3,6 +3,8 @@ import {
   FormControl,
   FormLabel,
   Input,
+  InputGroup,
+  InputRightElement,
   Modal,
   ModalBody,
   ModalContent,
@@ -24,6 +26,9 @@ import {
 import FolderImage from "../../../assets/png/folder_icon.png";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { MdOutlineArrowOutward } from "react-icons/md";
+import { AiOutlineSearch } from "react-icons/ai";
+import CommonButton from "../../../Components/Buttons/CommonButton";
 
 interface TableProps {
   themeMode?: boolean;
@@ -344,10 +349,26 @@ const ConcertContent: React.FC<TableProps> = (props) => {
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28" style={{}}>
-      <div className="flex items-center justify-end py-5">
+      {/* <div className="flex items-center justify-end py-5">
         <Button colorScheme="green" onClick={handleNewPost}>
           Add New Item
         </Button>
+      </div> */}
+      <div className="flex justify-between">
+        <div
+          className={`mb-4 ${
+            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}
+          style={{ width: "300px" }}
+        >
+          <InputGroup>
+            <Input type="text" placeholder="Search..." />
+            <InputRightElement>
+              <AiOutlineSearch />
+            </InputRightElement>
+          </InputGroup>
+        </div>
+        <CommonButton text="Add New Item" onClick={handleNewPost} />
       </div>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
@@ -395,14 +416,17 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                   <td>{item.category}</td>
                   <td>{item.location}</td>
                   <td>
+                <div className="flex items-center gap-2 justify-center">
+                Preview 
                     <a
                       href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-500 underline"
                     >
-                      View
+                       <MdOutlineArrowOutward/>
                     </a>
+                </div>
                   </td>
                   <td className="text-center">{item.description}</td>
                   <td className="text-center">

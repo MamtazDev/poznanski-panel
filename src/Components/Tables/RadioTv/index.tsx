@@ -350,12 +350,10 @@ const RadioTv: React.FC<TableProps> = (props) => {
 
   return (
     <>
-      <div className="flex items-center justify-end py-5">
-        {/* <Button colorScheme="green" onClick={handleNewPost}> */}
+      {/* <div className="flex items-center justify-end py-5">
+      
         <CommonButton text="Add new Item" onClick={handleNewPost} />
-        {/* Add New Item */}
-        {/* </Button> */}
-      </div>
+      </div> */}
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
