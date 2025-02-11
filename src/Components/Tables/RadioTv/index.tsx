@@ -23,6 +23,8 @@ import {
 } from "../../../Constant/api-functions";
 import tableIcon from "../../../assets/svg/icons-table.svg";
 import CommonButton from "../../Buttons/CommonButton";
+import { FaRegEdit } from "react-icons/fa";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface TableProps {
   themeMode?: boolean;
@@ -359,17 +361,16 @@ const RadioTv: React.FC<TableProps> = (props) => {
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
             className={`text-xs uppercase ${
-              props.themeMode
-                ? "text-gray-700 bg-gray-400"
-                : "bg-gray-700 text-gray-400"
+              props. themeMode
+              ? "text-white bg-[#5A1073]"
+              : "bg-[#3bd6c6] text-[#5A1073]"
             }`}
           >
             <tr>
-              <th className="px-6 py-3 w-32">Name</th>
+              <th className="px-6 py-3 w-32">Title</th>
               <th className="px-6 py-3 w-32">Image</th>
               <th className="px-6 py-3 w-32">Description</th>
               <th className="px-6 py-3 w-40">Video</th>
-              <th className="px-6 py-3 w-40">Title</th>
               <th className="px-6 py-3 w-28">Tag</th>
               {/* <th className="px-6 py-3 w-28">Star</th> */}
               <th className="px-6 py-3 w-28">Action</th>
@@ -379,20 +380,18 @@ const RadioTv: React.FC<TableProps> = (props) => {
             {radioData?.map((item, idx) => (
               <tr
                 key={`article-table-${idx}`}
-                className={`border-b ${
+                className={`border-b hover:bg-gray-200 ${
                   !props.themeMode
                     ? "bg-gray-800 border-gray-700 text-gray-200"
                     : "bg-white text-gray-900"
                 }`}
               >
-                <td className="px-4 py-3">
-                  {item?.artists?.map((i:any) => i.name)}
-                </td>
-                <td className="px-4 py-3">
+               <td className="px-4 py-3">{item?.title}</td>
+                <td className="px-4 py-3 ">
                   <img
                     src={item?.thumbnail || "https://placehold.co/50x50"}
                     alt="profile"
-                    className="w-20 h-20 rounded-full object-cover"
+                    className="w-[50px] h-[50px] rounded-full object-cover  flex items-center mx-auto"
                   />
                 </td>
                 <td className="px-4 py-3">{item?.description}</td>
@@ -410,21 +409,20 @@ const RadioTv: React.FC<TableProps> = (props) => {
                       title="YouTube video player"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       frameBorder="0"
-                      className="w-40 h-24 md:w-60 md:h-32 rounded-lg shadow-lg"
+                      className="w-40 h-24 md: rounded-lg shadow-lg"
                     ></iframe>
                   </div>
                 </td>
-                <td className="px-4 py-3">{item?.title}</td>
                 <td className="px-4 py-3">{item?.tags}</td>
                 {/* <td className="px-4 py-3">
                   {item?.artists?.map((i:any) => i.star)}
                 </td> */}
                 <td className="px-4 py-3">
                   <div className="flex justify-center space-x-2">
-                    <Button onClick={() => handleEdit(item._id)}>Edit</Button>
-                    <Button onClick={() => handleDelete(item._id)}>
-                      Delete
-                    </Button>
+                    <button onClick={() => handleEdit(item._id)}><FaRegEdit /></button>
+                    <button onClick={() => handleDelete(item._id)}>
+                    <RiDeleteBin6Line />
+                    </button>
                   </div>
                 </td>
               </tr>
