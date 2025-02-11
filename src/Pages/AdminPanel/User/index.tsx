@@ -110,7 +110,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
         </div>
       </div>
 
-      <TableContainer>
+      {/* <TableContainer>
         <Table variant="striped" colorScheme="gray">
           <Thead
             className={`text-xs uppercase ${
@@ -133,21 +133,60 @@ const UserMainPage: React.FC<UserDataProps> = () => {
                 <Td className="capitalize">{user.role}</Td>
                 <Td>{user.email}</Td>
                 <Td>
-                  <div className="flex items-center justify-between">
-                    <h2 style={{ color: user.isVerified ? "green" : "red" }}>
-                      {user.isVerified ? "Verified" : "Unverified"}
-                    </h2>
-                    <AiOutlineEdit
-                      onClick={() => handleEditClick(user._id, user.isVerified)}
-                      className="cursor-pointer"
-                    />
-                  </div>
+                 
                 </Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
-      </TableContainer>
+      </TableContainer> */}
+
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+        <table className="w-full h-full" style={{ minWidth: "400px" }}>
+          <thead
+            className={`text-xs uppercase ${
+              themeMode
+                ? "text-white bg-[#5A1073]"
+                : "bg-[#3bd6c6] text-[#5A1073]"
+            }`}
+          >
+            <tr>
+              <th className="px-6 py-3">Title</th>
+              <th className="px-6 py-3">Role</th>
+              <th className="px-6 py-3">Email</th>
+              <th className="px-6 py-3">Is Verified</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {userAllData.map((user) => (
+              <tr
+                key={user._id}
+                className={`border-b py-3 ${
+                  !themeMode
+                    ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
+                    : "bg-white text-gray-900 hover:bg-gray-200"
+                }`}
+              >
+                <td className="py-3">{user.nickname}</td>
+                <td className="py-3">{user.role}</td>
+                <td className="py-3">{user.email}</td>
+                <td className="py-3">
+                  <div className="">
+                    <h2 style={{ color: user.isVerified ? "green" : "red" }}>
+                      {user.isVerified ? "Verified" : "Unverified"}
+                    </h2>
+                  </div>
+                </td>
+                <td> <AiOutlineEdit
+                      onClick={() => handleEditClick(user._id, user.isVerified)}
+                      className="cursor-pointer mr-5"
+                    /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
