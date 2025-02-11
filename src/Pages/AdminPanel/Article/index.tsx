@@ -129,7 +129,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
 
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
-    isNew: boolean = false,
+    isNew: boolean = false
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -142,7 +142,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
           }));
         } else {
           setEditData((prev) =>
-            prev ? { ...prev, files: [uploadedImageUrl] } : null,
+            prev ? { ...prev, files: [uploadedImageUrl] } : null
           );
         }
       }
@@ -176,7 +176,14 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
           <p style={{ fontSize: "16px", fontWeight: "bold" }}>
             Are you sure you want to delete this item?
           </p>
-          <div style={{ marginTop: "10px", display: "flex", justifyContent: "center", gap: "10px" }}>
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+          >
             <Button
               colorScheme="red"
               size="sm"
@@ -187,7 +194,9 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
             >
               Yes, Delete
             </Button>
-            <Button size="sm" onClick={onClose}>Cancel</Button>
+            <Button size="sm" onClick={onClose}>
+              Cancel
+            </Button>
           </div>
         </div>
       ),
@@ -314,7 +323,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field: string,
-    isNew: boolean = false,
+    isNew: boolean = false
   ) => {
     const { value } = e.target;
 
@@ -328,16 +337,14 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex justify-between">
-    
-        <div className={`mb-4 ${themeMode
-                ? "text-gray-800 bg-white"
-                : "bg-gray-800 text-white"}`} style={{ width: "300px" }}>
+        <div
+          className={`mb-4 ${
+            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}
+          style={{ width: "300px" }}
+        >
           <InputGroup>
-            <Input
-              type="text"
-              placeholder="Search..."
-             
-            />
+            <Input type="text" placeholder="Search..." />
             <InputRightElement>
               <AiOutlineSearch />
             </InputRightElement>
@@ -383,12 +390,14 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                 </td>
                 <td>{item.title}</td>
                 <td>{item.tags}</td>
-                <td>{new Date(item.date).toISOString().split('T')[0]}</td>
+                <td>{new Date(item.date).toISOString().split("T")[0]}</td>
                 <td>
                   <div className="flex justify-center space-x-2">
-                    <button  onClick={() => handleEdit(item._id)}><FaRegEdit /></button>
-                    <button  onClick={() => handleDelete(item._id)}>
-                    <RiDeleteBin6Line />
+                    <button onClick={() => handleEdit(item._id)}>
+                      <FaRegEdit />
+                    </button>
+                    <button onClick={() => handleDelete(item._id)}>
+                      <RiDeleteBin6Line />
                     </button>
                   </div>
                 </td>
@@ -456,16 +465,14 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                 checked={editData?.confirmed || false}
                 onChange={(e) =>
                   setEditData((prev) =>
-                    prev ? { ...prev, confirmed: e.target.checked } : null,
+                    prev ? { ...prev, confirmed: e.target.checked } : null
                   )
                 }
               />
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button  onClick={handleSave}>
-              Save
-            </Button>
+            <Button onClick={handleSave}>Save</Button>
             <Button variant="ghost" onClick={onClose} className="ml-3">
               Cancel
             </Button>

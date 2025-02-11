@@ -129,7 +129,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
 
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
-    isNew: boolean = false,
+    isNew: boolean = false
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -142,7 +142,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
           }));
         } else {
           setEditData((prev) =>
-            prev ? { ...prev, files: [uploadedImageUrl] } : null,
+            prev ? { ...prev, files: [uploadedImageUrl] } : null
           );
         }
       }
@@ -158,7 +158,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
   };
 
   const handleDelete = async (id: string) => {
-    setDeleteId(id);  
+    setDeleteId(id);
     toast({
       title: "Confirm Deletion",
       description: "Are you sure you want to delete this item?",
@@ -176,7 +176,9 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
             textAlign: "center",
           }}
         >
-          <p style={{ fontSize: "16px", fontWeight: "bold" }}>Are you sure you want to delete this item?</p>
+          <p style={{ fontSize: "16px", fontWeight: "bold" }}>
+            Are you sure you want to delete this item?
+          </p>
           <div
             style={{
               marginTop: "15px",
@@ -192,11 +194,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
             >
               Yes, Delete
             </Button>
-            <Button
-              size="sm"
-              colorScheme="blue"
-              onClick={onClose}
-            >
+            <Button size="sm" colorScheme="blue" onClick={onClose}>
               Cancel
             </Button>
           </div>
@@ -206,7 +204,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
   };
 
   const confirmDelete = async (id: string, onClose: () => void) => {
-    onClose();  // Close the confirmation toast
+    onClose(); // Close the confirmation toast
     try {
       const res = await apiDeleteReq(`/news/${id}`, {});
       if (res.success) {
@@ -217,7 +215,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
           isClosable: true,
           position: "top",
         });
-        fetchArticles(); 
+        fetchArticles();
       } else {
         toast({
           title: "Failed to delete",
@@ -283,7 +281,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
 
       const res = await apiPutReq(`/news/${editData._id}`, editData);
       if (res.success) {
-        fetchArticles(); 
+        fetchArticles();
         toast({
           title: "Article updated successfully!",
           status: "success",
@@ -377,7 +375,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field: string,
-    isNew: boolean = false,
+    isNew: boolean = false
   ) => {
     const { value } = e.target;
 
@@ -399,12 +397,16 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex justify-between">
-        <div className="mb-4" style={{ width: "300px" }}>
+        <div
+          className={`mb-4 ${
+            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}
+          style={{ width: "300px" }}
+        >
           <InputGroup>
             <Input
               type="text"
-              placeholder="Search..."
-              backgroundColor="white"
+               placeholder="Search..."
             />
             <InputRightElement>
               <AiOutlineSearch />
@@ -419,8 +421,8 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
           <thead
             className={`text-xs uppercase ${
               themeMode
-              ? "text-white bg-[#5A1073]"
-              : "bg-[#3bd6c6] text-[#5A1073]"
+                ? "text-white bg-[#5A1073]"
+                : "bg-[#3bd6c6] text-[#5A1073]"
             }`}
           >
             <tr>
@@ -435,10 +437,10 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
             {cardData.map((item) => (
               <tr
                 key={item._id}
-                className={`border-b py-4 hover:bg-gray-200 ${
+                className={`border-b py-3 ${
                   !themeMode
-                    ? "bg-gray-800 text-gray-200"
-                    : "bg-white text-gray-900"
+                    ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
+                    : "bg-white text-gray-900 hover:bg-gray-200"
                 }`}
               >
                 <td>
@@ -449,12 +451,14 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                 </td>
                 <td>{item.title}</td>
                 <td>{item.tags}</td>
-                <td>{new Date(item.date).toISOString().split('T')[0]}</td>
+                <td>{new Date(item.date).toISOString().split("T")[0]}</td>
                 <td>
                   <div className="flex justify-center space-x-2">
-                    <button onClick={() => handleEdit(item._id)}><FaRegEdit /></button>
+                    <button onClick={() => handleEdit(item._id)}>
+                      <FaRegEdit />
+                    </button>
                     <button onClick={() => handleDelete(item._id)}>
-                    <RiDeleteBin6Line />
+                      <RiDeleteBin6Line />
                     </button>
                   </div>
                 </td>
@@ -522,7 +526,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                 checked={editData?.confirmed || false}
                 onChange={(e) =>
                   setEditData((prev) =>
-                    prev ? { ...prev, confirmed: e.target.checked } : null,
+                    prev ? { ...prev, confirmed: e.target.checked } : null
                   )
                 }
               />
