@@ -72,8 +72,8 @@ const UserMainPage: React.FC<UserDataProps> = () => {
         prevData.map((user) =>
           user.id === selectedUserId
             ? { ...user, isVerified: verificationStatus === "Verified" }
-            : user,
-        ),
+            : user
+        )
       );
 
       onClose();
@@ -108,7 +108,11 @@ const UserMainPage: React.FC<UserDataProps> = () => {
 
       <TableContainer>
         <Table variant="striped" colorScheme="gray">
-          <Thead>
+          <Thead  className={`text-xs uppercase ${
+              themeMode
+              ? "text-white bg-[#5A1073]"
+              : "bg-[#3bd6c6] text-[#5A1073]"
+            }`}>
             <Tr>
               <Th>Title</Th>
               <Th>Role</Th>
@@ -123,7 +127,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
                 <Td className="capitalize">{user.role}</Td>
                 <Td>{user.email}</Td>
                 <Td>
-                  <div className="flex gap-2 items-center">
+                  <div className="flex items-center justify-between">
                     <h2 style={{ color: user.isVerified ? "green" : "red" }}>
                       {user.isVerified ? "Verified" : "Unverified"}
                     </h2>
