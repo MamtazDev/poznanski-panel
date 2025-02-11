@@ -156,7 +156,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
   };
 
   const handleDelete = async (id: string) => {
-    setDeleteId(id);
+    setDeleteId(id);  
     toast({
       title: "Confirm Deletion",
       description: "Are you sure you want to delete this item?",
@@ -165,13 +165,38 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
       isClosable: false,
       position: "top",
       render: ({ onClose }) => (
-        <div style={{ padding: "10px", background: "#F5F5F5", borderRadius: "8px", boxShadow: "lg", border:"2px" , borderColor:"red" }}>
-          <p>Are you sure you want to delete this item?</p>
-          <div style={{ marginTop: "10px", display: "flex", justifyContent: "space-between" }}>
-            <Button colorScheme="red" size="sm" onClick={() => confirmDelete(id, onClose)}>
+        <div
+          style={{
+            padding: "20px",
+            background: "#fff",
+            borderRadius: "8px",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+            textAlign: "center",
+          }}
+        >
+          <p style={{ fontSize: "16px", fontWeight: "bold" }}>Are you sure you want to delete this item?</p>
+          <div
+            style={{
+              marginTop: "15px",
+              display: "flex",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+          >
+            <Button
+              colorScheme="red"
+              size="sm"
+              onClick={() => confirmDelete(id, onClose)}
+            >
               Yes, Delete
             </Button>
-            <Button size="sm" colorScheme="blue" onClick={onClose}>Cancel</Button>
+            <Button
+              size="sm"
+              colorScheme="blue"
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
           </div>
         </div>
       ),
@@ -179,7 +204,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
   };
 
   const confirmDelete = async (id: string, onClose: () => void) => {
-    onClose(); 
+    onClose();  // Close the confirmation toast
     try {
       const res = await apiDeleteReq(`/news/${id}`, {});
       if (res.success) {
@@ -188,14 +213,16 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
           status: "success",
           duration: 3000,
           isClosable: true,
+          position: "top",
         });
-        fetchArticles();
+        fetchArticles(); 
       } else {
         toast({
           title: "Failed to delete",
           status: "error",
           duration: 3000,
           isClosable: true,
+          position: "top",
         });
       }
     } catch (error) {
@@ -205,6 +232,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
         status: "error",
         duration: 3000,
         isClosable: true,
+        position: "top",
       });
     }
   };
@@ -249,11 +277,11 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
     }
 
     try {
-      console.log("Saving data:", editData); // Debug log to ensure the data is correct
+      console.log("Saving data:", editData);
 
       const res = await apiPutReq(`/news/${editData._id}`, editData);
       if (res.success) {
-        fetchArticles(); // Fetch updated articles after save
+        fetchArticles(); 
         toast({
           title: "Article updated successfully!",
           status: "success",
