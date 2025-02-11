@@ -40,11 +40,11 @@ const mainMenu = [
     text: "Artists",
     link: "artists",
   },
-  {
-    icon: <BiCircle />,
-    text: "Partner Logos",
-    link: "logos",
-  },
+  // {
+  //   icon: <BiCircle />,
+  //   text: "Partner Logos",
+  //   link: "logos",
+  // },
   {
     icon: <BiCircle />,
     text: "User",

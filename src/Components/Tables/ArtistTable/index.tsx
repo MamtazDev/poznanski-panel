@@ -151,11 +151,11 @@ const ArtistTable: React.FC<TableProps> = (props) => {
             15
           </option>
         </Select>
-        <PaginationBar
+        {/* <PaginationBar
           selectedPage={props.selectedPage}
           setSelectedPage={props.setSelectedPage}
           pages={props.pageNum}
-        />
+        /> */}
       </div>
     </>
   );

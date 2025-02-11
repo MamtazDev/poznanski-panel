@@ -379,7 +379,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                 <tr
                   key={index}
                  className={`border-b py-4  ${
-                  themeMode
+                  !themeMode
                     ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
                     : "bg-white text-gray-900 hover:bg-gray-200"
                 }`}

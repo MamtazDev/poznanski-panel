@@ -20,7 +20,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ component }) => {
       setSelectedMenu("concerts");
     } else if (location.pathname.includes("artists")) {
       setSelectedMenu("artists");
-    } else if (location.pathname.includes("logos")) {
+    } 
+    else if (location.pathname.includes("logos")) {
       setSelectedMenu("logos");
     }
   }, [location.pathname]);
