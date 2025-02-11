@@ -118,20 +118,87 @@ const RadioTv: React.FC<TableProps> = (props) => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this item?",
-    );
-    if (!confirmDelete) return;
+  // const handleDelete = async (id: string) => {
+  //   const confirmDelete = window.confirm(
+  //     "Are you sure you want to delete this item?",
+  //   );
+  //   if (!confirmDelete) return;
 
+  //   try {
+  //     const res = await apiDeleteReq(`/radio/${id} `, {});
+  //     if (res) {
+  //       toast({
+  //         title: "Deleted successfully!",
+  //         status: "success",
+  //         duration: 3000,
+  //         isClosable: true,
+  //       });
+  //       setRadioData((prev) => prev.filter((item) => item._id !== id));
+  //     } else {
+  //       toast({
+  //         title: "Failed to delete",
+  //         status: "error",
+  //         duration: 3000,
+  //         isClosable: true,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting:", error);
+  //     toast({
+  //       title: "Error deleting item",
+  //       status: "error",
+  //       duration: 3000,
+  //       isClosable: true,
+  //     });
+  //   }
+  // };
+  const handleDelete = async (id: string) => {
+    // Show confirmation toast
+    toast({
+      position: "top",
+      duration: null, 
+      isClosable: false,
+      render: ({ onClose }) => (
+        <div
+          style={{
+            background: "white",
+            padding: "20px",
+            borderRadius: "8px",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+            textAlign: "center",
+          }}
+        >
+          <p style={{ fontSize: "16px", fontWeight: "bold" }}>
+            Are you sure you want to delete this item?
+          </p>
+          <div style={{ marginTop: "10px", display: "flex", justifyContent: "center", gap: "10px" }}>
+            <Button
+              colorScheme="red"
+              size="sm"
+              onClick={async () => {
+                onClose(); // Close confirmation toast
+                await deleteItem(id);
+              }}
+            >
+              Yes, Delete
+            </Button>
+            <Button size="sm" onClick={onClose}>Cancel</Button>
+          </div>
+        </div>
+      ),
+    });
+  };
+
+  const deleteItem = async (id: string) => {
     try {
-      const res = await apiDeleteReq(`/radio/${id} `, {});
+      const res = await apiDeleteReq(`/radio/${id}`, {});
       if (res) {
         toast({
           title: "Deleted successfully!",
           status: "success",
           duration: 3000,
           isClosable: true,
+          position: "top",
         });
         setRadioData((prev) => prev.filter((item) => item._id !== id));
       } else {
@@ -140,6 +207,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
           status: "error",
           duration: 3000,
           isClosable: true,
+          position: "top",
         });
       }
     } catch (error) {
@@ -149,78 +217,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
         status: "error",
         duration: 3000,
         isClosable: true,
-      });
-    }
-  };
-  // const handleDelete = async (id: string) => {
-  //   setDeleteId(id);
-  //   toast({
-  //     title: "Confirm Deletion",
-  //     description: "Are you sure you want to delete this item?",
-  //     status: "warning",
-  //     duration: null,
-  //     isClosable: false,
-  //     position: "top",
-  //     render: ({ onClose }) => (
-  //       <div
-  //         style={{
-  //           padding: "10px",
-  //           background: "white",
-  //           borderRadius: "8px",
-  //           boxShadow: "lg",
-  //         }}
-  //       >
-  //         <p>Are you sure you want to delete this item?</p>
-  //         <div
-  //           style={{
-  //             marginTop: "10px",
-  //             display: "flex",
-  //             justifyContent: "space-between",
-  //           }}
-  //         >
-  //           <Button
-  //             colorScheme="red"
-  //             size="sm"
-  //             onClick={() => confirmDelete(id, onClose)}
-  //           >
-  //             Yes, Delete
-  //           </Button>
-  //           <Button size="sm" onClick={onClose}>
-  //             Cancel
-  //           </Button>
-  //         </div>
-  //       </div>
-  //     ),
-  //   });
-  // };
-
-  const confirmDelete = async (id: string, onClose: () => void) => {
-    onClose();
-    try {
-      const res = await apiDeleteReq(`/radio/${id}`, {});
-      if (res.success) {
-        toast({
-          title: "Deleted successfully!",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-        // fetchArticles();
-      } else {
-        toast({
-          title: "Failed to delete",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-    } catch (error) {
-      console.error("Error deleting:", error);
-      toast({
-        title: "Error deleting item",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
+        position: "top",
       });
     }
   };
@@ -374,7 +371,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
               <th className="px-6 py-3 w-40">Video</th>
               <th className="px-6 py-3 w-40">Title</th>
               <th className="px-6 py-3 w-28">Tag</th>
-              <th className="px-6 py-3 w-28">Star</th>
+              {/* <th className="px-6 py-3 w-28">Star</th> */}
               <th className="px-6 py-3 w-28">Action</th>
             </tr>
           </thead>
@@ -419,9 +416,9 @@ const RadioTv: React.FC<TableProps> = (props) => {
                 </td>
                 <td className="px-4 py-3">{item?.title}</td>
                 <td className="px-4 py-3">{item?.tags}</td>
-                <td className="px-4 py-3">
+                {/* <td className="px-4 py-3">
                   {item?.artists?.map((i:any) => i.star)}
-                </td>
+                </td> */}
                 <td className="px-4 py-3">
                   <div className="flex justify-center space-x-2">
                     <Button onClick={() => handleEdit(item._id)}>Edit</Button>

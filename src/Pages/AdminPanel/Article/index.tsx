@@ -156,12 +156,43 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   };
 
   const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this item?",
-    );
+    // Show confirmation toast
+    toast({
+      position: "top",
+      duration: null, // Wait until user action
+      isClosable: false,
+      render: ({ onClose }) => (
+        <div
+          style={{
+            background: "white",
+            padding: "20px",
+            borderRadius: "8px",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+            textAlign: "center",
+          }}
+        >
+          <p style={{ fontSize: "16px", fontWeight: "bold" }}>
+            Are you sure you want to delete this item?
+          </p>
+          <div style={{ marginTop: "10px", display: "flex", justifyContent: "center", gap: "10px" }}>
+            <Button
+              colorScheme="red"
+              size="sm"
+              onClick={async () => {
+                onClose(); // Close confirmation toast
+                await deleteItem(id);
+              }}
+            >
+              Yes, Delete
+            </Button>
+            <Button size="sm" onClick={onClose}>Cancel</Button>
+          </div>
+        </div>
+      ),
+    });
+  };
 
-    if (!confirmDelete) return;
-
+  const deleteItem = async (id: string) => {
     try {
       const res = await apiDeleteReq(`/news/${id}`, {});
       if (res.success) {
@@ -170,6 +201,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
           status: "success",
           duration: 3000,
           isClosable: true,
+          position: "top",
         });
         fetchArticles();
       } else {
@@ -178,6 +210,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
           status: "error",
           duration: 3000,
           isClosable: true,
+          position: "top",
         });
       }
     } catch (error) {
@@ -187,6 +220,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
         status: "error",
         duration: 3000,
         isClosable: true,
+        position: "top",
       });
     }
   };
@@ -308,7 +342,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
         <CommonButton text="Add article" onClick={handleAddArticle} />
       </div>
 
-      <TipTapPage/>
+      {/* <TipTapPage/> */}
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
@@ -340,16 +374,16 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                 <td>
                   <img
                     src={item?.files?.[0] || staticImg}
-                    className="rounded-full w-[100px] h-[100px]"
+                    className="rounded-full w-[100px] h-[100px] my-2 flex items-center mx-auto"
                   />
                 </td>
                 <td>{item.title}</td>
                 <td>{item.tags}</td>
-                <td>{item.date}</td>
+                <td>{new Date(item.date).toISOString().split('T')[0]}</td>
                 <td>
                   <div className="flex justify-center space-x-2">
-                    <Button onClick={() => handleEdit(item._id)}>Edit</Button>
-                    <Button onClick={() => handleDelete(item._id)}>
+                    <Button colorScheme="blue" onClick={() => handleEdit(item._id)}>Edit</Button>
+                    <Button colorScheme="red" onClick={() => handleDelete(item._id)}>
                       Delete
                     </Button>
                   </div>
@@ -425,10 +459,10 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSave}>
+            <Button  onClick={handleSave}>
               Save
             </Button>
-            <Button variant="ghost" onClick={onClose}>
+            <Button variant="ghost" onClick={onClose} className="ml-3">
               Cancel
             </Button>
           </ModalFooter>

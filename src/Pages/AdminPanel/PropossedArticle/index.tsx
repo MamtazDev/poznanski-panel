@@ -165,13 +165,13 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
       isClosable: false,
       position: "top",
       render: ({ onClose }) => (
-        <div style={{ padding: "10px", background: "white", borderRadius: "8px", boxShadow: "lg" }}>
+        <div style={{ padding: "10px", background: "#F5F5F5", borderRadius: "8px", boxShadow: "lg", border:"2px" , borderColor:"red" }}>
           <p>Are you sure you want to delete this item?</p>
           <div style={{ marginTop: "10px", display: "flex", justifyContent: "space-between" }}>
             <Button colorScheme="red" size="sm" onClick={() => confirmDelete(id, onClose)}>
               Yes, Delete
             </Button>
-            <Button size="sm" onClick={onClose}>Cancel</Button>
+            <Button size="sm" colorScheme="blue" onClick={onClose}>Cancel</Button>
           </div>
         </div>
       ),
@@ -419,7 +419,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                 </td>
                 <td>{item.title}</td>
                 <td>{item.tags}</td>
-                <td>{item.date}</td>
+                <td>{new Date(item.date).toISOString().split('T')[0]}</td>
                 <td>
                   <div className="flex justify-center space-x-2">
                     <Button onClick={() => handleEdit(item._id)}>Edit</Button>
