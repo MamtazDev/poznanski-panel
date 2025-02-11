@@ -116,11 +116,52 @@ const MaterialContent: React.FC<TableProps> = (props) => {
   };
 
   const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this item?",
-    );
+    toast({
+      title: "Confirm Deletion",
+      description: "Are you sure you want to delete this item?",
+      status: "warning",
+      duration: null,
+      isClosable: false,
+      position: "top",
+      render: ({ onClose }) => (
+        <div
+          style={{
+            padding: "20px",
+            background: "#fff",
+            borderRadius: "8px",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+            textAlign: "center",
+          }}
+        >
+          <p style={{ fontSize: "16px", fontWeight: "bold" }}>
+            Are you sure you want to delete this item?
+          </p>
+          <div
+            style={{
+              marginTop: "15px",
+              display: "flex",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+          >
+            <Button
+              colorScheme="red"
+              size="sm"
+              onClick={() => confirmDelete(id, onClose)}
+            >
+              Yes, Delete
+            </Button>
+            <Button size="sm" colorScheme="blue" onClick={onClose}>
+              Cancel
+            </Button>
+          </div>
+        </div>
+      ),
+    });
+  };
 
-    if (!confirmDelete) return;
+  const confirmDelete = async (id: string, onClose: () => void) => {
+    onClose();  // Close the confirmation toast
 
     try {
       const res = await apiDeleteReq(`/materials/${id}`, {});
@@ -130,6 +171,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
           status: "success",
           duration: 3000,
           isClosable: true,
+          position: "top",
         });
         setRadioData((prev) => ({
           materials: prev.materials.filter((item) => item._id !== id),
@@ -140,6 +182,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
           status: "error",
           duration: 3000,
           isClosable: true,
+          position: "top",
         });
       }
     } catch (error) {
@@ -149,9 +192,11 @@ const MaterialContent: React.FC<TableProps> = (props) => {
         status: "error",
         duration: 3000,
         isClosable: true,
+        position: "top",
       });
     }
   };
+
 
   const handleSave = async () => {
     if (!editData || !editData._id) return;
