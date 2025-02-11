@@ -3,6 +3,7 @@ import { Image, Select, Avatar } from "@chakra-ui/react";
 import CrudBtn from "../../CrudBtn";
 import PaginationBar from "../../PaginationBar";
 import "./style.css";
+import img from "../../../assets/png/profileImg3.png"
 
 interface TableProps {
   themeMode: boolean;
@@ -54,8 +55,8 @@ const ArtistTable: React.FC<TableProps> = (props) => {
                     className={`border-b ${!props.themeMode ? "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700" : "bg-white text-gray-900 hover:bg-gray-200"}`}
                   >
                     <td className="py-3">
-                      <div className="rounded-full w-[50px] h-[50px] my-2 flex items-center mx-auto">
-                        <img src={item.profileImg} alt="Uploaded Image" />
+                      <div className="my-2">
+                        <img src={item.profileImg || img} alt="Uploaded Image" className="rounded-full  w-[50px] h-[50px] flex items-center mx-auto" />
                       </div>
                     </td>
                     <td className="py-3" style={{ width: "200px" }}>

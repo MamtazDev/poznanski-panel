@@ -29,6 +29,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineArrowOutward } from "react-icons/md";
 import { AiOutlineSearch } from "react-icons/ai";
 import CommonButton from "../../../Components/Buttons/CommonButton";
+import img from "../../../assets/png/profileImg3.png";
 
 interface TableProps {
   themeMode?: boolean;
@@ -376,8 +377,8 @@ const ConcertContent: React.FC<TableProps> = (props) => {
           <thead
             className={`text-xs uppercase ${
               themeMode
-              ? "text-white bg-[#5A1073]"
-              : "bg-[#3bd6c6] text-[#5A1073]"
+                ? "text-white bg-[#5A1073]"
+                : "bg-[#3bd6c6] text-[#5A1073]"
             }`}
           >
             <tr>
@@ -399,15 +400,15 @@ const ConcertContent: React.FC<TableProps> = (props) => {
               radioData.map((item, index) => (
                 <tr
                   key={index}
-                 className={`border-b py-4  ${
-                  !themeMode
-                    ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
-                    : "bg-white text-gray-900 hover:bg-gray-200"
-                }`}
+                  className={`border-b py-4  ${
+                    !themeMode
+                      ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
+                      : "bg-white text-gray-900 hover:bg-gray-200"
+                  }`}
                 >
                   <td>
                     <img
-                      src={item.img || FolderImage}
+                      src={item.img || img}
                       alt={item.name}
                       className="rounded-full w-[50px] h-[50px] my-2 flex items-center mx-auto"
                     />
@@ -416,28 +417,34 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                   <td>{item.category}</td>
                   <td>{item.location}</td>
                   <td>
-                <div className="flex items-center gap-2 justify-center">
-                Preview 
-                    <a
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 underline"
-                    >
-                       <MdOutlineArrowOutward/>
-                    </a>
-                </div>
+                    <button className="bg-gray-200 py-2 px-4 rounded-md">
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 underline flex items-center gap-2 justify-center"
+                      >
+                        Preview
+                        <MdOutlineArrowOutward />
+                      </a>
+                    </button>
                   </td>
                   <td className="text-center">{item.description}</td>
                   <td className="text-center">
                     {item.isFeatured === true ? "Featured" : "Not Featured"}
                   </td>
-                  <td>{new Date(item.timeframe.start).toISOString().split('T')[0]}</td>
-                  <td>{new Date(item.timeframe.end).toISOString().split('T')[0]}</td>
+                  <td>
+                    {new Date(item.timeframe.start).toISOString().split("T")[0]}
+                  </td>
+                  <td>
+                    {new Date(item.timeframe.end).toISOString().split("T")[0]}
+                  </td>
                   <td className="text-center space-x-2">
-                    <button onClick={() => handleEdit(item._id)}><FaRegEdit /></button>
+                    <button onClick={() => handleEdit(item._id)}>
+                      <FaRegEdit />
+                    </button>
                     <button onClick={() => handleDelete(item._id)}>
-                    <RiDeleteBin6Line />
+                      <RiDeleteBin6Line />
                     </button>
                   </td>
                 </tr>

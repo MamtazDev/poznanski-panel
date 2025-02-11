@@ -450,7 +450,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                   />
                 </td>
                 <td>{item.title}</td>
-                <td>{item.tags}</td>
+                <td>{item.tags || "N/A"}</td>
                 <td>{new Date(item.date).toISOString().split("T")[0]}</td>
                 <td>
                   <div className="flex justify-center space-x-2">
