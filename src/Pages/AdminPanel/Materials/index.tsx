@@ -347,7 +347,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
           >
             <tr>
               <th className="px-6 py-3" style={{ width: "130px" }}>
-                Link
+                Video
               </th>
               <th className="px-6 py-3" style={{ width: "130px" }}>
                 Title
@@ -377,16 +377,24 @@ const MaterialContent: React.FC<TableProps> = (props) => {
                       : "bg-white text-gray-900 hover:bg-gray-200"
                   }`}
                 >
-                  <td>
-                    <a
-                      href={item.youTube}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 underline"
-                    >
-                      View
-                    </a>
-                  </td>
+                   <td className="px-4 py-3">
+                  <div className="flex justify-center">
+                    <iframe
+                      src={
+                        item?.youTube?.includes("youtube.com/watch")
+                          ? `https://www.youtube.com/embed/${
+                              item?.youTube?.split("v=")[1].split("&")[0]
+                            }`
+                          : item?.youTube ||
+                            "https://www.youtube.com/embed/6JYIGclVQdw"
+                      }
+                      title="YouTube video player"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      frameBorder="0"
+                      className="w-40 h-24 md: rounded-lg shadow-lg"
+                    ></iframe>
+                  </div>
+                </td>
                   <td className="py-4">{item.title}</td>
                   <td className="py-4">{item.tags}</td>
                   <td className="py-4">{new Date(item.date).toISOString().split('T')[0]}</td>
