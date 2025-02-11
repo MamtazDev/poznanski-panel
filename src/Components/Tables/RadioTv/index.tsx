@@ -433,7 +433,10 @@ const RadioTv: React.FC<TableProps> = (props) => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Edit Item</ModalHeader>
+         <div className={` ${
+            props.themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}>
+         <ModalHeader>Edit Item</ModalHeader>
           <ModalBody>
             {/* artist */}
             <FormControl id="artist" isRequired>
@@ -515,10 +518,11 @@ const RadioTv: React.FC<TableProps> = (props) => {
             <Button colorScheme="blue" onClick={handleSave} className="mr-3">
               Save
             </Button>
-            <Button variant="ghost" onClick={onClose}>
+            <Button variant="red" onClick={onClose}>
               Cancel
             </Button>
           </ModalFooter>
+         </div>
         </ModalContent>
       </Modal>
 
@@ -526,7 +530,10 @@ const RadioTv: React.FC<TableProps> = (props) => {
       <Modal isOpen={isNewOpen} onClose={onNewClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add New Item</ModalHeader>
+         <div className={` ${
+            props.themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}>
+         <ModalHeader>Add New Item</ModalHeader>
           <ModalBody>
             <FormControl isRequired>
               <FormLabel>Artist</FormLabel>
@@ -608,6 +615,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
               Cancel
             </Button>
           </ModalFooter>
+         </div>
         </ModalContent>
       </Modal>
     </>

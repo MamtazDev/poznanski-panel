@@ -30,6 +30,8 @@ import { MdOutlineArrowOutward } from "react-icons/md";
 import { AiOutlineSearch } from "react-icons/ai";
 import CommonButton from "../../../Components/Buttons/CommonButton";
 import img from "../../../assets/png/profileImg3.png";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../reducers";
 
 interface TableProps {
   themeMode?: boolean;
@@ -56,7 +58,8 @@ interface TableProps {
 const ConcertContent: React.FC<TableProps> = (props) => {
   const [radioData, setRadioData] = useState<any[]>([]);
   const [editData, setEditData] = useState<any | null>(null);
-  const [themeMode, setThemeMode] = useState<boolean>(true);
+  // const [themeMode, setThemeMode] = useState<boolean>(true);
+  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [newData, setNewData] = useState<any>({
     timeframe: { start: "", end: "" },
     name: "",
@@ -417,7 +420,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                   <td>{item.category}</td>
                   <td>{item.location}</td>
                   <td>
-                    <button className="bg-gray-200 py-2 px-4 rounded-md">
+                    <button className={` py-2 px-4 rounded-md ${themeMode ? "bg-gray-200" : "bg-gray-700"}`}>
                       <a
                         href={item.link}
                         target="_blank"
@@ -464,6 +467,9 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent    >
+          <div className={` ${
+            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}>
           <ModalHeader>Edit Item</ModalHeader>
           <ModalBody>
             {/* Title */}
@@ -570,10 +576,11 @@ const ConcertContent: React.FC<TableProps> = (props) => {
             <Button colorScheme="blue" onClick={handleSave} className="mr-3">
               Save
             </Button>
-            <Button variant="ghost" onClick={onClose}>
+            <Button variant="red" onClick={onClose}>
               Cancel
             </Button>
           </ModalFooter>
+          </div>
         </ModalContent>
       </Modal>
 
@@ -581,6 +588,9 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       <Modal isOpen={isNewOpen} onClose={onNewClose}>
         <ModalOverlay />
         <ModalContent>
+          <div className={` ${
+            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}>
           <ModalHeader>Add New Item</ModalHeader>
           <ModalBody>
             {/* Title */}
@@ -687,10 +697,11 @@ const ConcertContent: React.FC<TableProps> = (props) => {
             <Button colorScheme="blue" onClick={handleCreatePost} className="mr-3">
               Create
             </Button>
-            <Button variant="ghost" onClick={onNewClose}>
+            <Button variant="red" onClick={onNewClose}>
               Cancel
             </Button>
           </ModalFooter>
+          </div>
         </ModalContent>
       </Modal>
     </div>

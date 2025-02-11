@@ -191,7 +191,10 @@ const UserMainPage: React.FC<UserDataProps> = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Edit Verification Status</ModalHeader>
+         <div className={` ${
+            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}>
+         <ModalHeader>Edit Verification Status</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <RadioGroup
@@ -208,10 +211,11 @@ const UserMainPage: React.FC<UserDataProps> = () => {
             <Button colorScheme="blue" onClick={handleSaveVerification}>
               Save
             </Button>
-            <Button variant="ghost" onClick={onClose}>
+            <Button variant="red" onClick={onClose}>
               Cancel
             </Button>
           </ModalFooter>
+         </div>
         </ModalContent>
       </Modal>
     </div>
