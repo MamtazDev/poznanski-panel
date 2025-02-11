@@ -420,12 +420,14 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                   <td>{item.category}</td>
                   <td>{item.location}</td>
                   <td>
-                    <button className={` py-2 px-4 rounded-md ${themeMode ? "bg-gray-200" : "bg-gray-700"}`}>
+                    <button
+                      className={` py-2 px-4 rounded-md ${themeMode ? "bg-gray-100" : "bg-gray-900"}`}
+                    >
                       <a
                         href={item.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-500 underline flex items-center gap-2 justify-center"
+                        className="text-blue-500 font-semibold flex items-center gap-2 justify-center"
                       >
                         Preview
                         <MdOutlineArrowOutward />
@@ -466,120 +468,122 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       {/* Edit Modal */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent    >
-          <div className={` ${
-            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-          }`}>
-          <ModalHeader>Edit Item</ModalHeader>
-          <ModalBody>
-            {/* Title */}
-            <FormControl id="title" isRequired mt={4}>
-              <FormLabel>Title</FormLabel>
-              <Input
-                value={editData?.name}
-                onChange={(e) => handleInputChange(e, "name")}
-                placeholder="Enter title"
-              />
-            </FormControl>
-
-            {/* Description */}
-            <FormControl id="description" isRequired mt={4}>
-              <FormLabel>Description</FormLabel>
-              <Textarea
-                value={editData?.description}
-                onChange={(e) => handleInputChange(e, "description")}
-                placeholder="Enter description"
-              />
-            </FormControl>
-
-            {/* Link */}
-            <FormControl id="link" mt={4}>
-              <FormLabel>Link</FormLabel>
-              <Input
-                value={editData?.link}
-                onChange={(e) => handleInputChange(e, "link")}
-                placeholder="Enter link"
-              />
-            </FormControl>
-
-            {/* Location */}
-            <FormControl id="location" mt={4}>
-              <FormLabel>Location</FormLabel>
-              <Input
-                value={editData?.location}
-                onChange={(e) => handleInputChange(e, "location")}
-                placeholder="Enter location"
-              />
-            </FormControl>
-
-            {/* Timeframe */}
-            <FormControl id="timeframe" mt={4}>
-              <FormLabel>Start Date</FormLabel>
-              <Input
-                type="datetime-local"
-                value={editData?.timeframe?.start || ""}
-                onChange={(e) => handleInputChange(e, "timeframe", "start")}
-              />
-
-              <FormLabel>End Date</FormLabel>
-              <Input
-                type="datetime-local"
-                value={editData?.timeframe?.end || ""}
-                onChange={(e) => handleInputChange(e, "timeframe", "end")}
-              />
-            </FormControl>
-
-            {/* Thumbnail */}
-            <FormControl id="thumbnail" mt={4}>
-              <FormLabel>Thumbnail</FormLabel>
-              <img
-                width={200}
-                height={200}
-                src={editData?.img || FolderImage}
-                alt="Thumbnail"
-              />
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                mt={2}
-              />
-            </FormControl>
-
-            {/* isFeatured */}
-            <FormControl id="isFeatured" mt={4}>
-              <FormLabel>Featured Status</FormLabel>
-              <label>
-                <input
-                  type="radio"
-                  name="editIsFeatured"
-                  value="true"
-                  checked={editData?.isFeatured === true}
-                  onChange={handleFeaturedChange}
+        <ModalContent>
+          <div
+            className={` ${
+              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}
+          >
+            <ModalHeader>Edit Item</ModalHeader>
+            <ModalBody>
+              {/* Title */}
+              <FormControl id="title" isRequired mt={4}>
+                <FormLabel>Title</FormLabel>
+                <Input
+                  value={editData?.name}
+                  onChange={(e) => handleInputChange(e, "name")}
+                  placeholder="Enter title"
                 />
-                Featured
-              </label>
-              <label className="ml-4">
-                <input
-                  type="radio"
-                  name="editIsFeatured"
-                  value="false"
-                  checked={editData?.isFeatured === false}
-                  onChange={handleFeaturedChange}
-                />
-                Not Featured
-              </label>
-            </FormControl>
-          </ModalBody>
+              </FormControl>
 
-          <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSave} className="mr-3">
-              Save
-            </Button>
-            <Button variant="red" onClick={onClose}>
-              Cancel
-            </Button>
-          </ModalFooter>
+              {/* Description */}
+              <FormControl id="description" isRequired mt={4}>
+                <FormLabel>Description</FormLabel>
+                <Textarea
+                  value={editData?.description}
+                  onChange={(e) => handleInputChange(e, "description")}
+                  placeholder="Enter description"
+                />
+              </FormControl>
+
+              {/* Link */}
+              <FormControl id="link" mt={4}>
+                <FormLabel>Link</FormLabel>
+                <Input
+                  value={editData?.link}
+                  onChange={(e) => handleInputChange(e, "link")}
+                  placeholder="Enter link"
+                />
+              </FormControl>
+
+              {/* Location */}
+              <FormControl id="location" mt={4}>
+                <FormLabel>Location</FormLabel>
+                <Input
+                  value={editData?.location}
+                  onChange={(e) => handleInputChange(e, "location")}
+                  placeholder="Enter location"
+                />
+              </FormControl>
+
+              {/* Timeframe */}
+              <FormControl id="timeframe" mt={4}>
+                <FormLabel>Start Date</FormLabel>
+                <Input
+                  type="datetime-local"
+                  value={editData?.timeframe?.start || ""}
+                  onChange={(e) => handleInputChange(e, "timeframe", "start")}
+                />
+
+                <FormLabel>End Date</FormLabel>
+                <Input
+                  type="datetime-local"
+                  value={editData?.timeframe?.end || ""}
+                  onChange={(e) => handleInputChange(e, "timeframe", "end")}
+                />
+              </FormControl>
+
+              {/* Thumbnail */}
+              <FormControl id="thumbnail" mt={4}>
+                <FormLabel>Thumbnail</FormLabel>
+                <img
+                  width={200}
+                  height={200}
+                  src={editData?.img || FolderImage}
+                  alt="Thumbnail"
+                />
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  mt={2}
+                />
+              </FormControl>
+
+              {/* isFeatured */}
+              <FormControl id="isFeatured" mt={4}>
+                <FormLabel>Featured Status</FormLabel>
+                <label>
+                  <input
+                    type="radio"
+                    name="editIsFeatured"
+                    value="true"
+                    checked={editData?.isFeatured === true}
+                    onChange={handleFeaturedChange}
+                  />
+                  Featured
+                </label>
+                <label className="ml-4">
+                  <input
+                    type="radio"
+                    name="editIsFeatured"
+                    value="false"
+                    checked={editData?.isFeatured === false}
+                    onChange={handleFeaturedChange}
+                  />
+                  Not Featured
+                </label>
+              </FormControl>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button colorScheme="blue" onClick={handleSave} className="mr-3">
+                Save
+              </Button>
+              <Button variant="red" onClick={onClose}>
+                Cancel
+              </Button>
+            </ModalFooter>
           </div>
         </ModalContent>
       </Modal>
@@ -588,119 +592,127 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       <Modal isOpen={isNewOpen} onClose={onNewClose}>
         <ModalOverlay />
         <ModalContent>
-          <div className={` ${
-            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-          }`}>
-          <ModalHeader>Add New Item</ModalHeader>
-          <ModalBody>
-            {/* Title */}
-            <FormControl id="title" isRequired mt={4}>
-              <FormLabel>Title</FormLabel>
-              <Input
-                value={newData.name}
-                onChange={(e) => handleNewInputChange(e, "name")}
-                placeholder="Enter title"
-              />
-            </FormControl>
-
-            {/* Description */}
-            <FormControl id="description" isRequired mt={4}>
-              <FormLabel>Description</FormLabel>
-              <Textarea
-                value={newData.description}
-                onChange={(e) => handleNewInputChange(e, "description")}
-                placeholder="Enter description"
-              />
-            </FormControl>
-
-            {/* Link */}
-            <FormControl id="link" mt={4}>
-              <FormLabel>Link</FormLabel>
-              <Input
-                value={newData.link}
-                onChange={(e) => handleNewInputChange(e, "link")}
-                placeholder="Enter link"
-              />
-            </FormControl>
-
-            {/* Location */}
-            <FormControl id="location" mt={4}>
-              <FormLabel>Location</FormLabel>
-              <Input
-                value={newData.location}
-                onChange={(e) => handleNewInputChange(e, "location")}
-                placeholder="Enter location"
-              />
-            </FormControl>
-
-            {/* Time frame */}
-            <FormControl id="timeframe" mt={4}>
-              <FormLabel>Start Date</FormLabel>
-              <Input
-                type="datetime-local"
-                value={newData?.timeframe?.start || ""}
-                onChange={(e) => handleNewInputChange(e, "timeframe", "start")}
-              />
-
-              <FormLabel>End Date</FormLabel>
-              <Input
-                type="datetime-local"
-                value={newData?.timeframe?.end || ""}
-                onChange={(e) => handleNewInputChange(e, "timeframe", "end")}
-              />
-            </FormControl>
-
-            {/* Thumbnail */}
-            <FormControl id="thumbnail" mt={4}>
-              <FormLabel>Thumbnail</FormLabel>
-              <img
-                width={200}
-                height={200}
-                src={newData.img || FolderImage}
-                alt="Thumbnail"
-              />
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={handleNewImageUpload}
-                mt={2}
-              />
-            </FormControl>
-
-            {/* Is Featured */}
-            <FormControl id="isFeatured" mt={4}>
-              <FormLabel>Featured Status</FormLabel>
-              <label>
-                <input
-                  type="radio"
-                  name="newIsFeatured"
-                  value="true"
-                  checked={newData.isFeatured === true}
-                  onChange={handleNewFeaturedChange}
+          <div
+            className={` ${
+              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}
+          >
+            <ModalHeader>Add New Item</ModalHeader>
+            <ModalBody>
+              {/* Title */}
+              <FormControl id="title" isRequired mt={4}>
+                <FormLabel>Title</FormLabel>
+                <Input
+                  value={newData.name}
+                  onChange={(e) => handleNewInputChange(e, "name")}
+                  placeholder="Enter title"
                 />
-                Featured
-              </label>
-              <label className="ml-4">
-                <input
-                  type="radio"
-                  name="newIsFeatured"
-                  value="false"
-                  checked={newData.isFeatured === false}
-                  onChange={handleNewFeaturedChange}
-                />
-                Not Featured
-              </label>
-            </FormControl>
-          </ModalBody>
+              </FormControl>
 
-          <ModalFooter>
-            <Button colorScheme="blue" onClick={handleCreatePost} className="mr-3">
-              Create
-            </Button>
-            <Button variant="red" onClick={onNewClose}>
-              Cancel
-            </Button>
-          </ModalFooter>
+              {/* Description */}
+              <FormControl id="description" isRequired mt={4}>
+                <FormLabel>Description</FormLabel>
+                <Textarea
+                  value={newData.description}
+                  onChange={(e) => handleNewInputChange(e, "description")}
+                  placeholder="Enter description"
+                />
+              </FormControl>
+
+              {/* Link */}
+              <FormControl id="link" mt={4}>
+                <FormLabel>Link</FormLabel>
+                <Input
+                  value={newData.link}
+                  onChange={(e) => handleNewInputChange(e, "link")}
+                  placeholder="Enter link"
+                />
+              </FormControl>
+
+              {/* Location */}
+              <FormControl id="location" mt={4}>
+                <FormLabel>Location</FormLabel>
+                <Input
+                  value={newData.location}
+                  onChange={(e) => handleNewInputChange(e, "location")}
+                  placeholder="Enter location"
+                />
+              </FormControl>
+
+              {/* Time frame */}
+              <FormControl id="timeframe" mt={4}>
+                <FormLabel>Start Date</FormLabel>
+                <Input
+                  type="datetime-local"
+                  value={newData?.timeframe?.start || ""}
+                  onChange={(e) =>
+                    handleNewInputChange(e, "timeframe", "start")
+                  }
+                />
+
+                <FormLabel>End Date</FormLabel>
+                <Input
+                  type="datetime-local"
+                  value={newData?.timeframe?.end || ""}
+                  onChange={(e) => handleNewInputChange(e, "timeframe", "end")}
+                />
+              </FormControl>
+
+              {/* Thumbnail */}
+              <FormControl id="thumbnail" mt={4}>
+                <FormLabel>Thumbnail</FormLabel>
+                <img
+                  width={200}
+                  height={200}
+                  src={newData.img || FolderImage}
+                  alt="Thumbnail"
+                />
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleNewImageUpload}
+                  mt={2}
+                />
+              </FormControl>
+
+              {/* Is Featured */}
+              <FormControl id="isFeatured" mt={4}>
+                <FormLabel>Featured Status</FormLabel>
+                <label>
+                  <input
+                    type="radio"
+                    name="newIsFeatured"
+                    value="true"
+                    checked={newData.isFeatured === true}
+                    onChange={handleNewFeaturedChange}
+                  />
+                  Featured
+                </label>
+                <label className="ml-4">
+                  <input
+                    type="radio"
+                    name="newIsFeatured"
+                    value="false"
+                    checked={newData.isFeatured === false}
+                    onChange={handleNewFeaturedChange}
+                  />
+                  Not Featured
+                </label>
+              </FormControl>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button
+                colorScheme="blue"
+                onClick={handleCreatePost}
+                className="mr-3"
+              >
+                Create
+              </Button>
+              <Button variant="red" onClick={onNewClose}>
+                Cancel
+              </Button>
+            </ModalFooter>
           </div>
         </ModalContent>
       </Modal>

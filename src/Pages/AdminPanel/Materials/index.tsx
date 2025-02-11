@@ -37,7 +37,7 @@ interface Material {
   title: string;
   description: string;
   youTube: string;
-  tags: string[];
+  tags: string;
   date: string;
   commentsSection: {
     commentsIds: string[];
@@ -77,7 +77,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
     title: "",
     youTube: "",
     description: "",
-    tags: "",
+    tags: "React, Frontend, JavaScript",
     date: "",
   });
   console.log(newData, " new data");
@@ -94,7 +94,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
   const [materials, setMaterials] = useState<Material[]>([]);
 
   useEffect(() => {
-    apiGetReq("/materials", {}).then((res) => {
+    apiGetReq("/materials", { limit: 100 }).then((res) => {
       console.log(res, "materials data");
 
       if (res && Array.isArray(res.materials)) {
@@ -254,8 +254,8 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       title: "",
       description: "",
       youTube: "",
-      tags: [], // Should be an array
-      date: "",
+      tags: "React, Frontend, JavaScript", // Should be an array
+      date: "2025-01-28T00:00:00.000Z",
     });
     onNewOpen();
   };
@@ -266,7 +266,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       const res = await apiPostReq("/materials", newData);
       console.log("API Response:", res);
 
-      if (res.success) {
+      if (res.title) {
         setRadioData((prev) => ({
           materials: [...prev.materials, res.data],
         }));
@@ -304,7 +304,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
   ) => {
     setNewData((prev: any) => ({
       ...prev,
-      [field]: field === "tags" ? e.target.value.split(",") : e.target.value,
+      [field]: e.target.value,
     }));
   };
 
@@ -446,69 +446,71 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <div className={` ${
-            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-          }`}>
-          <ModalHeader>Edit Item</ModalHeader>
-          <ModalBody>
-            {/* Title */}
-            <FormControl id="title" isRequired mt={4}>
-              <FormLabel>Title</FormLabel>
-              <Input
-                value={editData?.title}
-                onChange={(e) => handleInputChange(e, "title")}
-                placeholder="Enter title"
-              />
-            </FormControl>
-          </ModalBody>
-          <ModalBody>
-            {/* Title */}
-            <FormControl id="youTube" isRequired mt={4}>
-              <FormLabel>Link</FormLabel>
-              <Input
-                value={editData?.youTube}
-                onChange={(e) => handleInputChange(e, "youTube")}
-                placeholder="Enter YouTube Link"
-              />
-            </FormControl>
-          </ModalBody>
-          <ModalBody>
-            {/* description */}
-            <FormControl id="description" isRequired mt={4}>
-              <FormLabel>Description</FormLabel>
-              <Input
-                value={editData?.description}
-                onChange={(e) => handleInputChange(e, "description")}
-                placeholder="Enter description"
-              />
-            </FormControl>
+          <div
+            className={` ${
+              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}
+          >
+            <ModalHeader>Edit Item</ModalHeader>
+            <ModalBody>
+              {/* Title */}
+              <FormControl id="title" isRequired mt={4}>
+                <FormLabel>Title</FormLabel>
+                <Input
+                  value={editData?.title}
+                  onChange={(e) => handleInputChange(e, "title")}
+                  placeholder="Enter title"
+                />
+              </FormControl>
+            </ModalBody>
+            <ModalBody>
+              {/* Title */}
+              <FormControl id="youTube" isRequired mt={4}>
+                <FormLabel>Link</FormLabel>
+                <Input
+                  value={editData?.youTube}
+                  onChange={(e) => handleInputChange(e, "youTube")}
+                  placeholder="Enter YouTube Link"
+                />
+              </FormControl>
+            </ModalBody>
+            <ModalBody>
+              {/* description */}
+              <FormControl id="description" isRequired mt={4}>
+                <FormLabel>Description</FormLabel>
+                <Input
+                  value={editData?.description}
+                  onChange={(e) => handleInputChange(e, "description")}
+                  placeholder="Enter description"
+                />
+              </FormControl>
 
-            <FormControl id="tags" isRequired mt={4}>
-              <FormLabel>Tags</FormLabel>
-              <Input
-                value={editData?.tags}
-                onChange={(e) => handleInputChange(e, "tags")}
-                placeholder="Enter tags"
-              />
-            </FormControl>
-            <FormControl id="date" isRequired mt={4}>
-              <FormLabel>Date</FormLabel>
-              <Input
-                value={editData?.date}
-                onChange={(e) => handleInputChange(e, "date")}
-                placeholder="Enter date"
-              />
-            </FormControl>
-          </ModalBody>
+              <FormControl id="tags" isRequired mt={4}>
+                <FormLabel>Tags</FormLabel>
+                <Input
+                  value={editData?.tags}
+                  onChange={(e) => handleInputChange(e, "tags")}
+                  placeholder="Enter tags"
+                />
+              </FormControl>
+              <FormControl id="date" isRequired mt={4}>
+                <FormLabel>Date</FormLabel>
+                <Input
+                  value={editData?.date}
+                  onChange={(e) => handleInputChange(e, "date")}
+                  placeholder="Enter date"
+                />
+              </FormControl>
+            </ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSave} className="mr-3">
-              Save
-            </Button>
-            <Button variant="red" onClick={onClose}>
-              Cancel
-            </Button>
-          </ModalFooter>
+            <ModalFooter>
+              <Button colorScheme="blue" onClick={handleSave} className="mr-3">
+                Save
+              </Button>
+              <Button variant="red" onClick={onClose}>
+                Cancel
+              </Button>
+            </ModalFooter>
           </div>
         </ModalContent>
       </Modal>
@@ -517,72 +519,74 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       <Modal isOpen={isNewOpen} onClose={onNewClose}>
         <ModalOverlay />
         <ModalContent>
-         <div className={`${
-            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-          }`}>
-         <ModalHeader>Add New Item</ModalHeader>
-          <ModalBody>
-            {/* Title */}
-            <FormControl id="title" isRequired mt={4}>
-              <FormLabel>Title</FormLabel>
-              <Input
-                value={newData.title}
-                onChange={(e) => handleNewInputChange(e, "title")}
-                placeholder="Enter title"
-              />
-            </FormControl>
-            <FormControl id="tags" isRequired mt={4}>
-              <FormLabel>tags</FormLabel>
-              <Input
-                value={newData.tags}
-                onChange={(e) => handleNewInputChange(e, "tags")}
-                placeholder="Enter tags"
-              />
-            </FormControl>
+          <div
+            className={`${
+              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}
+          >
+            <ModalHeader>Add New Item</ModalHeader>
+            <ModalBody>
+              {/* Title */}
+              <FormControl id="title" isRequired mt={4}>
+                <FormLabel>Title</FormLabel>
+                <Input
+                  value={newData.title}
+                  onChange={(e) => handleNewInputChange(e, "title")}
+                  placeholder="Enter title"
+                />
+              </FormControl>
+              <FormControl id="tags" isRequired mt={4}>
+                <FormLabel>tags</FormLabel>
+                <Input
+                  value={newData.tags}
+                  onChange={(e) => handleNewInputChange(e, "tags")}
+                  placeholder="Enter tags"
+                />
+              </FormControl>
 
-            {/* Description */}
-            <FormControl id="description" isRequired mt={4}>
-              <FormLabel>Description</FormLabel>
-              <Textarea
-                value={newData.description}
-                onChange={(e) => handleNewInputChange(e, "description")}
-                placeholder="Enter description"
-              />
-            </FormControl>
+              {/* Description */}
+              <FormControl id="description" isRequired mt={4}>
+                <FormLabel>Description</FormLabel>
+                <Textarea
+                  value={newData.description}
+                  onChange={(e) => handleNewInputChange(e, "description")}
+                  placeholder="Enter description"
+                />
+              </FormControl>
 
-            {/* Link */}
-            <FormControl id="youTube" mt={4}>
-              <FormLabel>Link</FormLabel>
-              <Input
-                value={newData.youTube}
-                onChange={(e) => handleNewInputChange(e, "youTube")}
-                placeholder="Enter link"
-              />
-            </FormControl>
+              {/* Link */}
+              <FormControl id="youTube" mt={4}>
+                <FormLabel>Link</FormLabel>
+                <Input
+                  value={newData.youTube}
+                  onChange={(e) => handleNewInputChange(e, "youTube")}
+                  placeholder="Enter link"
+                />
+              </FormControl>
 
-            <FormControl id="date" mt={4}>
-              <FormLabel>Start Date</FormLabel>
-              <Input
-                value={editData?.date}
-                onChange={(e) => handleInputChange(e, "date")}
-                placeholder="Enter date"
-              />
-            </FormControl>
-          </ModalBody>
+              <FormControl id="date" mt={4}>
+                <FormLabel>Start Date</FormLabel>
+                <Input
+                  value={editData?.date}
+                  onChange={(e) => handleInputChange(e, "date")}
+                  placeholder="Enter date"
+                />
+              </FormControl>
+            </ModalBody>
 
-          <ModalFooter>
-            <Button
-              colorScheme="blue"
-              onClick={handleCreatePost}
-              className="mr-3"
-            >
-              Create
-            </Button>
-            <Button variant="red" onClick={onNewClose}>
-              Cancel
-            </Button>
-          </ModalFooter>
-         </div>
+            <ModalFooter>
+              <Button
+                colorScheme="blue"
+                onClick={handleCreatePost}
+                className="mr-3"
+              >
+                Create
+              </Button>
+              <Button variant="red" onClick={onNewClose}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </div>
         </ModalContent>
       </Modal>
     </div>
