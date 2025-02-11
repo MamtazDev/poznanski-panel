@@ -24,6 +24,8 @@ import {
 import FolderImage from "../../../assets/png/folder_icon.png";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../reducers";
+import { FaRegEdit } from "react-icons/fa";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 // Define types for the data
 interface Material {
@@ -290,12 +292,12 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       </div>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
-        <table className="w-full h-full">
+        <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
             className={`text-xs uppercase ${
               themeMode
-                ? " text-gray-700  bg-gray-400"
-                : "bg-gray-700 text-gray-400"
+              ? "text-white bg-[#5A1073]"
+              : "bg-[#3bd6c6] text-[#5A1073]"
             }`}
           >
             <tr>
@@ -324,7 +326,11 @@ const MaterialContent: React.FC<TableProps> = (props) => {
               materials.map((item: Material, index: number) => (
                 <tr
                   key={index}
-                  className={` p-4 ${!themeMode && "back-dark text-white"}`}
+                  className={`border-b py-4 hover:bg-gray-200 ${
+                    !themeMode
+                      ? "bg-gray-800 text-gray-200"
+                      : "bg-white text-gray-900"
+                  }`}
                 >
                   <td>
                     <a
@@ -336,16 +342,16 @@ const MaterialContent: React.FC<TableProps> = (props) => {
                       View
                     </a>
                   </td>
-                  <td>{item.title}</td>
-                  <td>{item.tags}</td>
-                  <td>{item.date}</td>
-                  <td>{item.description}</td>
-                  <td className="text-center py-2">
+                  <td className="py-4">{item.title}</td>
+                  <td className="py-4">{item.tags}</td>
+                  <td className="py-4">{new Date(item.date).toISOString().split('T')[0]}</td>
+                  <td className="py-4">{item.description}</td>
+                  <td className="text-center py-4">
                     <div className="flex justify-center space-x-2">
-                      <Button onClick={() => handleEdit(item._id)}>Edit</Button>
-                      <Button onClick={() => handleDelete(item._id)}>
-                        Delete
-                      </Button>
+                      <button onClick={() => handleEdit(item._id)}><FaRegEdit /></button>
+                      <button onClick={() => handleDelete(item._id)}>
+                      <RiDeleteBin6Line />
+                      </button>
                     </div>
                   </td>
                 </tr>
