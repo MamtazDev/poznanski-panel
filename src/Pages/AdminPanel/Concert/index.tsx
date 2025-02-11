@@ -463,7 +463,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       {/* Edit Modal */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent >
           <ModalHeader>Edit Item</ModalHeader>
           <ModalBody>
             {/* Title */}
@@ -567,7 +567,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSave}>
+            <Button colorScheme="blue" onClick={handleSave} className="mr-3">
               Save
             </Button>
             <Button variant="ghost" onClick={onClose}>
@@ -684,7 +684,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleCreatePost}>
+            <Button colorScheme="blue" onClick={handleCreatePost} className="mr-3">
               Create
             </Button>
             <Button variant="ghost" onClick={onNewClose}>
