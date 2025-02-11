@@ -371,10 +371,10 @@ const MaterialContent: React.FC<TableProps> = (props) => {
               materials.map((item: Material, index: number) => (
                 <tr
                   key={index}
-                  className={`border-b py-4 hover:bg-gray-200 ${
+                  className={`border-b py-4  ${
                     !themeMode
-                      ? "bg-gray-800 text-gray-200"
-                      : "bg-white text-gray-900"
+                      ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
+                      : "bg-white text-gray-900 hover:bg-gray-200"
                   }`}
                 >
                   <td>
