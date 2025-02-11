@@ -308,7 +308,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
         <CommonButton text="Add article" onClick={handleAddArticle} />
       </div>
 
-      <TipTapPage/>
+      {/* <TipTapPage/> */}
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
