@@ -496,7 +496,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSave}>
+            <Button colorScheme="blue" onClick={handleSave} className="mr-5">
               Save
             </Button>
             <Button variant="ghost" onClick={onClose}>
@@ -561,7 +561,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleCreatePost}>
+            <Button colorScheme="blue" onClick={handleCreatePost} className="mr-5">
               Create
             </Button>
             <Button variant="ghost" onClick={onNewClose}>
