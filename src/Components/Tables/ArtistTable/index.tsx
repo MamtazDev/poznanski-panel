@@ -53,30 +53,21 @@ const ArtistTable: React.FC<TableProps> = (props) => {
                     key={`article-table-${idx}`}
                     className={`border-b ${!props.themeMode ? "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700" : "bg-white text-gray-900 hover:bg-gray-200"}`}
                   >
-                    <td>
-                      <div className="flex justify-center m-3">
-                        {/* <img
-                          className="object-contain rounded-full size-[100px]"
-                          src={
-                            item.profileImg
-                            ? item.profileImg.toString()
-                            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAwLk7BdSBwMGmmO6YCyxEP0otqy_0jXtY6w&s"
-                          }
-                          alt="avatar"
-                        /> */}
-                        <div className="object-contain rounded-full w-[50px] h-[50px] my-2 flex items-center mx-auto">
-                          <img src={item.profileImg} alt="Uploaded Image" />
-                        </div>
+                    <td className="py-3">
+                      <div className="rounded-full w-[50px] h-[50px] my-2 flex items-center mx-auto">
+                        <img src={item.profileImg} alt="Uploaded Image" />
                       </div>
                     </td>
-                    <td style={{ width: "200px" }}>{item.name}</td>
-                    <td>
+                    <td className="py-3" style={{ width: "200px" }}>
+                      {item.name}
+                    </td>
+                    <td className="py-3">
                       <div className="table-description">
                         {item.description}
                       </div>
                     </td>
-                    <td>{item.star}</td>
-                    <td>
+                    <td className="py-3">{item.star}</td>
+                    <td className="py-3">
                       <div className="flex justify-center">
                         <CrudBtn
                           onClickEdit={props.handleEdit}
@@ -109,7 +100,7 @@ const ArtistTable: React.FC<TableProps> = (props) => {
           </tbody>
         </table>
       </div>
-      <div className="flex mt-3 justify-end gap-2">
+      {/* <div className="flex mt-3 justify-end gap-2">
         <div
           className={`flex items-center gap-2 ${props.themeMode ? " text-gray-700" : "text-gray-100"}`}
         >
@@ -151,12 +142,12 @@ const ArtistTable: React.FC<TableProps> = (props) => {
             15
           </option>
         </Select>
-        {/* <PaginationBar
+        <PaginationBar
           selectedPage={props.selectedPage}
           setSelectedPage={props.setSelectedPage}
           pages={props.pageNum}
-        /> */}
-      </div>
+        />
+      </div> */}
     </>
   );
 };
