@@ -28,7 +28,11 @@ const ArtistTable: React.FC<TableProps> = (props) => {
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
-            className={`text-xs uppercase ${props.themeMode ? " text-gray-700  bg-gray-400" : "bg-gray-700 text-gray-400"}`}
+            className={`text-xs uppercase ${
+              props.themeMode
+                ? "text-white bg-[#5A1073]"
+                : "bg-[#3bd6c6] text-[#5A1073]"
+            }`}
           >
             <tr>
               <th className="px-6 py-3" style={{ width: "130px" }}>
@@ -60,7 +64,7 @@ const ArtistTable: React.FC<TableProps> = (props) => {
                           }
                           alt="avatar"
                         /> */}
-                        <div className="object-contain rounded-full size-[100px] overflow-hidden">
+                        <div className="object-contain rounded-full w-[50px] h-[50px] my-2 flex items-center mx-auto">
                           <img src={item.profileImg} alt="Uploaded Image" />
                         </div>
                       </div>

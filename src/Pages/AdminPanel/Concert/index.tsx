@@ -99,7 +99,6 @@ const ConcertContent: React.FC<TableProps> = (props) => {
             borderRadius: "8px",
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
             textAlign: "center",
-            border: "2px solid #F7941D",
           }}
         >
           <p style={{ fontSize: "16px", fontWeight: "bold" }}>

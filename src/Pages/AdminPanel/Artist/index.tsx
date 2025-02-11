@@ -132,8 +132,8 @@ const ArticleContent = () => {
                   description: res.data.description,
                   star: res.data.star,
                 }
-              : item,
-          ),
+              : item
+          )
         );
       }
     });
@@ -163,7 +163,7 @@ const ArticleContent = () => {
       if (res.success) {
         if (res.deleted) {
           setCardData((prevState) =>
-            prevState.filter((item) => item.id !== modalData.id),
+            prevState.filter((item) => item.id !== modalData.id)
           );
         } else {
           console.error("No match that news!");
