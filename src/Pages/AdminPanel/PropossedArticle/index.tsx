@@ -29,6 +29,8 @@ import {
 } from "../../../Constant/api-functions";
 import CommonButton from "../../../Components/Buttons/CommonButton";
 import PaginationBar from "../../../Components/PaginationBar";
+import { FaRegEdit } from "react-icons/fa";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface Comment {
   author: string;
@@ -442,7 +444,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                 <td>
                   <img
                     src={item?.files?.[0] || staticImg}
-                    className="rounded-full w-[100px] h-[100px] my-2 flex items-center mx-auto"
+                    className="rounded-full w-[50px] h-[50px] my-2 flex items-center mx-auto"
                   />
                 </td>
                 <td>{item.title}</td>
@@ -450,10 +452,10 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                 <td>{new Date(item.date).toISOString().split('T')[0]}</td>
                 <td>
                   <div className="flex justify-center space-x-2">
-                    <Button onClick={() => handleEdit(item._id)}>Edit</Button>
-                    <Button onClick={() => handleDelete(item._id)}>
-                      Delete
-                    </Button>
+                    <button onClick={() => handleEdit(item._id)}><FaRegEdit /></button>
+                    <button onClick={() => handleDelete(item._id)}>
+                    <RiDeleteBin6Line />
+                    </button>
                   </div>
                 </td>
               </tr>
