@@ -119,8 +119,8 @@ const PartnerLogos = () => {
                   img1: modalData.img1,
                   img2: modalData.img2,
                 }
-              : item,
-          ),
+              : item
+          )
         );
       }
     });
@@ -165,7 +165,7 @@ const PartnerLogos = () => {
       if (res.success) {
         if (res.deleted) {
           setCardData((prevState) =>
-            prevState.filter((item) => item.id !== modalData.id),
+            prevState.filter((item) => item.id !== modalData.id)
           );
         } else {
           console.log("No match that news!");
@@ -180,12 +180,16 @@ const PartnerLogos = () => {
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex justify-between">
-        <div className="mb-4" style={{ width: "300px" }}>
+        <div
+          className={`mb-4 ${
+            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}
+          style={{ width: "300px" }}
+        >
           <InputGroup>
             <Input
               type="text"
               placeholder="Search..."
-              backgroundColor="white"
               onChange={handleChangeFilterText}
             />
             <InputRightElement pointerEvents="none">

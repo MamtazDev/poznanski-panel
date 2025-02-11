@@ -22,6 +22,9 @@ import {
   apiPutReq,
 } from "../../../Constant/api-functions";
 import tableIcon from "../../../assets/svg/icons-table.svg";
+import CommonButton from "../../Buttons/CommonButton";
+import { FaRegEdit } from "react-icons/fa";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface TableProps {
   themeMode?: boolean;
@@ -78,6 +81,8 @@ const RadioTv: React.FC<TableProps> = (props) => {
   const [radioData, setRadioData] = useState<any[]>([]);
   const [artistData, setArtistData] = useState<any[]>([]);
   const [editData, setEditData] = useState<any | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
   const [newData, setNewData] = useState<any>({
     title: "",
     description: "",
@@ -115,20 +120,87 @@ const RadioTv: React.FC<TableProps> = (props) => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this item?",
-    );
-    if (!confirmDelete) return;
+  // const handleDelete = async (id: string) => {
+  //   const confirmDelete = window.confirm(
+  //     "Are you sure you want to delete this item?",
+  //   );
+  //   if (!confirmDelete) return;
 
+  //   try {
+  //     const res = await apiDeleteReq(`/radio/${id} `, {});
+  //     if (res) {
+  //       toast({
+  //         title: "Deleted successfully!",
+  //         status: "success",
+  //         duration: 3000,
+  //         isClosable: true,
+  //       });
+  //       setRadioData((prev) => prev.filter((item) => item._id !== id));
+  //     } else {
+  //       toast({
+  //         title: "Failed to delete",
+  //         status: "error",
+  //         duration: 3000,
+  //         isClosable: true,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting:", error);
+  //     toast({
+  //       title: "Error deleting item",
+  //       status: "error",
+  //       duration: 3000,
+  //       isClosable: true,
+  //     });
+  //   }
+  // };
+  const handleDelete = async (id: string) => {
+    // Show confirmation toast
+    toast({
+      position: "top",
+      duration: null, 
+      isClosable: false,
+      render: ({ onClose }) => (
+        <div
+          style={{
+            background: "white",
+            padding: "20px",
+            borderRadius: "8px",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+            textAlign: "center",
+          }}
+        >
+          <p style={{ fontSize: "16px", fontWeight: "bold" }}>
+            Are you sure you want to delete this item?
+          </p>
+          <div style={{ marginTop: "10px", display: "flex", justifyContent: "center", gap: "10px" }}>
+            <Button
+              colorScheme="red"
+              size="sm"
+              onClick={async () => {
+                onClose(); // Close confirmation toast
+                await deleteItem(id);
+              }}
+            >
+              Yes, Delete
+            </Button>
+            <Button size="sm" onClick={onClose}>Cancel</Button>
+          </div>
+        </div>
+      ),
+    });
+  };
+
+  const deleteItem = async (id: string) => {
     try {
-      const res = await apiDeleteReq(`/radio/${id} `, {});
+      const res = await apiDeleteReq(`/radio/${id}`, {});
       if (res) {
         toast({
           title: "Deleted successfully!",
           status: "success",
           duration: 3000,
           isClosable: true,
+          position: "top",
         });
         setRadioData((prev) => prev.filter((item) => item._id !== id));
       } else {
@@ -137,6 +209,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
           status: "error",
           duration: 3000,
           isClosable: true,
+          position: "top",
         });
       }
     } catch (error) {
@@ -146,6 +219,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
         status: "error",
         duration: 3000,
         isClosable: true,
+        position: "top",
       });
     }
   };
@@ -154,7 +228,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
-    field: string,
+    field: string
   ) => {
     if (editData) {
       setEditData({ ...editData, [field]: e.target.value });
@@ -165,7 +239,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
-    field: string,
+    field: string
   ) => {
     setNewData({ ...newData, [field]: e.target.value });
   };
@@ -183,7 +257,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
   };
 
   const handleImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -198,7 +272,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
   };
 
   const handleNewImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -229,8 +303,8 @@ const RadioTv: React.FC<TableProps> = (props) => {
       if (res) {
         setRadioData((prev) =>
           prev.map((item) =>
-            item._id === editData._id ? { ...item, ...res.data } : item,
-          ),
+            item._id === editData._id ? { ...item, ...res.data } : item
+          )
         );
         onClose();
         setEditData(null);
@@ -277,138 +351,78 @@ const RadioTv: React.FC<TableProps> = (props) => {
   return (
     <>
       <div className="flex items-center justify-end py-5">
-        <Button colorScheme="green" onClick={handleNewPost}>
-          Add New Item
-        </Button>
+        {/* <Button colorScheme="green" onClick={handleNewPost}> */}
+        <CommonButton text="Add new Item" onClick={handleNewPost} />
+        {/* Add New Item */}
+        {/* </Button> */}
       </div>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
             className={`text-xs uppercase ${
-              props.themeMode
-                ? " text-gray-700  bg-gray-400"
-                : "bg-gray-700 text-gray-400"
+              props. themeMode
+              ? "text-white bg-[#5A1073]"
+              : "bg-[#3bd6c6] text-[#5A1073]"
             }`}
           >
             <tr>
-              <th className="px-6 py-3" style={{ width: "130px" }}>
-                Name
-              </th>
-              <th className="px-6 py-3" style={{ width: "130px" }}>
-                Image
-              </th>
-              <th className="px-6 py-3" style={{ width: "130px" }}>
-                Description
-              </th>
-              <th className="px-6 py-3" style={{ width: "130px" }}>
-                Video
-              </th>
-              <th className="px-6 py-3">Title</th>
+              <th className="px-6 py-3 w-32">Title</th>
+              <th className="px-6 py-3 w-32">Image</th>
+              <th className="px-6 py-3 w-32">Description</th>
+              <th className="px-6 py-3 w-40">Video</th>
               <th className="px-6 py-3 w-28">Tag</th>
-              <th className="px-6 py-3 w-28">Star</th>
+              {/* <th className="px-6 py-3 w-28">Star</th> */}
               <th className="px-6 py-3 w-28">Action</th>
             </tr>
           </thead>
-
           <tbody>
-            {/* {radioData.length ? (
-              radioData?.map((item, idx) => (
-                <tr
-                  key={`article-table-${idx}`}
-                  className={`border-b ${
-                    !props.themeMode
-                      ? "bg-gray-800 border-gray-700 text-gray-200"
-                      : "bg-white text-gray-900"
-                  }`}>
-                  <td>{item?.artists?.map((i: any) => i.name)}</td>
-                  <td>
-                    <img
-                      src={item?.thumbnail || "https://placehold.co/50x50"}
-                      alt="profile"
-                      className="w-20 h-20 rounded-full"
-                    />
-                  </td>
-                  <td>{item?.description}</td>
-                  <td>
+            {radioData?.map((item, idx) => (
+              <tr
+                key={`article-table-${idx}`}
+                className={`border-b  ${
+                  !props.themeMode
+                    ? "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700"
+                    : "bg-white text-gray-900 hover:bg-gray-200"
+                }`}
+              >
+               <td className="px-4 py-3">{item?.title}</td>
+                <td className="px-4 py-3 ">
+                  <img
+                    src={item?.thumbnail || "https://placehold.co/50x50"}
+                    alt="profile"
+                    className="w-[50px] h-[50px] rounded-full object-cover  flex items-center mx-auto"
+                  />
+                </td>
+                <td className="px-4 py-3">{item?.description}</td>
+                <td className="px-4 py-3">
+                  <div className="flex justify-center">
                     <iframe
                       src={
                         item?.youTube?.includes("youtube.com/watch")
-                          ? `https://www.youtube.com/embed/${item?.youTube?.split("v=")[1]}`
+                          ? `https://www.youtube.com/embed/${
+                              item?.youTube?.split("v=")[1].split("&")[0]
+                            }`
                           : item?.youTube ||
                             "https://www.youtube.com/embed/6JYIGclVQdw"
                       }
                       title="YouTube video player"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       frameBorder="0"
-                      width="300"
-                      height="150"></iframe>
-                  </td>
-                  <td style={{ width: "200px" }}>{item?.title}</td>
-                  <td>{item?.tags}</td>
-                  <td>{item?.artists?.map((i: any) => i.star)}</td>
-                  <td>
-                    <div className="flex justify-center space-x-2">
-                      <Button onClick={() => handleEdit(item._id)}>Edit</Button>
-                      <Button onClick={() => handleDelete(item._id)}>
-                        Delete
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )
-            : (
-              <tr className="relative" style={{ height: "400px" }}>
-                <div className="absolute top-1/2 left-1/2 w-32 -translate-x-1/2 -translate-y-1/2">
-                  <img src={tableIcon} alt="table-icon" />
-                  <p>No content available</p>
-                </div>
-              </tr>
-            )
-            } */}
-            {radioData?.map((item, idx) => (
-              <tr
-                key={`article-table-${idx}`}
-                className={`border-b ${
-                  !props.themeMode
-                    ? "bg-gray-800 border-gray-700 text-gray-200"
-                    : "bg-white text-gray-900"
-                }`}
-              >
-                <td>{item?.artists?.map((i: any) => i.name)}</td>
-                <td>
-                  <img
-                    src={item?.thumbnail || "https://placehold.co/50x50"}
-                    alt="profile"
-                    className="w-20 h-20 rounded-full"
-                  />
+                      className="w-40 h-24 md: rounded-lg shadow-lg"
+                    ></iframe>
+                  </div>
                 </td>
-                <td>{item?.description}</td>
-                <td>
-                  <iframe
-                    src={
-                      item?.youTube?.includes("youtube.com/watch")
-                        ? `https://www.youtube.com/embed/${item?.youTube?.split("v=")[1]}`
-                        : item?.youTube ||
-                          "https://www.youtube.com/embed/6JYIGclVQdw"
-                    }
-                    title="YouTube video player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    frameBorder="0"
-                    width="300"
-                    height="150"
-                  ></iframe>
-                </td>
-                <td style={{ width: "200px" }}>{item?.title}</td>
-                <td>{item?.tags}</td>
-                <td>{item?.artists?.map((i: any) => i.star)}</td>
-                <td>
+                <td className="px-4 py-3">{item?.tags}</td>
+                {/* <td className="px-4 py-3">
+                  {item?.artists?.map((i:any) => i.star)}
+                </td> */}
+                <td className="px-4 py-3">
                   <div className="flex justify-center space-x-2">
-                    <Button onClick={() => handleEdit(item._id)}>Edit</Button>
-                    <Button onClick={() => handleDelete(item._id)}>
-                      Delete
-                    </Button>
+                    <button onClick={() => handleEdit(item._id)}><FaRegEdit /></button>
+                    <button onClick={() => handleDelete(item._id)}>
+                    <RiDeleteBin6Line />
+                    </button>
                   </div>
                 </td>
               </tr>

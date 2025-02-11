@@ -22,6 +22,8 @@ import {
   apiPutReq,
 } from "../../../Constant/api-functions";
 import FolderImage from "../../../assets/png/folder_icon.png";
+import { FaRegEdit } from "react-icons/fa";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface TableProps {
   themeMode?: boolean;
@@ -82,11 +84,52 @@ const ConcertContent: React.FC<TableProps> = (props) => {
   };
 
   const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this item?",
-    );
+    toast({
+      title: "Confirm Deletion",
+      description: "Are you sure you want to delete this item?",
+      status: "warning",
+      duration: null,
+      isClosable: false,
+      position: "top",
+      render: ({ onClose }) => (
+        <div
+          style={{
+            padding: "20px",
+            background: "#fff",
+            borderRadius: "8px",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+            textAlign: "center",
+          }}
+        >
+          <p style={{ fontSize: "16px", fontWeight: "bold" }}>
+            Are you sure you want to delete this item?
+          </p>
+          <div
+            style={{
+              marginTop: "15px",
+              display: "flex",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+          >
+            <Button
+              colorScheme="red"
+              size="sm"
+              onClick={() => confirmDelete(id, onClose)}
+            >
+              Yes, Delete
+            </Button>
+            <Button size="sm" colorScheme="blue" onClick={onClose}>
+              Cancel
+            </Button>
+          </div>
+        </div>
+      ),
+    });
+  };
 
-    if (!confirmDelete) return;
+  const confirmDelete = async (id: string, onClose: () => void) => {
+    onClose(); // Close the confirmation toast
 
     try {
       const res = await apiDeleteReq(`/concert/${id}`, {});
@@ -96,6 +139,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
           status: "success",
           duration: 3000,
           isClosable: true,
+          position: "top",
         });
         setRadioData((prev) => prev.filter((item) => item._id !== id));
       } else {
@@ -104,6 +148,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
           status: "error",
           duration: 3000,
           isClosable: true,
+          position: "top",
         });
       }
     } catch (error) {
@@ -113,6 +158,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
         status: "error",
         duration: 3000,
         isClosable: true,
+        position: "top",
       });
     }
   };
@@ -122,7 +168,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
     field: string,
-    subField?: string,
+    subField?: string
   ) => {
     const { value } = e.target;
 
@@ -146,7 +192,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
     field: string,
-    subField?: string,
+    subField?: string
   ) => {
     const { value } = e.target;
 
@@ -180,7 +226,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
   };
 
   const handleImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -195,7 +241,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
   };
 
   const handleNewImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -240,8 +286,8 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       if (res) {
         setRadioData((prev) =>
           prev.map((item) =>
-            item._id === editData._id ? { ...item, ...res.data } : item,
-          ),
+            item._id === editData._id ? { ...item, ...res.data } : item
+          )
         );
 
         toast({
@@ -309,8 +355,8 @@ const ConcertContent: React.FC<TableProps> = (props) => {
           <thead
             className={`text-xs uppercase ${
               themeMode
-                ? "text-gray-700 bg-gray-400"
-                : "bg-gray-700 text-gray-400"
+              ? "text-white bg-[#5A1073]"
+              : "bg-[#3bd6c6] text-[#5A1073]"
             }`}
           >
             <tr>
@@ -332,19 +378,17 @@ const ConcertContent: React.FC<TableProps> = (props) => {
               radioData.map((item, index) => (
                 <tr
                   key={index}
-                  className={`
-                    ${
-                      themeMode
-                        ? "bg-white text-gray-900"
-                        : "bg-gray-800 text-gray-200"
-                    }
-                  `}
+                 className={`border-b py-4  ${
+                  !themeMode
+                    ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
+                    : "bg-white text-gray-900 hover:bg-gray-200"
+                }`}
                 >
-                  <td className="text-center flex items-center justify-center">
+                  <td>
                     <img
                       src={item.img || FolderImage}
                       alt={item.name}
-                      className="w-20 h-20 rounded-full"
+                      className="rounded-full w-[50px] h-[50px] my-2 flex items-center mx-auto"
                     />
                   </td>
                   <td>{item.name}</td>
@@ -364,13 +408,13 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                   <td className="text-center">
                     {item.isFeatured === true ? "Featured" : "Not Featured"}
                   </td>
-                  <td>{item.timeframe.start}</td>
-                  <td>{item.timeframe.end}</td>
+                  <td>{new Date(item.timeframe.start).toISOString().split('T')[0]}</td>
+                  <td>{new Date(item.timeframe.end).toISOString().split('T')[0]}</td>
                   <td className="text-center space-x-2">
-                    <Button onClick={() => handleEdit(item._id)}>Edit</Button>
-                    <Button onClick={() => handleDelete(item._id)}>
-                      Delete
-                    </Button>
+                    <button onClick={() => handleEdit(item._id)}><FaRegEdit /></button>
+                    <button onClick={() => handleDelete(item._id)}>
+                    <RiDeleteBin6Line />
+                    </button>
                   </td>
                 </tr>
               ))

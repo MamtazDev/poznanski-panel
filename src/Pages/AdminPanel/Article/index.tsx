@@ -30,6 +30,8 @@ import {
 import CommonButton from "../../../Components/Buttons/CommonButton";
 import PaginationBar from "../../../Components/PaginationBar";
 import TipTapPage from "../../../Components/TipTapPage";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { FaRegEdit } from "react-icons/fa";
 
 interface Comment {
   author: string;
@@ -127,7 +129,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
 
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
-    isNew: boolean = false,
+    isNew: boolean = false
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -140,7 +142,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
           }));
         } else {
           setEditData((prev) =>
-            prev ? { ...prev, files: [uploadedImageUrl] } : null,
+            prev ? { ...prev, files: [uploadedImageUrl] } : null
           );
         }
       }
@@ -156,12 +158,52 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   };
 
   const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this item?",
-    );
+    // Show confirmation toast
+    toast({
+      position: "top",
+      duration: null, // Wait until user action
+      isClosable: false,
+      render: ({ onClose }) => (
+        <div
+          style={{
+            background: "white",
+            padding: "20px",
+            borderRadius: "8px",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+            textAlign: "center",
+          }}
+        >
+          <p style={{ fontSize: "16px", fontWeight: "bold" }}>
+            Are you sure you want to delete this item?
+          </p>
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+          >
+            <Button
+              colorScheme="red"
+              size="sm"
+              onClick={async () => {
+                onClose(); // Close confirmation toast
+                await deleteItem(id);
+              }}
+            >
+              Yes, Delete
+            </Button>
+            <Button size="sm" onClick={onClose}>
+              Cancel
+            </Button>
+          </div>
+        </div>
+      ),
+    });
+  };
 
-    if (!confirmDelete) return;
-
+  const deleteItem = async (id: string) => {
     try {
       const res = await apiDeleteReq(`/news/${id}`, {});
       if (res.success) {
@@ -170,6 +212,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
           status: "success",
           duration: 3000,
           isClosable: true,
+          position: "top",
         });
         fetchArticles();
       } else {
@@ -178,6 +221,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
           status: "error",
           duration: 3000,
           isClosable: true,
+          position: "top",
         });
       }
     } catch (error) {
@@ -187,6 +231,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
         status: "error",
         duration: 3000,
         isClosable: true,
+        position: "top",
       });
     }
   };
@@ -278,7 +323,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field: string,
-    isNew: boolean = false,
+    isNew: boolean = false
   ) => {
     const { value } = e.target;
 
@@ -292,14 +337,14 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex justify-between">
-    
-        <div className="mb-4" style={{ width: "300px" }}>
+        <div
+          className={`mb-4 ${
+            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}
+          style={{ width: "300px" }}
+        >
           <InputGroup>
-            <Input
-              type="text"
-              placeholder="Search..."
-              backgroundColor="white"
-            />
+            <Input type="text" placeholder="Search..." />
             <InputRightElement>
               <AiOutlineSearch />
             </InputRightElement>
@@ -315,8 +360,8 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
           <thead
             className={`text-xs uppercase ${
               themeMode
-                ? "text-gray-700 bg-gray-400"
-                : "bg-gray-700 text-gray-400"
+                ? "text-white bg-[#5A1073]"
+                : "bg-[#3bd6c6] text-[#5A1073]"
             }`}
           >
             <tr>
@@ -333,25 +378,27 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                 key={item._id}
                 className={`border-b py-3 ${
                   !themeMode
-                    ? "bg-gray-800 text-gray-200"
-                    : "bg-white text-gray-900"
+                    ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
+                    : "bg-white text-gray-900 hover:bg-gray-200"
                 }`}
               >
                 <td>
                   <img
                     src={item?.files?.[0] || staticImg}
-                    className="rounded-full w-[100px] h-[100px]"
+                    className="rounded-full w-[50px] h-[50px] my-2 flex items-center mx-auto"
                   />
                 </td>
                 <td>{item.title}</td>
                 <td>{item.tags}</td>
-                <td>{item.date}</td>
+                <td>{new Date(item.date).toISOString().split("T")[0]}</td>
                 <td>
                   <div className="flex justify-center space-x-2">
-                    <Button onClick={() => handleEdit(item._id)}>Edit</Button>
-                    <Button onClick={() => handleDelete(item._id)}>
-                      Delete
-                    </Button>
+                    <button onClick={() => handleEdit(item._id)}>
+                      <FaRegEdit />
+                    </button>
+                    <button onClick={() => handleDelete(item._id)}>
+                      <RiDeleteBin6Line />
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -418,17 +465,15 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                 checked={editData?.confirmed || false}
                 onChange={(e) =>
                   setEditData((prev) =>
-                    prev ? { ...prev, confirmed: e.target.checked } : null,
+                    prev ? { ...prev, confirmed: e.target.checked } : null
                   )
                 }
               />
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSave}>
-              Save
-            </Button>
-            <Button variant="ghost" onClick={onClose}>
+            <Button onClick={handleSave}>Save</Button>
+            <Button variant="ghost" onClick={onClose} className="ml-3">
               Cancel
             </Button>
           </ModalFooter>

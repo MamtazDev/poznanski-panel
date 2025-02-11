@@ -4,6 +4,8 @@ import { IconButton } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import "./style.css";
+import { FaRegEdit } from "react-icons/fa";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface CrudBtnProps {
   value: string;
@@ -26,7 +28,7 @@ const CrudBtn: React.FC<CrudBtnProps> = ({
         <IconButton
           aria-label="Edit button"
           variant={themeMode ? "outline" : "solid"}
-          icon={<AiFillEdit />}
+          icon={<FaRegEdit />}
           onClick={() => {
             console.log("Edit clicked:", value, mode);
             onClickEdit(value, mode);
@@ -35,7 +37,7 @@ const CrudBtn: React.FC<CrudBtnProps> = ({
         <IconButton
           aria-label="Delete button"
           variant={themeMode ? "outline" : "solid"}
-          icon={<AiFillDelete />}
+          icon={ <RiDeleteBin6Line />}
           onClick={() => {
             console.log("Delete clicked:", value, mode);
             onClickDelete(value, mode);
