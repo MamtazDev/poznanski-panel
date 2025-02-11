@@ -419,8 +419,8 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
           <thead
             className={`text-xs uppercase ${
               themeMode
-                ? "text-gray-700 bg-gray-400"
-                : "bg-gray-700 text-gray-400"
+              ? "text-white bg-[#5A1073]"
+              : "bg-[#3bd6c6] text-[#5A1073]"
             }`}
           >
             <tr>
@@ -435,7 +435,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
             {cardData.map((item) => (
               <tr
                 key={item._id}
-                className={`border-b py-4 ${
+                className={`border-b py-4 hover:bg-gray-200 ${
                   !themeMode
                     ? "bg-gray-800 text-gray-200"
                     : "bg-white text-gray-900"
