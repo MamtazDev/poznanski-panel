@@ -28,19 +28,19 @@ const TipTapPage1: React.FC<TipTapProps> = ({ content, setContent }) => {
     content[0]?.description || ""
   );
 
-  const editor = useEditor({
-    extensions: [StarterKit],
-    content,
-    onUpdate: ({ editor }) => {
-      console.log("From created Editor page:",editor)
-      const html = editor.getHTML();
-      setContent(html);
-    },
-  });
+  // const editor = useEditor({
+  //   extensions: [StarterKit],
+  //   content,
+  //   onUpdate: ({ editor }) => {
+  //     console.log("From created Editor page:",editor)
+  //     const html = editor.getHTML();
+  //     setContent(html);
+  //   },
+  // });
 
-  // useEffect(() => {
-  //   console.log("Editor Content Updated:", editorContent);
-  // }, [editorContent]);
+  useEffect(() => {
+    console.log("Editor Content:", content);
+  }, [content]);
 
   return (
     <div className="bg-gray-500 p-4 items-center justify-center text-white text-xl rounded-lg shadow-lg h-[500px]">
@@ -53,7 +53,7 @@ const TipTapPage1: React.FC<TipTapProps> = ({ content, setContent }) => {
         }}
         setFiles={setFiles}
         content={editorContent}
-        editor={editor}
+        // editor={editor}
       />
     </div>
   );
