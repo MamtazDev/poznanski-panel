@@ -114,8 +114,9 @@ const TipTap: React.FC<TipTapProps> = ({
 
   const editor = useEditor({
     extensions: getExtensionsData(setFiles),
-    content, // Use the content prop here
+    content,
     onUpdate: ({ editor }) => {
+      console.log(editor, "editor")
       const html = editor.getHTML();
       return onEditorUpdate(html);
     },

@@ -97,7 +97,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
   }, []);
 
   const fetchArticles = () => {
-    apiGetReq("/news/all?type=proposed?limit=100", {}) 
+    apiGetReq("/news/all?type=proposed", {})
       .then((res) => {
         if (res?.news) {
           setCardData(res.news);
@@ -408,8 +408,9 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                   />
                 </td>
                 <td>{item.title}</td>
+                <td>{item.nickname}</td>
                 <td>{item.tags || "N/A"}</td>
-                <td>{new Date(item.date).toISOString().split("T")[0]}</td>
+                <td>{item.date}</td>
                 <td>
                   <div className="flex justify-center space-x-2">
                     <button onClick={() => handleEdit(item._id)}>

@@ -164,8 +164,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
             borderRadius: "8px",
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
             textAlign: "center",
-          }}
-        >
+          }}>
           <p style={{ fontSize: "16px", fontWeight: "bold" }}>
             Are you sure you want to delete this item?
           </p>
@@ -175,16 +174,14 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
               display: "flex",
               justifyContent: "center",
               gap: "10px",
-            }}
-          >
+            }}>
             <Button
               colorScheme="red"
               size="sm"
               onClick={async () => {
                 onClose(); // Close confirmation toast
                 await deleteItem(id);
-              }}
-            >
+              }}>
               Yes, Delete
             </Button>
             <Button size="sm" onClick={onClose}>
@@ -279,7 +276,12 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
 
   const handleCreateArticle = async () => {
     try {
-      const res = await apiPostReq("/news", newData);
+      const formattedData = {
+        ...newData,
+        date: new Date(newData.date).toISOString(),
+      };
+      const res = await apiPostReq("/news", formattedData);
+      // const res = await apiPostReq("/news", newData);
       if (res.success) {
         fetchArticles(); // Refetch data after creation
         toast({
@@ -327,6 +329,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     if (!editData || !editData._id) return;
     const updatedData = {
       ...editData,
+      date: new Date(editData.date).toISOString(), // Format the date
       content: JSON.stringify(editData.content),
     };
 
@@ -376,8 +379,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
           className={`mb-4 ${
             themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
           }`}
-          style={{ width: "300px" }}
-        >
+          style={{ width: "300px" }}>
           <InputGroup>
             <Input type="text" placeholder="Search..." />
             <InputRightElement>
@@ -397,8 +399,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
               themeMode
                 ? "text-white bg-[#5A1073]"
                 : "bg-[#3bd6c6] text-[#5A1073]"
-            }`}
-          >
+            }`}>
             <tr>
               <th className="px-6 py-3">Image</th>
               <th className="px-6 py-3">Title</th>
@@ -408,6 +409,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
               <th className="px-6 py-3">Action</th>
             </tr>
           </thead>
+
           <tbody>
             {cardData.map((item) => (
               <tr
@@ -416,8 +418,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                   !themeMode
                     ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
                     : "bg-white text-gray-900 hover:bg-gray-200"
-                }`}
-              >
+                }`}>
                 <td>
                   <img
                     src={item?.files?.[0] || staticImg}
@@ -427,7 +428,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                 <td>{item.title}</td>
                 <td>{item.nickname}</td>
                 <td>{item.tags}</td>
-                {/* <td>{new Date(item.date).toISOString().split("T")[0]}</td> */}
+                {/* <td>{new Date(item.date).toISOString()}</td> */}
                 <td>{item.date}</td>
                 <td>
                   <div className="flex justify-center space-x-2">
@@ -453,8 +454,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
             fontSize="2xl"
             fontWeight="bold"
             textAlign="center"
-            color="blue.600"
-          >
+            color="blue.600">
             Edit Article
           </ModalHeader>
 
@@ -470,8 +470,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                   borderRadius="md"
                   overflow="hidden"
                   width="150px"
-                  height="150px"
-                >
+                  height="150px">
                   <Image
                     src={preview}
                     alt="Uploaded Preview"
@@ -494,8 +493,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                   size="sm"
                   colorScheme="red"
                   mt={2}
-                  onClick={() => setPreview(null)}
-                >
+                  onClick={() => setPreview(null)}>
                   Remove Image
                 </Button>
               )}
@@ -566,13 +564,23 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
               />
             </VStack>
 
+            {/* Date */}
+            <FormControl id="date" isRequired>
+              <FormLabel>Date</FormLabel>
+              <Input
+                type="date"
+                value={editData?.date || ""}
+                onChange={(e) => handleInputChange(e, "date", false)}
+                focusBorderColor="blue.500"
+              />
+            </FormControl>
+
             {/* Checkbox */}
             <FormControl
               id="confirmed"
               mt={4}
               display="flex"
-              alignItems="center"
-            >
+              alignItems="center">
               <Checkbox
                 colorScheme="blue"
                 isChecked={editData?.confirmed || false}
@@ -580,8 +588,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                   setEditData((prev) =>
                     prev ? { ...prev, confirmed: e.target.checked } : null
                   )
-                }
-              >
+                }>
                 Confirmed
               </Checkbox>
             </FormControl>
@@ -605,8 +612,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
             fontSize="2xl"
             fontWeight="bold"
             textAlign="center"
-            color="blue.600"
-          >
+            color="blue.600">
             Create New Article
           </ModalHeader>
 
@@ -621,8 +627,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                   borderRadius="md"
                   overflow="hidden"
                   width="150px"
-                  height="150px"
-                >
+                  height="150px">
                   <Image
                     src={preview}
                     alt="Uploaded Preview"
@@ -644,8 +649,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                   size="sm"
                   colorScheme="red"
                   mt={2}
-                  onClick={() => setPreview(null)}
-                >
+                  onClick={() => setPreview(null)}>
                   Remove Image
                 </Button>
               )}
@@ -706,7 +710,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
             </FormControl>
 
             {/* Rich Text Editor */}
-            <VStack spacing={4} align="stretch" mt={4}>
+            <VStack spacing={4} align="stretch" mt={4} mb={4}>
               <TipTapPage
                 content={newData.content}
                 setContent={(newContent) =>
@@ -715,13 +719,23 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
               />
             </VStack>
 
+            {/* Date */}
+            <FormControl id="date" isRequired>
+              <FormLabel>Date</FormLabel>
+              <Input
+                type="date"
+                value={newData?.date || ""}
+                onChange={(e) => handleInputChange(e, "date", true)}
+                focusBorderColor="blue.500"
+              />
+            </FormControl>
+
             {/* Checkbox */}
             <FormControl
               id="confirmed"
               mt={4}
               display="flex"
-              alignItems="center"
-            >
+              alignItems="center">
               <Checkbox
                 colorScheme="blue"
                 isChecked={newData?.confirmed}
@@ -730,8 +744,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                     ...prev,
                     confirmed: e.target.checked,
                   }))
-                }
-              >
+                }>
                 Confirmed
               </Checkbox>
             </FormControl>
