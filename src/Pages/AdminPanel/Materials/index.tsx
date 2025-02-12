@@ -366,10 +366,10 @@ const MaterialContent: React.FC<TableProps> = (props) => {
           >
             <tr>
               <th className="px-6 py-3" style={{ width: "130px" }}>
-                Video
+                Title
               </th>
               <th className="px-6 py-3" style={{ width: "130px" }}>
-                Title
+                Video
               </th>
               <th className="px-6 py-3" style={{ width: "130px" }}>
                 Tags
@@ -396,6 +396,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
                       : "bg-white text-gray-900 hover:bg-gray-200"
                   }`}
                 >
+                   <td className="py-4">{item.title}</td>
                   <td className="px-4 py-3">
                     <div className="flex justify-center">
                       <iframe
@@ -414,7 +415,6 @@ const MaterialContent: React.FC<TableProps> = (props) => {
                       ></iframe>
                     </div>
                   </td>
-                  <td className="py-4">{item.title}</td>
                   <td className="py-4">{item.tags}</td>
                   <td className="py-4">
                     {new Date(item.date).toISOString().split("T")[0]}

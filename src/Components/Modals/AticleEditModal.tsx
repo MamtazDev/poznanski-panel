@@ -18,6 +18,7 @@ import FolderIcon from "../../assets/png/folder_icon.png";
 import { apiPostReq } from "../../Constant/api-functions";
 import "./style.css";
 import CrudBtn from "../CrudBtn";
+import TipTapPage from "../TipTapPage";
 
 interface Tag {
   _id: string;
@@ -39,17 +40,35 @@ interface Data {
   link: string;
 }
 
+interface News {
+  _id: string;
+  title: string;
+  intro: string;
+  feature: string;
+  tags: string;
+  date: string;
+  content: Content[];
+  link: string;
+  nickname: string;
+  email: string;
+  confirmed: boolean;
+}
+
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data?: Data;
-  setData: React.Dispatch<React.SetStateAction<Data>>;
+  data?: any;
+  setData: React.Dispatch<React.SetStateAction<News | null | any>>;
   handleOk: () => void;
   tags: {
     _id: string;
     name: string;
   }[];
   setTags: React.Dispatch<React.SetStateAction<Tag[]>>;
+  handleImageUpload: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    isNew: boolean
+  ) => void;
 }
 
 const EditModal: React.FC<ModalProps> = ({
@@ -60,18 +79,35 @@ const EditModal: React.FC<ModalProps> = ({
   setIsOpen,
   tags,
   setTags,
+  handleImageUpload,
 }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [errTitle, setErrTitle] = useState<boolean>(false);
 
-  const handleButtonClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click(); // Trigger the file selection dialog
+  const handleContentChange = (newContent: string) => {
+    if (data) {
+      setData({
+        ...data,
+        content: [
+          {
+            subHead: "",
+            img: "",
+            description: newContent,
+          },
+        ],
+      });
+      console.log("Updated content:", data.content);
     }
   };
+
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   if (!data) {
-    // Return null if data is undefined to prevent rendering issues
     return null;
   }
 
@@ -89,6 +125,7 @@ const EditModal: React.FC<ModalProps> = ({
       reader.readAsDataURL(file);
     }
   };
+
   const onClose = () => {
     setIsOpen(false);
   };
@@ -97,6 +134,7 @@ const EditModal: React.FC<ModalProps> = ({
     handleChange(e);
     setErrTitle(false);
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData({
       ...data,
@@ -107,6 +145,7 @@ const EditModal: React.FC<ModalProps> = ({
   const handleChangeTag = (value: string) => {
     setData({ ...data, feature: value });
   };
+
   const createNewTag = (value: string) => {
     console.log(value);
     apiPostReq("/tag", { name: value })
@@ -154,10 +193,9 @@ const EditModal: React.FC<ModalProps> = ({
         <ModalContent
           maxWidth={"100vh"}
           backgroundColor={themeMode ? "#FFF" : "#242526"}
-          padding={6}
-        >
+          padding={6}>
           <ModalBody>
-            <div className="flex gap-4 w-full">
+            <div className="flex gap-4 w-full mb-5">
               <div className="w-3/5">
                 <Input
                   name="title"
@@ -176,86 +214,38 @@ const EditModal: React.FC<ModalProps> = ({
                     handleOk={createNewTag}
                   />
                 </div>
-                <div className="md:mt-6">
-                  <Input
-                    name="link"
-                    label="YouTube Video Link"
-                    value={data.link}
-                    onChange={handleChange}
-                  />
-                </div>
               </div>
+
               <div className="image-field w-2/5">
-                {data?.content[0].img === fileUrl ||
-                data?.content[0].img === "" ? (
-                  <div className="flex items-center justify-center h-full">
-                    <div className="flex flex-col gap-2">
-                      <div className="flex justify-center">
-                        <img src={FolderIcon} alt="no data" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleImageChange}
-                          ref={fileInputRef}
-                          style={{ display: "none" }}
-                        />
-                        <button
-                          className="add-file-btn"
-                          onClick={handleButtonClick}
-                        >
-                          + Select File
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                {data?.files?.[0] ? (
+                  <img
+                    src={data.files[0]}
+                    alt="Uploaded Thumbnail"
+                    className="rounded-md w-full h-32 object-cover"
+                  />
                 ) : (
-                  <div className="flex justify-center items-center w-full h-full relative">
-                    <img src={data.content[0].img.toString()} alt="new img" />
-                    <div
-                      className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 `}
-                    >
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        ref={fileInputRef}
-                        style={{ display: "none" }}
-                      />
-                      <div
-                        className={`rounded-lg opacity-70 ${themeMode ? "bg-gray-400" : "bg-gray-50"}`}
-                      >
-                        <CrudBtn
-                          value=""
-                          onClickDelete={handleDelete}
-                          onClickEdit={handleButtonClick}
-                        />
-                      </div>
-                    </div>
-                  </div>
+                  <p>No image selected</p>
                 )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, false)}
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                />
+                <button
+                  className="add-file-btn"
+                  onClick={() => fileInputRef.current?.click()}>
+                  + Select File
+                </button>
               </div>
             </div>
-            {data.content.map((item, idx) => (
-              <div key={`article-edit-modal-${idx}`}>
-                <div className="md:mt-6">
-                  <Input
-                    name="subTitle"
-                    label={`Sub Title ${idx + 1}`}
-                    value={item.subHead}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="flex w-full md:mt-6">
-                  <Textarea
-                    label="Description"
-                    value={item.description}
-                    onChange={handleDescription}
-                  />
-                </div>
-              </div>
-            ))}
+
+            <TipTapPage
+              content={data.content}
+              setContent={handleContentChange}
+            />
+
             <div className="md:mt-6">
               <DatePicker
                 name="date"
@@ -272,8 +262,7 @@ const EditModal: React.FC<ModalProps> = ({
             <Button
               variant="ghost"
               color={themeMode ? "black" : "white"}
-              onClick={handleClickOk}
-            >
+              onClick={handleClickOk}>
               Yes, I'm sure
             </Button>
           </ModalFooter>
