@@ -449,151 +449,157 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
       <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
         <ModalOverlay />
         <ModalContent borderRadius="lg" boxShadow="xl" p={4} maxWidth={800}>
-          <ModalHeader
-            fontSize="2xl"
-            fontWeight="bold"
-            textAlign="center"
-            color="blue.600"
+          <div
+            className={` ${
+              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}
           >
-            Edit Article
-          </ModalHeader>
-
-          <ModalBody>
-            {/* Image Upload Section */}
-            <FormControl id="files" isRequired mb={4}>
-              <FormLabel>Upload Image</FormLabel>
-              {preview && (
-                <Box
-                  mt={2}
-                  border="1px solid"
-                  borderColor="gray.300"
-                  borderRadius="md"
-                  overflow="hidden"
-                  width="150px"
-                  height="150px"
-                >
-                  <Image
-                    src={preview}
-                    alt="Uploaded Preview"
-                    objectFit="cover"
-                  />
-                </Box>
-              )}
-
-              {/* Upload Input */}
-              <Input
-                type="file"
-                p={1}
-                onChange={handleFileChange}
-                accept="image/*"
-              />
-
-              {/* Remove Image Button */}
-              {preview && (
-                <Button
-                  size="sm"
-                  colorScheme="red"
-                  mt={2}
-                  onClick={() => setPreview(null)}
-                >
-                  Remove Image
-                </Button>
-              )}
-            </FormControl>
-
-            {/* Grid Layout for Input Fields */}
-            <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
-              <FormControl id="title" isRequired>
-                <FormLabel>Title</FormLabel>
-                <Input
-                  value={editData?.title || ""}
-                  onChange={(e) => handleInputChange(e, "title", false)}
-                  placeholder="Enter title"
-                  focusBorderColor="blue.500"
-                />
-              </FormControl>
-
-              <FormControl id="nickname" isRequired>
-                <FormLabel>Nickname</FormLabel>
-                <Input
-                  value={editData?.nickname || ""}
-                  onChange={(e) => handleInputChange(e, "nickname", false)}
-                  placeholder="Enter nickname"
-                  focusBorderColor="blue.500"
-                />
-              </FormControl>
-
-              <FormControl id="tags" isRequired>
-                <FormLabel>Tags</FormLabel>
-                <Input
-                  value={editData?.tags || ""}
-                  onChange={(e) => handleInputChange(e, "tags", false)}
-                  placeholder="Enter tags"
-                  focusBorderColor="blue.500"
-                />
-              </FormControl>
-
-              <FormControl id="email" isRequired>
-                <FormLabel>Email</FormLabel>
-                <Input
-                  type="email"
-                  value={editData?.email || ""}
-                  onChange={(e) => handleInputChange(e, "email", false)}
-                  placeholder="Enter email"
-                  focusBorderColor="blue.500"
-                />
-              </FormControl>
-            </SimpleGrid>
-
-            {/* Introduction Field */}
-            <FormControl id="intro" isRequired mt={4}>
-              <FormLabel>Introduction</FormLabel>
-              <Textarea
-                value={editData?.intro || ""}
-                onChange={(e) => handleInputChange(e, "intro", false)}
-                placeholder="Enter introduction"
-                focusBorderColor="blue.500"
-              />
-            </FormControl>
-
-            {/* Rich Text Editor */}
-            <VStack spacing={4} align="stretch" mt={4}>
-              <TipTapPage
-                content={editData?.content || []}
-                setContent={(newContent) =>
-                  handleContentChange(newContent, false)
-                }
-              />
-            </VStack>
-
-            {/* Checkbox */}
-            <FormControl
-              id="confirmed"
-              mt={4}
-              display="flex"
-              alignItems="center"
+            <ModalHeader
+              fontSize="2xl"
+              fontWeight="bold"
+              textAlign="center"
+              color="blue.600"
             >
-              <Checkbox
-                colorScheme="blue"
-                isChecked={editData?.confirmed || false}
-                onChange={(e) =>
-                  setEditData((prev) =>
-                    prev ? { ...prev, confirmed: e.target.checked } : null
-                  )
-                }
-              >
-                Confirmed
-              </Checkbox>
-            </FormControl>
-          </ModalBody>
+              Edit Article
+            </ModalHeader>
 
-          {/* Buttons */}
-          <ModalFooter>
-            <Button onClick={handleSave}>Save</Button>
-            <Button variant="ghost" onClick={onClose} className="ml-3">
-              Cancel
-            </Button>
-          </ModalFooter>
+            <ModalBody>
+              {/* Image Upload Section */}
+              <FormControl id="files" isRequired mb={4}>
+                <FormLabel>Upload Image</FormLabel>
+                {preview && (
+                  <Box
+                    mt={2}
+                    border="1px solid"
+                    borderColor="gray.300"
+                    borderRadius="md"
+                    overflow="hidden"
+                    width="150px"
+                    height="150px"
+                  >
+                    <Image
+                      src={preview}
+                      alt="Uploaded Preview"
+                      objectFit="cover"
+                    />
+                  </Box>
+                )}
+
+                {/* Upload Input */}
+                <Input
+                  type="file"
+                  p={1}
+                  onChange={handleFileChange}
+                  accept="image/*"
+                />
+
+                {/* Remove Image Button */}
+                {preview && (
+                  <Button
+                    size="sm"
+                    colorScheme="red"
+                    mt={2}
+                    onClick={() => setPreview(null)}
+                  >
+                    Remove Image
+                  </Button>
+                )}
+              </FormControl>
+
+              {/* Grid Layout for Input Fields */}
+              <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
+                <FormControl id="title" isRequired>
+                  <FormLabel>Title</FormLabel>
+                  <Input
+                    value={editData?.title || ""}
+                    onChange={(e) => handleInputChange(e, "title", false)}
+                    placeholder="Enter title"
+                    focusBorderColor="blue.500"
+                  />
+                </FormControl>
+
+                <FormControl id="nickname" isRequired>
+                  <FormLabel>Nickname</FormLabel>
+                  <Input
+                    value={editData?.nickname || ""}
+                    onChange={(e) => handleInputChange(e, "nickname", false)}
+                    placeholder="Enter nickname"
+                    focusBorderColor="blue.500"
+                  />
+                </FormControl>
+
+                <FormControl id="tags" isRequired>
+                  <FormLabel>Tags</FormLabel>
+                  <Input
+                    value={editData?.tags || ""}
+                    onChange={(e) => handleInputChange(e, "tags", false)}
+                    placeholder="Enter tags"
+                    focusBorderColor="blue.500"
+                  />
+                </FormControl>
+
+                <FormControl id="email" isRequired>
+                  <FormLabel>Email</FormLabel>
+                  <Input
+                    type="email"
+                    value={editData?.email || ""}
+                    onChange={(e) => handleInputChange(e, "email", false)}
+                    placeholder="Enter email"
+                    focusBorderColor="blue.500"
+                  />
+                </FormControl>
+              </SimpleGrid>
+
+              {/* Introduction Field */}
+              <FormControl id="intro" isRequired mt={4}>
+                <FormLabel>Introduction</FormLabel>
+                <Textarea
+                  value={editData?.intro || ""}
+                  onChange={(e) => handleInputChange(e, "intro", false)}
+                  placeholder="Enter introduction"
+                  focusBorderColor="blue.500"
+                />
+              </FormControl>
+
+              {/* Rich Text Editor */}
+              <VStack spacing={4} align="stretch" mt={4}>
+                <TipTapPage
+                  content={editData?.content || []}
+                  setContent={(newContent) =>
+                    handleContentChange(newContent, false)
+                  }
+                />
+              </VStack>
+
+              {/* Checkbox */}
+              <FormControl
+                id="confirmed"
+                mt={4}
+                display="flex"
+                alignItems="center"
+              >
+                <Checkbox
+                  colorScheme="blue"
+                  isChecked={editData?.confirmed || false}
+                  onChange={(e) =>
+                    setEditData((prev) =>
+                      prev ? { ...prev, confirmed: e.target.checked } : null
+                    )
+                  }
+                >
+                  Confirmed
+                </Checkbox>
+              </FormControl>
+            </ModalBody>
+
+            {/* Buttons */}
+            <ModalFooter>
+              <Button onClick={handleSave}>Save</Button>
+              <Button variant="red" onClick={onClose} className="ml-3">
+                Cancel
+              </Button>
+            </ModalFooter>
+          </div>
         </ModalContent>
       </Modal>
 
@@ -601,151 +607,157 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
       <Modal isOpen={isNewOpen} onClose={onNewClose} size="lg" isCentered>
         <ModalOverlay />
         <ModalContent borderRadius="lg" boxShadow="xl" p={4} maxWidth={800}>
-          <ModalHeader
-            fontSize="2xl"
-            fontWeight="bold"
-            textAlign="center"
-            color="blue.600"
+          <div
+            className={` ${
+              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}
           >
-            Create New Article
-          </ModalHeader>
-
-          <ModalBody>
-            <FormControl id="files" isRequired mb={4}>
-              <FormLabel>Upload Image</FormLabel>
-              {preview && (
-                <Box
-                  mt={2}
-                  border="1px solid"
-                  borderColor="gray.300"
-                  borderRadius="md"
-                  overflow="hidden"
-                  width="150px"
-                  height="150px"
-                >
-                  <Image
-                    src={preview}
-                    alt="Uploaded Preview"
-                    objectFit="cover"
-                  />
-                </Box>
-              )}
-              {/* Upload Input */}
-              <Input
-                type="file"
-                p={1}
-                onChange={handleFileChange}
-                accept="image/*"
-              />
-
-              {/* Remove Image Button */}
-              {preview && (
-                <Button
-                  size="sm"
-                  colorScheme="red"
-                  mt={2}
-                  onClick={() => setPreview(null)}
-                >
-                  Remove Image
-                </Button>
-              )}
-            </FormControl>
-            {/* Grid Layout */}
-            <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
-              <FormControl id="title" isRequired>
-                <FormLabel>Title</FormLabel>
-                <Input
-                  value={newData?.title || ""}
-                  onChange={(e) => handleInputChange(e, "title", true)}
-                  placeholder="Enter title"
-                  focusBorderColor="blue.500"
-                />
-              </FormControl>
-
-              <FormControl id="nickname" isRequired>
-                <FormLabel>Nickname</FormLabel>
-                <Input
-                  value={newData?.nickname || ""}
-                  onChange={(e) => handleInputChange(e, "nickname", true)}
-                  placeholder="Enter nickname"
-                  focusBorderColor="blue.500"
-                />
-              </FormControl>
-
-              <FormControl id="tags" isRequired>
-                <FormLabel>Tags</FormLabel>
-                <Input
-                  value={newData?.tags || ""}
-                  onChange={(e) => handleInputChange(e, "tags", true)}
-                  placeholder="Enter tags"
-                  focusBorderColor="blue.500"
-                />
-              </FormControl>
-
-              <FormControl id="email" isRequired>
-                <FormLabel>Email</FormLabel>
-                <Input
-                  type="email"
-                  value={newData?.email || ""}
-                  onChange={(e) => handleInputChange(e, "email", true)}
-                  placeholder="Enter email"
-                  focusBorderColor="blue.500"
-                />
-              </FormControl>
-            </SimpleGrid>
-
-            {/* Introduction Field */}
-            <FormControl id="intro" isRequired mt={4}>
-              <FormLabel>Introduction</FormLabel>
-              <Textarea
-                value={newData?.intro || ""}
-                onChange={(e) => handleInputChange(e, "intro", true)}
-                placeholder="Enter introduction"
-                focusBorderColor="blue.500"
-              />
-            </FormControl>
-
-            {/* Rich Text Editor */}
-            <VStack spacing={4} align="stretch" mt={4}>
-              <TipTapPage
-                content={newData.content}
-                setContent={(newContent) =>
-                  handleContentChange(newContent, true)
-                }
-              />
-            </VStack>
-
-            {/* Checkbox */}
-            <FormControl
-              id="confirmed"
-              mt={4}
-              display="flex"
-              alignItems="center"
+            <ModalHeader
+              fontSize="2xl"
+              fontWeight="bold"
+              textAlign="center"
+              color="blue.600"
             >
-              <Checkbox
-                colorScheme="blue"
-                isChecked={newData?.confirmed}
-                onChange={(e) =>
-                  setNewData((prev) => ({
-                    ...prev,
-                    confirmed: e.target.checked,
-                  }))
-                }
-              >
-                Confirmed
-              </Checkbox>
-            </FormControl>
-          </ModalBody>
+              Create New Article
+            </ModalHeader>
 
-          {/* Buttons */}
-          <ModalFooter>
-            <Button colorScheme="blue" onClick={handleCreateArticle} mr={3}>
-              Create
-            </Button>
-            <Button variant="outline" onClick={onNewClose}>
-              Cancel
-            </Button>
-          </ModalFooter>
+            <ModalBody>
+              <FormControl id="files" isRequired mb={4}>
+                <FormLabel>Upload Image</FormLabel>
+                {preview && (
+                  <Box
+                    mt={2}
+                    border="1px solid"
+                    borderColor="gray.300"
+                    borderRadius="md"
+                    overflow="hidden"
+                    width="150px"
+                    height="150px"
+                  >
+                    <Image
+                      src={preview}
+                      alt="Uploaded Preview"
+                      objectFit="cover"
+                    />
+                  </Box>
+                )}
+                {/* Upload Input */}
+                <Input
+                  type="file"
+                  p={1}
+                  onChange={handleFileChange}
+                  accept="image/*"
+                />
+
+                {/* Remove Image Button */}
+                {preview && (
+                  <Button
+                    size="sm"
+                    colorScheme="red"
+                    mt={2}
+                    onClick={() => setPreview(null)}
+                  >
+                    Remove Image
+                  </Button>
+                )}
+              </FormControl>
+              {/* Grid Layout */}
+              <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
+                <FormControl id="title" isRequired>
+                  <FormLabel>Title</FormLabel>
+                  <Input
+                    value={newData?.title || ""}
+                    onChange={(e) => handleInputChange(e, "title", true)}
+                    placeholder="Enter title"
+                    focusBorderColor="blue.500"
+                  />
+                </FormControl>
+
+                <FormControl id="nickname" isRequired>
+                  <FormLabel>Nickname</FormLabel>
+                  <Input
+                    value={newData?.nickname || ""}
+                    onChange={(e) => handleInputChange(e, "nickname", true)}
+                    placeholder="Enter nickname"
+                    focusBorderColor="blue.500"
+                  />
+                </FormControl>
+
+                <FormControl id="tags" isRequired>
+                  <FormLabel>Tags</FormLabel>
+                  <Input
+                    value={newData?.tags || ""}
+                    onChange={(e) => handleInputChange(e, "tags", true)}
+                    placeholder="Enter tags"
+                    focusBorderColor="blue.500"
+                  />
+                </FormControl>
+
+                <FormControl id="email" isRequired>
+                  <FormLabel>Email</FormLabel>
+                  <Input
+                    type="email"
+                    value={newData?.email || ""}
+                    onChange={(e) => handleInputChange(e, "email", true)}
+                    placeholder="Enter email"
+                    focusBorderColor="blue.500"
+                  />
+                </FormControl>
+              </SimpleGrid>
+
+              {/* Introduction Field */}
+              <FormControl id="intro" isRequired mt={4}>
+                <FormLabel>Introduction</FormLabel>
+                <Textarea
+                  value={newData?.intro || ""}
+                  onChange={(e) => handleInputChange(e, "intro", true)}
+                  placeholder="Enter introduction"
+                  focusBorderColor="blue.500"
+                />
+              </FormControl>
+
+              {/* Rich Text Editor */}
+              <VStack spacing={4} align="stretch" mt={4}>
+                <TipTapPage
+                  content={newData.content}
+                  setContent={(newContent) =>
+                    handleContentChange(newContent, true)
+                  }
+                />
+              </VStack>
+
+              {/* Checkbox */}
+              <FormControl
+                id="confirmed"
+                mt={4}
+                display="flex"
+                alignItems="center"
+              >
+                <Checkbox
+                  colorScheme="blue"
+                  isChecked={newData?.confirmed}
+                  onChange={(e) =>
+                    setNewData((prev) => ({
+                      ...prev,
+                      confirmed: e.target.checked,
+                    }))
+                  }
+                >
+                  Confirmed
+                </Checkbox>
+              </FormControl>
+            </ModalBody>
+
+            {/* Buttons */}
+            <ModalFooter>
+              <Button colorScheme="blue" onClick={handleCreateArticle} mr={3}>
+                Create
+              </Button>
+              <Button variant="outline" colorScheme="red" onClick={onNewClose}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </div>
         </ModalContent>
       </Modal>
     </div>
