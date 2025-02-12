@@ -52,7 +52,7 @@ interface News {
   tags: string;
   date: string;
   files?: string[];
-  content: Content[];
+  content: "";
   link: string;
   nickname: string;
   email: string;
@@ -76,7 +76,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
     feature: "",
     files: [""],
     date: "",
-    content: [{ subHead: "", img: "", description: "" }],
+    content: "",
     link: "",
     nickname: "",
     email: "",
@@ -146,7 +146,8 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
   const handleEdit = (id: string) => {
     const selectedItem = cardData.find((item) => item._id === id);
     if (selectedItem) {
-      const parsedContent = JSON.parse(String(selectedItem.content)); // Parse the content
+      const parsedContent = selectedItem.content; // Parse the content
+      console.log("parsedContent", parsedContent)
       setEditData({ ...selectedItem, content: parsedContent }); // Set parsed content
       onOpen();
     }
@@ -215,33 +216,21 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
   };
 
   const handleContentChange = (newContent: string, isNew: boolean = false) => {
-    if (isNew) {
-      setNewData((prev) => ({
-        ...prev,
-        content: [
-          {
-            subHead: prev.content[0]?.subHead || "",
-            img: prev.content[0]?.img || "",
-            description: newContent,
-          },
-        ],
-      }));
-    } else {
-      setEditData((prev) =>
-        prev
-          ? {
-              ...prev,
-              content: [
-                {
-                  subHead: prev.content[0]?.subHead || "",
-                  img: prev.content[0]?.img || "",
-                  description: newContent,
-                },
-              ],
-            }
-          : null
-      );
-    }
+    // if (isNew) {
+    //   setNewData((prev) => ({
+    //     ...prev,
+    //     content: newContent,
+    //   }));
+    // } else {
+    //   setEditData((prev) =>
+    //     prev
+    //       ? {
+    //           ...prev,
+    //           content: newContent,
+    //         }
+    //       : null
+    //   );
+    // }
   };
 
   const handleAddArticle = () => {
@@ -252,7 +241,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
       feature: "",
       files: [""],
       date: "",
-      content: [{ subHead: "", img: "", description: "" }],
+      content: "",
       link: "",
       nickname: "",
       email: "",
@@ -470,7 +459,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                 accept="image/*"
               />
 
-              {/* Remove Image Button */}
+
               {preview && (
                 <Button
                   size="sm"
@@ -483,7 +472,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
               )}
             </FormControl>
 
-            {/* Grid Layout for Input Fields */}
+
             <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
               <FormControl id="title" isRequired>
                 <FormLabel>Title</FormLabel>
@@ -540,12 +529,12 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
 
             {/* Rich Text Editor */}
             <VStack spacing={4} align="stretch" mt={4}>
-              <TipTapPage
-                content={editData?.content || []}
+              {/* <TipTapPage
+                content={editData?.content || ""}
                 setContent={(newContent) =>
                   handleContentChange(newContent, false)
                 }
-              />
+              /> */}
             </VStack>
 
             {/* Checkbox */}
@@ -692,7 +681,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
             {/* Rich Text Editor */}
             <VStack spacing={4} align="stretch" mt={4}>
               <TipTapPage
-                content={newData.content}
+                content={newData.content || ""}
                 setContent={(newContent) =>
                   handleContentChange(newContent, true)
                 }

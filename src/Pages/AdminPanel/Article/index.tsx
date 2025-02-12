@@ -51,7 +51,7 @@ interface News {
   tags: string;
   date: string;
   files?: string[];
-  content: Content[];
+  content: string;
   link: string;
   nickname: string;
   email: string;
@@ -74,7 +74,8 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     feature: "",
     files: [""],
     date: "",
-    content: [{ subHead: "", img: "", description: "" }],
+    content: "",
+    // content: [{ subHead: "", img: "", description: "" }],
     link: "",
     nickname: "",
     email: "",
@@ -230,26 +231,14 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     if (isNew) {
       setNewData((prev) => ({
         ...prev,
-        content: [
-          {
-            subHead: prev.content[0]?.subHead || "",
-            img: prev.content[0]?.img || "",
-            description: newContent,
-          },
-        ],
+        content: newContent,
       }));
     } else {
       setEditData((prev) =>
         prev
           ? {
               ...prev,
-              content: [
-                {
-                  subHead: prev.content[0]?.subHead || "",
-                  img: prev.content[0]?.img || "",
-                  description: newContent,
-                },
-              ],
+              content: newContent,
             }
           : null
       );
@@ -264,7 +253,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
       feature: "",
       files: [""],
       date: "",
-      content: [{ subHead: "", img: "", description: "" }],
+      content: "",
       link: "",
       nickname: "",
       email: "",
@@ -557,7 +546,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
             {/* Rich Text Editor */}
             <VStack spacing={4} align="stretch" mt={4}>
               <TipTapPage
-                content={editData?.content || []}
+                content={editData?.content || ""}
                 setContent={(newContent) =>
                   handleContentChange(newContent, false)
                 }

@@ -10,7 +10,7 @@ interface Content {
 }
 
 interface TipTapProps {
-  content: any[];
+  content: string;
   setContent: (newContent: string) => void;
   // setContent: (content: string) => void;
 }
@@ -23,9 +23,10 @@ export type FileFromEditor = {
 };
 
 const TipTapPage1: React.FC<TipTapProps> = ({ content, setContent }) => {
+  console.log("content", content )
   const [files, setFiles] = useState<FileFromEditor[] | null>(null);
   const [editorContent, setEditorContent] = useState<string>(
-    content[0]?.description || ""
+    content || ""
   );
 
   // const editor = useEditor({
@@ -42,19 +43,16 @@ const TipTapPage1: React.FC<TipTapProps> = ({ content, setContent }) => {
     console.log("Editor Content:", content);
   }, [content]);
 
+  const [article, setArticle] = useState<string>(content);
+
+  useEffect(() => {
+    console.log("article", article);
+    setContent(article)
+  }, [article]);
+
   return (
     <div className="bg-gray-500 p-4 items-center justify-center text-white text-xl rounded-lg shadow-lg h-[500px]">
-      <TipTap
-        themeMode={false}
-        type={false}
-        setArticle={(newContent: string) => {
-          setEditorContent(newContent);
-          setContent(newContent);
-        }}
-        setFiles={setFiles}
-        content={editorContent}
-        // editor={editor}
-      />
+      <TipTap content={content} setArticle={setArticle} setFiles={setFiles} />
     </div>
   );
 };
