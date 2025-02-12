@@ -3,6 +3,10 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Modal,
   ModalBody,
   ModalContent,
@@ -450,10 +454,14 @@ const RadioTv: React.FC<TableProps> = ({
               {/* artist */}
               <FormControl id="artist" isRequired>
                 <FormLabel>Artist</FormLabel>
-                <Select
-                  placeholder="Select Artist"
+                <select
                   value={editData?.artists || ""}
                   onChange={(e) => handleInputChange(e, "artists")}
+                  className={`w-full border border-black outline-none focus:border-blue-500 px-4 py-2 rounded-md transition-all duration-200 ${
+                    themeMode
+                      ? "bg-white text-gray-800"
+                      : "bg-gray-700 text-white"
+                  }`}
                 >
                   {artistAllData.length > 0 ? (
                     artistAllData.map((items: any, index: number) => (
@@ -466,7 +474,7 @@ const RadioTv: React.FC<TableProps> = ({
                       <p>no data found</p>
                     </>
                   )}
-                </Select>
+                </select>
               </FormControl>
 
               <FormControl id="title" isRequired mt={4}>
@@ -548,8 +556,12 @@ const RadioTv: React.FC<TableProps> = ({
             <ModalBody>
               <FormControl isRequired>
                 <FormLabel>Artist</FormLabel>
-                <Select
-                  placeholder="Select Artist"
+                <select
+                  className={`w-full border border-black outline-none focus:border-blue-500 px-4 py-2 rounded-md transition-all duration-200 ${
+                    themeMode
+                      ? "bg-white text-gray-800"
+                      : "bg-gray-700 text-white"
+                  }`}
                   value={newData?.artists}
                   onChange={(e) => handleNewInputChange(e, "artists")}
                 >
@@ -558,7 +570,6 @@ const RadioTv: React.FC<TableProps> = ({
                       <option
                         key={index}
                         value={items.artist._id}
-                        className={`${themeMode ? "text-white bg-gray-700" : " text-black bg-gray-700"}`}
                       >
                         {items.artist.name}
                       </option>
@@ -566,7 +577,7 @@ const RadioTv: React.FC<TableProps> = ({
                   ) : (
                     <p>No data found</p>
                   )}
-                </Select>
+                </select>
               </FormControl>
 
               <FormControl isRequired mt={4}>
