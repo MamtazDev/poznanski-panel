@@ -214,7 +214,7 @@ const TipTap: React.FC<TipTapProps> = ({
 						<Box
 							sx={{
 								'&& .ProseMirror': {
-									height: editable ? '600px' : 'auto',
+									height: editable ? '270px' : 'auto',
 									overflowY: 'auto',
 									border: editable
 										? `1px solid ${themeMode ? '' : '#e5e7eb86'}`
