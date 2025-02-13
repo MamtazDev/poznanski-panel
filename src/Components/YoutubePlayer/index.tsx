@@ -15,7 +15,8 @@ const YoutubePlayer: React.FC<PlayerProps> = ({ link }) => {
   useEffect(() => {
     const regExp =
       /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const match = link.match(regExp);
+    const match = link?.match(regExp);
+    // const match = link;
     if (match) {
       setVideoId(match[4]);
     } else {
