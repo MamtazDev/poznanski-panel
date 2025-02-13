@@ -76,7 +76,7 @@ const ArtistModal: React.FC<ModalProps> = ({
   };
 
   const handleImageChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -124,8 +124,7 @@ const ArtistModal: React.FC<ModalProps> = ({
         <ModalContent
           maxWidth={"100vh"}
           backgroundColor={themeMode ? "#E9E9EB" : "#242526"}
-          padding={6}
-        >
+          padding={6}>
           <ModalBody>
             <div className="flex gap-2 w-full">
               <div className="w-3/5">
@@ -136,6 +135,8 @@ const ArtistModal: React.FC<ModalProps> = ({
                   error={errTitle}
                   errMsg="Type artist name"
                   onChange={handleChange}
+
+
                 />
                 <div>
                   <Textarea
@@ -170,8 +171,7 @@ const ArtistModal: React.FC<ModalProps> = ({
                         />
                         <button
                           className="add-file-btn"
-                          onClick={handleButtonClick}
-                        >
+                          onClick={handleButtonClick}>
                           + Select File
                         </button>
                       </div>
@@ -189,8 +189,7 @@ const ArtistModal: React.FC<ModalProps> = ({
                         style={{ display: "none" }}
                       />
                       <div
-                        className={`rounded-lg opacity-70 ${themeMode ? "bg-gray-400" : "bg-gray-50"}`}
-                      >
+                        className={`rounded-lg opacity-70 ${themeMode ? "bg-gray-400" : "bg-gray-50"}`}>
                         <CrudBtn
                           value=""
                           onClickDelete={handleDelete}
@@ -210,8 +209,7 @@ const ArtistModal: React.FC<ModalProps> = ({
             <Button
               variant="ghost"
               color={themeMode ? "black" : "white"}
-              onClick={handleClickAdd}
-            >
+              onClick={handleClickAdd}>
               Yes, I'm sure
             </Button>
           </ModalFooter>

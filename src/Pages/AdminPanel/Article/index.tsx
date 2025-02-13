@@ -145,8 +145,9 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   const handleEdit = (id: string) => {
     const selectedItem = cardData.find((item) => item._id === id);
     if (selectedItem) {
-      const parsedContent = JSON.parse(String(selectedItem.content)); // Parse the content
-      setEditData({ ...selectedItem, content: parsedContent }); // Set parsed content
+      // const parsedContent = JSON.parse(String(selectedItem.content)); // Parse the content
+      // setEditData({ ...selectedItem, content: parsedContent }); // Set parsed content
+      setEditData({ ...selectedItem}); // Set parsed content
       onOpen();
     }
   };
@@ -412,6 +413,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                   <img
                     src={item?.files?.[0] || staticImg}
                     className="rounded-full w-[50px] h-[50px] my-2 flex items-center mx-auto"
+                    alt="img"
                   />
                 </td>
                 <td>{item.title}</td>
@@ -544,14 +546,14 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
             </FormControl>
 
             {/* Rich Text Editor */}
-            <VStack spacing={4} align="stretch" mt={4}>
+            {/* <VStack spacing={4} align="stretch" mt={4}>
               <TipTapPage
                 content={editData?.content || ""}
                 setContent={(newContent) =>
                   handleContentChange(newContent, false)
                 }
               />
-            </VStack>
+            </VStack> */}
 
             {/* Date */}
             <FormControl id="date" isRequired>

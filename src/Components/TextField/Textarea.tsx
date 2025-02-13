@@ -31,7 +31,7 @@ const Textarea: React.FC<InputProps> = ({
       <textarea
         id="message"
         rows={rowNum || 5}
-        className={`block w-full border ${themeMode ? "textarea-light" : "textarea-dark"}`}
+        className={`block w-full border ${themeMode ? "textarea-light" : "textarea-dark"} border border-gray-300 shadow-sm `}
         placeholder={placeholderText}
         onChange={onChange && ((e) => onChange(e.target.value))}
       >

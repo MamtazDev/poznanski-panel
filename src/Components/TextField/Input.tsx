@@ -36,7 +36,7 @@ const Input: React.FC<InputProps> = ({
         id="floating_email"
         value={value}
         onChange={onChange && ((e) => onChange(e))}
-        className={`${themeMode ? "input-light" : "input-dark"} shadow-sm  block w-full ${error ? "border border-red-500 text-red-900 placeholder-red-700" : "border"} `}
+        className={`${themeMode ? "input-light" : "input-dark"} shadow-sm block w-full ${error && "border border-red-500 text-red-900 placeholder-red-700"} border border-gray-300 focus:outline-none`}
         style={{ height: type ? "32px" : "36.825px" }}
         placeholder={error ? errMsg : ""}
         required

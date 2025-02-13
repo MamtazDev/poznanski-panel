@@ -179,8 +179,7 @@ const RadioTv: React.FC<TableProps> = ({
             borderRadius: "8px",
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
             textAlign: "center",
-          }}
-        >
+          }}>
           <p style={{ fontSize: "16px", fontWeight: "bold" }}>
             Are you sure you want to delete this item?
           </p>
@@ -190,16 +189,14 @@ const RadioTv: React.FC<TableProps> = ({
               display: "flex",
               justifyContent: "center",
               gap: "10px",
-            }}
-          >
+            }}>
             <Button
               colorScheme="red"
               size="sm"
               onClick={async () => {
                 onClose(); // Close confirmation toast
                 await deleteItem(id);
-              }}
-            >
+              }}>
               Yes, Delete
             </Button>
             <Button size="sm" onClick={onClose}>
@@ -367,8 +364,7 @@ const RadioTv: React.FC<TableProps> = ({
               themeMode
                 ? "text-white bg-[#5A1073]"
                 : "bg-[#3bd6c6] text-[#5A1073]"
-            }`}
-          >
+            }`}>
             <tr>
               <th className="px-6 py-3 w-32">Title</th>
               <th className="px-6 py-3 w-32">Image</th>
@@ -387,8 +383,7 @@ const RadioTv: React.FC<TableProps> = ({
                   !themeMode
                     ? "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700"
                     : "bg-white text-gray-900 hover:bg-gray-200"
-                }`}
-              >
+                }`}>
                 <td className="px-4 py-3">{item?.title}</td>
                 <td className="px-4 py-3 ">
                   <img
@@ -412,8 +407,7 @@ const RadioTv: React.FC<TableProps> = ({
                       title="YouTube video player"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       frameBorder="0"
-                      className="w-40 h-24 md: rounded-lg shadow-lg"
-                    ></iframe>
+                      className="w-40 h-24 md: rounded-lg shadow-lg"></iframe>
                   </div>
                 </td>
                 <td className="px-4 py-3">{item?.tags}</td>
@@ -443,8 +437,7 @@ const RadioTv: React.FC<TableProps> = ({
           <div
             className={` ${
               themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-            }`}
-          >
+            }`}>
             <ModalHeader>Edit Item</ModalHeader>
             <ModalBody>
               {/* artist */}
@@ -453,8 +446,7 @@ const RadioTv: React.FC<TableProps> = ({
                 <Select
                   placeholder="Select Artist"
                   value={editData?.artists || ""}
-                  onChange={(e) => handleInputChange(e, "artists")}
-                >
+                  onChange={(e) => handleInputChange(e, "artists")}>
                   {artistAllData.length > 0 ? (
                     artistAllData.map((items: any, index: number) => (
                       <option key={index} value={items.artist._id}>
@@ -542,8 +534,7 @@ const RadioTv: React.FC<TableProps> = ({
           <div
             className={` ${
               themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-            }`}
-          >
+            }`}>
             <ModalHeader>Add New Item</ModalHeader>
             <ModalBody>
               <FormControl isRequired>
@@ -551,15 +542,13 @@ const RadioTv: React.FC<TableProps> = ({
                 <Select
                   placeholder="Select Artist"
                   value={newData?.artists}
-                  onChange={(e) => handleNewInputChange(e, "artists")}
-                >
+                  onChange={(e) => handleNewInputChange(e, "artists")}>
                   {artistAllData.length > 0 ? (
                     artistAllData?.map((items: any, index: number) => (
                       <option
                         key={index}
                         value={items.artist._id}
-                        className={`${themeMode ? "text-white bg-gray-700" : " text-black bg-gray-700"}`}
-                      >
+                        className={`${themeMode ? "text-black bg-gray-700" : " text-black bg-gray-700"}`}>
                         {items.artist.name}
                       </option>
                     ))
@@ -626,8 +615,7 @@ const RadioTv: React.FC<TableProps> = ({
               <Button
                 colorScheme="blue"
                 onClick={handleCreatePost}
-                className="mr-3"
-              >
+                className="mr-3">
                 Save
               </Button>
               <Button variant="red" onClick={onNewClose}>
