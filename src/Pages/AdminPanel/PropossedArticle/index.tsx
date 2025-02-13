@@ -147,7 +147,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
     const selectedItem = cardData.find((item) => item._id === id);
     if (selectedItem) {
       const parsedContent = selectedItem.content; // Parse the content
-      console.log("parsedContent", parsedContent)
+      console.log("parsedContent", parsedContent);
       setEditData({ ...selectedItem, content: parsedContent }); // Set parsed content
       onOpen();
     }
@@ -170,8 +170,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
             borderRadius: "8px",
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
             textAlign: "center",
-          }}
-        >
+          }}>
           <p style={{ fontSize: "16px", fontWeight: "bold" }}>
             Are you sure you want to delete this item?
           </p>
@@ -181,13 +180,11 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
               display: "flex",
               justifyContent: "center",
               gap: "10px",
-            }}
-          >
+            }}>
             <Button
               colorScheme="red"
               size="sm"
-              onClick={() => confirmDelete(id, onClose)}
-            >
+              onClick={() => confirmDelete(id, onClose)}>
               Yes, Delete
             </Button>
             <Button size="sm" colorScheme="blue" onClick={onClose}>
@@ -350,8 +347,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
           className={`mb-4 ${
             themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
           }`}
-          style={{ width: "300px" }}
-        >
+          style={{ width: "300px" }}>
           <InputGroup>
             <Input type="text" placeholder="Search..." />
             <InputRightElement>
@@ -369,8 +365,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
               themeMode
                 ? "text-white bg-[#5A1073]"
                 : "bg-[#3bd6c6] text-[#5A1073]"
-            }`}
-          >
+            }`}>
             <tr>
               <th className="px-6 py-3">Image</th>
               <th className="px-6 py-3">Title</th>
@@ -388,12 +383,12 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                   !themeMode
                     ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
                     : "bg-white text-gray-900 hover:bg-gray-200"
-                }`}
-              >
+                }`}>
                 <td>
                   <img
                     src={item?.files?.[0] || staticImg}
                     className="rounded-full w-[50px] h-[50px] my-2 flex items-center mx-auto"
+                    alt=""
                   />
                 </td>
                 <td>{item.title}</td>
@@ -424,8 +419,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
             fontSize="2xl"
             fontWeight="bold"
             textAlign="center"
-            color="blue.600"
-          >
+            color="blue.600">
             Edit Article
           </ModalHeader>
 
@@ -441,8 +435,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                   borderRadius="md"
                   overflow="hidden"
                   width="150px"
-                  height="150px"
-                >
+                  height="150px">
                   <Image
                     src={preview}
                     alt="Uploaded Preview"
@@ -459,19 +452,16 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                 accept="image/*"
               />
 
-
               {preview && (
                 <Button
                   size="sm"
                   colorScheme="red"
                   mt={2}
-                  onClick={() => setPreview(null)}
-                >
+                  onClick={() => setPreview(null)}>
                   Remove Image
                 </Button>
               )}
             </FormControl>
-
 
             <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
               <FormControl id="title" isRequired>
@@ -542,8 +532,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
               id="confirmed"
               mt={4}
               display="flex"
-              alignItems="center"
-            >
+              alignItems="center">
               <Checkbox
                 colorScheme="blue"
                 isChecked={editData?.confirmed || false}
@@ -551,8 +540,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                   setEditData((prev) =>
                     prev ? { ...prev, confirmed: e.target.checked } : null
                   )
-                }
-              >
+                }>
                 Confirmed
               </Checkbox>
             </FormControl>
@@ -578,8 +566,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
             fontSize="2xl"
             fontWeight="bold"
             textAlign="center"
-            color="blue.600"
-          >
+            color="blue.600">
             Create New Article
           </ModalHeader>
 
@@ -594,8 +581,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                   borderRadius="md"
                   overflow="hidden"
                   width="150px"
-                  height="150px"
-                >
+                  height="150px">
                   <Image
                     src={preview}
                     alt="Uploaded Preview"
@@ -617,8 +603,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                   size="sm"
                   colorScheme="red"
                   mt={2}
-                  onClick={() => setPreview(null)}
-                >
+                  onClick={() => setPreview(null)}>
                   Remove Image
                 </Button>
               )}
@@ -693,8 +678,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
               id="confirmed"
               mt={4}
               display="flex"
-              alignItems="center"
-            >
+              alignItems="center">
               <Checkbox
                 colorScheme="blue"
                 isChecked={newData?.confirmed}
@@ -703,8 +687,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                     ...prev,
                     confirmed: e.target.checked,
                   }))
-                }
-              >
+                }>
                 Confirmed
               </Checkbox>
             </FormControl>
