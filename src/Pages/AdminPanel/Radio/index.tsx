@@ -274,7 +274,7 @@ const RadioContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
         </div>
         <CommonButton text="Add New" onClick={handleAdd} />
       </div>
-      <ProductTable
+      {/* <ProductTable
         themeMode={themeMode}
         cardData={cardData}
         handleEdit={handleEdit}
@@ -283,7 +283,7 @@ const RadioContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
         selectedPage={selectedPage}
         setSelectedPage={setSelectedPage}
         pageNum={pageNum}
-      />
+      /> */}
 
       <ConfirmModal
         isOpen={openDeleteModal}

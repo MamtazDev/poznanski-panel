@@ -1,7 +1,10 @@
 import {
+  Box,
   Button,
+  Checkbox,
   FormControl,
   FormLabel,
+  Image,
   Input,
   InputGroup,
   InputRightElement,
@@ -11,9 +14,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  SimpleGrid,
   Textarea,
   useDisclosure,
   useToast,
+  VStack,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -28,19 +33,14 @@ import {
   apiPutReq,
 } from "../../../Constant/api-functions";
 import CommonButton from "../../../Components/Buttons/CommonButton";
-import PaginationBar from "../../../Components/PaginationBar";
 import TipTapPage from "../../../Components/TipTapPage";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 
-interface Comment {
-  author: string;
-  text: string;
-  date: string;
-}
-
-interface CommentsSection {
-  comments: Comment[];
+interface Content {
+  subHead: string;
+  img: string;
+  description: string;
 }
 
 interface News {
@@ -51,19 +51,11 @@ interface News {
   tags: string;
   date: string;
   files?: string[];
-  content: Content[];
+  content: string;
   link: string;
   nickname: string;
   email: string;
   confirmed: boolean;
-  confirmationToken: string;
-  commentsSection: CommentsSection;
-}
-
-interface Content {
-  subHead: string;
-  img: string;
-  description: string;
 }
 
 interface ArticleProps {
@@ -73,6 +65,7 @@ interface ArticleProps {
 const Article: React.FC<ArticleProps> = ({ tagData }) => {
   const [cardData, setCardData] = useState<News[]>([]);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+  const [preview, setPreview] = useState<string | null>(null);
   const [editData, setEditData] = useState<News | null>(null);
   const [newData, setNewData] = useState<News>({
     _id: "",
@@ -81,15 +74,15 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     feature: "",
     files: [""],
     date: "",
-    content: [{ subHead: "", img: "", description: "" }],
+    content: "",
+    // content: [{ subHead: "", img: "", description: "" }],
     link: "",
     nickname: "",
     email: "",
     confirmed: false,
-    confirmationToken: "",
-    commentsSection: { comments: [] },
     tags: "",
   });
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isNewOpen,
@@ -98,8 +91,12 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   } = useDisclosure();
   const toast = useToast();
 
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
   const fetchArticles = () => {
-    apiGetReq("/news/all", {})
+    apiGetReq("/news/all?limit=100", {})
       .then((res) => {
         if (res?.news) {
           setCardData(res.news);
@@ -110,17 +107,13 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
       .catch((err) => console.error("API fetch error:", err));
   };
 
-  useEffect(() => {
-    fetchArticles();
-  }, []);
-
   const uploadImage = async (file: File) => {
     const formData = new FormData();
     formData.append("image", file);
 
     try {
       const res = await apiPostReq("/upload", formData, true);
-      return res?.fileUrl || ""; // Make sure this matches API response
+      return res?.fileUrl || "";
     } catch (error) {
       console.error("Error uploading image:", error);
       return "";
@@ -138,7 +131,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
         if (isNew) {
           setNewData((prev) => ({
             ...prev,
-            files: [uploadedImageUrl], // Store the uploaded file in `files`
+            files: [uploadedImageUrl],
           }));
         } else {
           setEditData((prev) =>
@@ -152,7 +145,8 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
   const handleEdit = (id: string) => {
     const selectedItem = cardData.find((item) => item._id === id);
     if (selectedItem) {
-      setEditData({ ...selectedItem });
+      const parsedContent = JSON.parse(String(selectedItem.content)); // Parse the content
+      setEditData({ ...selectedItem, content: parsedContent }); // Set parsed content
       onOpen();
     }
   };
@@ -171,8 +165,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
             borderRadius: "8px",
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
             textAlign: "center",
-          }}
-        >
+          }}>
           <p style={{ fontSize: "16px", fontWeight: "bold" }}>
             Are you sure you want to delete this item?
           </p>
@@ -182,16 +175,14 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
               display: "flex",
               justifyContent: "center",
               gap: "10px",
-            }}
-          >
+            }}>
             <Button
               colorScheme="red"
               size="sm"
               onClick={async () => {
                 onClose(); // Close confirmation toast
                 await deleteItem(id);
-              }}
-            >
+              }}>
               Yes, Delete
             </Button>
             <Button size="sm" onClick={onClose}>
@@ -236,36 +227,21 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     }
   };
 
-  const handleSave = async () => {
-    if (!editData || !editData._id) return;
-
-    try {
-      const res = await apiPutReq(`/news/${editData._id}`, editData);
-      if (res.success) {
-        fetchArticles(); // Refetch data after update
-        toast({
-          title: "Article updated successfully!",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-        onClose();
-      } else {
-        toast({
-          title: "Failed to update article",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-    } catch (error) {
-      console.error("Error updating article:", error);
-      toast({
-        title: "Error updating article",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+  const handleContentChange = (newContent: string, isNew: boolean = false) => {
+    if (isNew) {
+      setNewData((prev) => ({
+        ...prev,
+        content: newContent,
+      }));
+    } else {
+      setEditData((prev) =>
+        prev
+          ? {
+              ...prev,
+              content: newContent,
+            }
+          : null
+      );
     }
   };
 
@@ -277,13 +253,11 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
       feature: "",
       files: [""],
       date: "",
-      content: [{ subHead: "", img: "", description: "" }],
+      content: "",
       link: "",
       nickname: "",
       email: "",
       confirmed: false,
-      confirmationToken: "",
-      commentsSection: { comments: [] },
       tags: "",
     });
     onNewOpen();
@@ -291,7 +265,12 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
 
   const handleCreateArticle = async () => {
     try {
-      const res = await apiPostReq("/news", newData);
+      const formattedData = {
+        ...newData,
+        date: new Date(newData.date).toISOString(),
+      };
+      const res = await apiPostReq("/news", formattedData);
+      // const res = await apiPostReq("/news", newData);
       if (res.success) {
         fetchArticles(); // Refetch data after creation
         toast({
@@ -334,6 +313,54 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     }
   };
 
+  // Handle Image Selection
+  const handleSave = async () => {
+    if (!editData || !editData._id) return;
+    const updatedData = {
+      ...editData,
+      date: new Date(editData.date).toISOString(), // Format the date
+      content: JSON.stringify(editData.content),
+    };
+
+    try {
+      const res = await apiPutReq(`/news/${editData._id}`, updatedData);
+      if (res.success) {
+        fetchArticles();
+        toast({
+          title: "Article updated successfully!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        onClose();
+      } else {
+        toast({
+          title: "Failed to update article",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("Error updating article:", error);
+      toast({
+        title: "Error updating article",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setPreview(imageUrl);
+      handleImageUpload(event, true);
+    }
+  };
+
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex justify-between">
@@ -341,8 +368,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
           className={`mb-4 ${
             themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
           }`}
-          style={{ width: "300px" }}
-        >
+          style={{ width: "300px" }}>
           <InputGroup>
             <Input type="text" placeholder="Search..." />
             <InputRightElement>
@@ -362,16 +388,17 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
               themeMode
                 ? "text-white bg-[#5A1073]"
                 : "bg-[#3bd6c6] text-[#5A1073]"
-            }`}
-          >
+            }`}>
             <tr>
               <th className="px-6 py-3">Image</th>
               <th className="px-6 py-3">Title</th>
+              <th className="px-6 py-3">Nick Name</th>
               <th className="px-6 py-3">Tag</th>
               <th className="px-6 py-3">Date</th>
               <th className="px-6 py-3">Action</th>
             </tr>
           </thead>
+
           <tbody>
             {cardData.map((item) => (
               <tr
@@ -380,8 +407,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                   !themeMode
                     ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
                     : "bg-white text-gray-900 hover:bg-gray-200"
-                }`}
-              >
+                }`}>
                 <td>
                   <img
                     src={item?.files?.[0] || staticImg}
@@ -389,8 +415,10 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                   />
                 </td>
                 <td>{item.title}</td>
+                <td>{item.nickname}</td>
                 <td>{item.tags}</td>
-                <td>{new Date(item.date).toISOString().split("T")[0]}</td>
+                {/* <td>{new Date(item.date).toISOString()}</td> */}
+                <td>{item.date}</td>
                 <td>
                   <div className="flex justify-center space-x-2">
                     <button onClick={() => handleEdit(item._id)}>
@@ -408,69 +436,154 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
       </div>
 
       {/* Edit Modal */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Edit Article</ModalHeader>
+        <ModalContent borderRadius="lg" boxShadow="xl" p={4} maxWidth={800}>
+          <ModalHeader
+            fontSize="2xl"
+            fontWeight="bold"
+            textAlign="center"
+            color="blue.600">
+            Edit Article
+          </ModalHeader>
+
           <ModalBody>
-            <FormControl id="title" isRequired mt={4}>
-              <FormLabel>Title</FormLabel>
+            {/* Image Upload Section */}
+            <FormControl id="files" isRequired mb={4}>
+              <FormLabel>Upload Image</FormLabel>
+              {preview && (
+                <Box
+                  mt={2}
+                  border="1px solid"
+                  borderColor="gray.300"
+                  borderRadius="md"
+                  overflow="hidden"
+                  width="150px"
+                  height="150px">
+                  <Image
+                    src={preview}
+                    alt="Uploaded Preview"
+                    objectFit="cover"
+                  />
+                </Box>
+              )}
+
+              {/* Upload Input */}
               <Input
-                value={editData?.title || ""}
-                onChange={(e) => handleInputChange(e, "title")}
-                placeholder="Enter title"
+                type="file"
+                p={1}
+                onChange={handleFileChange}
+                accept="image/*"
               />
+
+              {/* Remove Image Button */}
+              {preview && (
+                <Button
+                  size="sm"
+                  colorScheme="red"
+                  mt={2}
+                  onClick={() => setPreview(null)}>
+                  Remove Image
+                </Button>
+              )}
             </FormControl>
+
+            {/* Grid Layout for Input Fields */}
+            <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
+              <FormControl id="title" isRequired>
+                <FormLabel>Title</FormLabel>
+                <Input
+                  value={editData?.title || ""}
+                  onChange={(e) => handleInputChange(e, "title", false)}
+                  placeholder="Enter title"
+                  focusBorderColor="blue.500"
+                />
+              </FormControl>
+
+              <FormControl id="nickname" isRequired>
+                <FormLabel>Nickname</FormLabel>
+                <Input
+                  value={editData?.nickname || ""}
+                  onChange={(e) => handleInputChange(e, "nickname", false)}
+                  placeholder="Enter nickname"
+                  focusBorderColor="blue.500"
+                />
+              </FormControl>
+
+              <FormControl id="tags" isRequired>
+                <FormLabel>Tags</FormLabel>
+                <Input
+                  value={editData?.tags || ""}
+                  onChange={(e) => handleInputChange(e, "tags", false)}
+                  placeholder="Enter tags"
+                  focusBorderColor="blue.500"
+                />
+              </FormControl>
+
+              <FormControl id="email" isRequired>
+                <FormLabel>Email</FormLabel>
+                <Input
+                  type="email"
+                  value={editData?.email || ""}
+                  onChange={(e) => handleInputChange(e, "email", false)}
+                  placeholder="Enter email"
+                  focusBorderColor="blue.500"
+                />
+              </FormControl>
+            </SimpleGrid>
+
+            {/* Introduction Field */}
             <FormControl id="intro" isRequired mt={4}>
               <FormLabel>Introduction</FormLabel>
               <Textarea
                 value={editData?.intro || ""}
-                onChange={(e) => handleInputChange(e, "intro")}
+                onChange={(e) => handleInputChange(e, "intro", false)}
                 placeholder="Enter introduction"
+                focusBorderColor="blue.500"
               />
             </FormControl>
-            <FormControl id="tags" isRequired mt={4}>
-              <FormLabel>Tags</FormLabel>
+
+            {/* Rich Text Editor */}
+            <VStack spacing={4} align="stretch" mt={4}>
+              <TipTapPage
+                content={editData?.content || ""}
+                setContent={(newContent) =>
+                  handleContentChange(newContent, false)
+                }
+              />
+            </VStack>
+
+            {/* Date */}
+            <FormControl id="date" isRequired>
+              <FormLabel>Date</FormLabel>
               <Input
-                value={editData?.tags || ""}
-                onChange={(e) => handleInputChange(e, "tags")}
-                placeholder="Enter tags"
+                type="date"
+                value={editData?.date || ""}
+                onChange={(e) => handleInputChange(e, "date", false)}
+                focusBorderColor="blue.500"
               />
             </FormControl>
-            <FormControl id="email" isRequired mt={4}>
-              <FormLabel>Email</FormLabel>
-              <Input
-                type="email"
-                value={editData?.email || ""}
-                onChange={(e) => handleInputChange(e, "email")}
-                placeholder="Enter email"
-              />
-            </FormControl>
-            <FormControl id="files" mt={4}>
-              <FormLabel>Change Image</FormLabel>
-              <Input
-                type="file"
-                onChange={(e) => handleImageUpload(e, false)}
-              />
-            </FormControl>
+
+            {/* Checkbox */}
             <FormControl
               id="confirmed"
               mt={4}
               display="flex"
-              alignItems="center"
-            >
-              <FormLabel>Confirmed</FormLabel>
-              <input
-                type="checkbox"
-                checked={editData?.confirmed || false}
+              alignItems="center">
+              <Checkbox
+                colorScheme="blue"
+                isChecked={editData?.confirmed || false}
                 onChange={(e) =>
                   setEditData((prev) =>
                     prev ? { ...prev, confirmed: e.target.checked } : null
                   )
-                }
-              />
+                }>
+                Confirmed
+              </Checkbox>
             </FormControl>
           </ModalBody>
+
+          {/* Buttons */}
           <ModalFooter>
             <Button onClick={handleSave}>Save</Button>
             <Button variant="ghost" onClick={onClose} className="ml-3">
@@ -481,72 +594,157 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
       </Modal>
 
       {/* New Article Modal */}
-      <Modal isOpen={isNewOpen} onClose={onNewClose}>
+      <Modal isOpen={isNewOpen} onClose={onNewClose} size="lg" isCentered>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create New Article</ModalHeader>
+        <ModalContent borderRadius="lg" boxShadow="xl" p={4} maxWidth={800}>
+          <ModalHeader
+            fontSize="2xl"
+            fontWeight="bold"
+            textAlign="center"
+            color="blue.600">
+            Create New Article
+          </ModalHeader>
+
           <ModalBody>
-            <FormControl id="title" isRequired mt={4}>
-              <FormLabel>Title</FormLabel>
+            <FormControl id="files" isRequired mb={4}>
+              <FormLabel>Upload Image</FormLabel>
+              {preview && (
+                <Box
+                  mt={2}
+                  border="1px solid"
+                  borderColor="gray.300"
+                  borderRadius="md"
+                  overflow="hidden"
+                  width="150px"
+                  height="150px">
+                  <Image
+                    src={preview}
+                    alt="Uploaded Preview"
+                    objectFit="cover"
+                  />
+                </Box>
+              )}
+              {/* Upload Input */}
               <Input
-                value={newData?.title || ""}
-                onChange={(e) => handleInputChange(e, "title", true)}
-                placeholder="Enter title"
+                type="file"
+                p={1}
+                onChange={handleFileChange}
+                accept="image/*"
               />
+
+              {/* Remove Image Button */}
+              {preview && (
+                <Button
+                  size="sm"
+                  colorScheme="red"
+                  mt={2}
+                  onClick={() => setPreview(null)}>
+                  Remove Image
+                </Button>
+              )}
             </FormControl>
+            {/* Grid Layout */}
+            <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
+              <FormControl id="title" isRequired>
+                <FormLabel>Title</FormLabel>
+                <Input
+                  value={newData?.title || ""}
+                  onChange={(e) => handleInputChange(e, "title", true)}
+                  placeholder="Enter title"
+                  focusBorderColor="blue.500"
+                />
+              </FormControl>
+
+              <FormControl id="nickname" isRequired>
+                <FormLabel>Nickname</FormLabel>
+                <Input
+                  value={newData?.nickname || ""}
+                  onChange={(e) => handleInputChange(e, "nickname", true)}
+                  placeholder="Enter nickname"
+                  focusBorderColor="blue.500"
+                />
+              </FormControl>
+
+              <FormControl id="tags" isRequired>
+                <FormLabel>Tags</FormLabel>
+                <Input
+                  value={newData?.tags || ""}
+                  onChange={(e) => handleInputChange(e, "tags", true)}
+                  placeholder="Enter tags"
+                  focusBorderColor="blue.500"
+                />
+              </FormControl>
+
+              <FormControl id="email" isRequired>
+                <FormLabel>Email</FormLabel>
+                <Input
+                  type="email"
+                  value={newData?.email || ""}
+                  onChange={(e) => handleInputChange(e, "email", true)}
+                  placeholder="Enter email"
+                  focusBorderColor="blue.500"
+                />
+              </FormControl>
+            </SimpleGrid>
+
+            {/* Introduction Field */}
             <FormControl id="intro" isRequired mt={4}>
               <FormLabel>Introduction</FormLabel>
               <Textarea
                 value={newData?.intro || ""}
                 onChange={(e) => handleInputChange(e, "intro", true)}
                 placeholder="Enter introduction"
+                focusBorderColor="blue.500"
               />
             </FormControl>
-            <FormControl id="tags" isRequired mt={4}>
-              <FormLabel>Tags</FormLabel>
+
+            {/* Rich Text Editor */}
+            <VStack spacing={4} align="stretch" mt={4} mb={4}>
+              <TipTapPage
+                content={newData.content}
+                setContent={(newContent) =>
+                  handleContentChange(newContent, true)
+                }
+              />
+            </VStack>
+
+            {/* Date */}
+            <FormControl id="date" isRequired>
+              <FormLabel>Date</FormLabel>
               <Input
-                value={newData?.tags || ""}
-                onChange={(e) => handleInputChange(e, "tags", true)}
-                placeholder="Enter tags"
+                type="date"
+                value={newData?.date || ""}
+                onChange={(e) => handleInputChange(e, "date", true)}
+                focusBorderColor="blue.500"
               />
             </FormControl>
-            <FormControl id="email" isRequired mt={4}>
-              <FormLabel>Email</FormLabel>
-              <Input
-                type="email"
-                value={newData?.email || ""}
-                onChange={(e) => handleInputChange(e, "email", true)}
-                placeholder="Enter email"
-              />
-            </FormControl>
-            <FormControl id="files" isRequired mt={4}>
-              <FormLabel>Image</FormLabel>
-              <Input type="file" onChange={(e) => handleImageUpload(e, true)} />
-            </FormControl>
+
+            {/* Checkbox */}
             <FormControl
               id="confirmed"
               mt={4}
               display="flex"
-              alignItems="center"
-            >
-              <FormLabel>Confirmed</FormLabel>
-              <input
-                type="checkbox"
-                checked={newData?.confirmed}
+              alignItems="center">
+              <Checkbox
+                colorScheme="blue"
+                isChecked={newData?.confirmed}
                 onChange={(e) =>
                   setNewData((prev) => ({
                     ...prev,
                     confirmed: e.target.checked,
                   }))
-                }
-              />
+                }>
+                Confirmed
+              </Checkbox>
             </FormControl>
           </ModalBody>
+
+          {/* Buttons */}
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleCreateArticle}>
+            <Button colorScheme="blue" onClick={handleCreateArticle} mr={3}>
               Create
             </Button>
-            <Button variant="ghost" onClick={onNewClose}>
+            <Button variant="outline" onClick={onNewClose}>
               Cancel
             </Button>
           </ModalFooter>

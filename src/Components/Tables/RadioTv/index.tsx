@@ -25,6 +25,7 @@ import tableIcon from "../../../assets/svg/icons-table.svg";
 import CommonButton from "../../Buttons/CommonButton";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import FolderImage from "../../../assets/png/folder_icon.png";
 
 interface TableProps {
   themeMode?: boolean;
@@ -39,12 +40,13 @@ interface TableProps {
     artist: string;
     star: number;
   }[];
-  handleEdit?: (id: string) => void;
-  handleDelete?: (id: string) => void;
-  handleChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  selectedPage?: string;
-  setSelectedPage?: React.Dispatch<React.SetStateAction<string>>;
-  pageNum?: string;
+  radioData: any[];
+  setRadioData: React.Dispatch<React.SetStateAction<any[]>>;
+  newData: any;
+  setNewData: React.Dispatch<React.SetStateAction<any>>;
+  isNewOpen: boolean;
+  onNewOpen: () => void;
+  onNewClose: () => void;
 }
 
 interface Artist {
@@ -77,29 +79,38 @@ interface ArtistData {
   products: Product[];
 }
 
-const RadioTv: React.FC<TableProps> = (props) => {
-  const [radioData, setRadioData] = useState<any[]>([]);
+const RadioTv: React.FC<TableProps> = ({
+  themeMode,
+  radioData,
+  setRadioData,
+  newData,
+  setNewData,
+  isNewOpen,
+  onNewOpen,
+  onNewClose,
+}) => {
+  // const [radioData, setRadioData] = useState<any[]>([]);
   const [artistData, setArtistData] = useState<any[]>([]);
   const [editData, setEditData] = useState<any | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const [newData, setNewData] = useState<any>({
-    title: "",
-    description: "",
-    youTube: "",
-    thumbnail: "",
-    artists: [],
-    userId: "6790c75af5c1e10f364abfd9",
-    tags: "",
-    date: new Date().toISOString(),
-  });
+  // const [newData, setNewData] = useState<any>({
+  //   title: "",
+  //   description: "",
+  //   youTube: "",
+  //   thumbnail: "",
+  //   artists: [],
+  //   userId: "6790c75af5c1e10f364abfd9",
+  //   tags: "",
+  //   date: new Date().toISOString(),
+  // });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isNewOpen,
-    onOpen: onNewOpen,
-    onClose: onNewClose,
-  } = useDisclosure();
+  // const {
+  //   isOpen: isNewOpen,
+  //   onOpen: onNewOpen,
+  //   onClose: onNewClose,
+  // } = useDisclosure();
 
   const artistAllData: ArtistData[] = artistData as ArtistData[];
   const toast = useToast();
@@ -158,7 +169,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
     // Show confirmation toast
     toast({
       position: "top",
-      duration: null, 
+      duration: null,
       isClosable: false,
       render: ({ onClose }) => (
         <div
@@ -173,7 +184,14 @@ const RadioTv: React.FC<TableProps> = (props) => {
           <p style={{ fontSize: "16px", fontWeight: "bold" }}>
             Are you sure you want to delete this item?
           </p>
-          <div style={{ marginTop: "10px", display: "flex", justifyContent: "center", gap: "10px" }}>
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+          >
             <Button
               colorScheme="red"
               size="sm"
@@ -184,7 +202,9 @@ const RadioTv: React.FC<TableProps> = (props) => {
             >
               Yes, Delete
             </Button>
-            <Button size="sm" onClick={onClose}>Cancel</Button>
+            <Button size="sm" onClick={onClose}>
+              Cancel
+            </Button>
           </div>
         </div>
       ),
@@ -314,20 +334,6 @@ const RadioTv: React.FC<TableProps> = (props) => {
     }
   };
 
-  const handleNewPost = () => {
-    setNewData({
-      title: "",
-      description: "",
-      youTube: "",
-      thumbnail: "",
-      artists: [],
-      userId: "6790c75af5c1e10f364abfd9",
-      tags: "",
-      date: new Date().toISOString(),
-    });
-    onNewOpen();
-  };
-
   const handleCreatePost = async () => {
     try {
       const res = await apiPostReq("/radio", newData);
@@ -342,7 +348,7 @@ const RadioTv: React.FC<TableProps> = (props) => {
   };
 
   useEffect(() => {
-    apiGetReq("/radio", {}).then((res) => {
+    apiGetReq("/radio?limit=100", {}).then((res) => {
       console.log(res.records);
       setRadioData(res.records);
     });
@@ -350,20 +356,17 @@ const RadioTv: React.FC<TableProps> = (props) => {
 
   return (
     <>
-      <div className="flex items-center justify-end py-5">
-        {/* <Button colorScheme="green" onClick={handleNewPost}> */}
+      {/* <div className="flex items-center justify-end ">
         <CommonButton text="Add new Item" onClick={handleNewPost} />
-        {/* Add New Item */}
-        {/* </Button> */}
-      </div>
+      </div> */}
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
             className={`text-xs uppercase ${
-              props. themeMode
-              ? "text-white bg-[#5A1073]"
-              : "bg-[#3bd6c6] text-[#5A1073]"
+              themeMode
+                ? "text-white bg-[#5A1073]"
+                : "bg-[#3bd6c6] text-[#5A1073]"
             }`}
           >
             <tr>
@@ -381,12 +384,12 @@ const RadioTv: React.FC<TableProps> = (props) => {
               <tr
                 key={`article-table-${idx}`}
                 className={`border-b  ${
-                  !props.themeMode
+                  !themeMode
                     ? "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700"
                     : "bg-white text-gray-900 hover:bg-gray-200"
                 }`}
               >
-               <td className="px-4 py-3">{item?.title}</td>
+                <td className="px-4 py-3">{item?.title}</td>
                 <td className="px-4 py-3 ">
                   <img
                     src={item?.thumbnail || "https://placehold.co/50x50"}
@@ -419,9 +422,11 @@ const RadioTv: React.FC<TableProps> = (props) => {
                 </td> */}
                 <td className="px-4 py-3">
                   <div className="flex justify-center space-x-2">
-                    <button onClick={() => handleEdit(item._id)}><FaRegEdit /></button>
+                    <button onClick={() => handleEdit(item._id)}>
+                      <FaRegEdit />
+                    </button>
                     <button onClick={() => handleDelete(item._id)}>
-                    <RiDeleteBin6Line />
+                      <RiDeleteBin6Line />
                     </button>
                   </div>
                 </td>
@@ -435,92 +440,98 @@ const RadioTv: React.FC<TableProps> = (props) => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Edit Item</ModalHeader>
-          <ModalBody>
-            {/* artist */}
-            <FormControl id="artist" isRequired>
-              <FormLabel>Artist</FormLabel>
-              <Select
-                placeholder="Select Artist"
-                value={editData?.artists || ""}
-                onChange={(e) => handleInputChange(e, "artists")}
-              >
-                {artistAllData.length > 0 ? (
-                  artistAllData.map((items: any, index: number) => (
-                    <option key={index} value={items.artist._id}>
-                      {items.artist.name}
-                    </option>
-                  ))
-                ) : (
-                  <>
-                    <p>no data found</p>
-                  </>
-                )}
-              </Select>
-            </FormControl>
+          <div
+            className={` ${
+              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}
+          >
+            <ModalHeader>Edit Item</ModalHeader>
+            <ModalBody>
+              {/* artist */}
+              <FormControl id="artist" isRequired>
+                <FormLabel>Artist</FormLabel>
+                <Select
+                  placeholder="Select Artist"
+                  value={editData?.artists || ""}
+                  onChange={(e) => handleInputChange(e, "artists")}
+                >
+                  {artistAllData.length > 0 ? (
+                    artistAllData.map((items: any, index: number) => (
+                      <option key={index} value={items.artist._id}>
+                        {items.artist.name}
+                      </option>
+                    ))
+                  ) : (
+                    <>
+                      <p>no data found</p>
+                    </>
+                  )}
+                </Select>
+              </FormControl>
 
-            <FormControl id="title" isRequired mt={4}>
-              <FormLabel>Title</FormLabel>
-              <Input
-                value={editData?.title}
-                onChange={(e) => handleInputChange(e, "title")}
-                placeholder="Enter title"
-              />
-            </FormControl>
+              <FormControl id="title" isRequired mt={4}>
+                <FormLabel>Title</FormLabel>
+                <Input
+                  value={editData?.title}
+                  onChange={(e) => handleInputChange(e, "title")}
+                  placeholder="Enter title"
+                />
+              </FormControl>
 
-            <FormControl id="description" isRequired mt={4}>
-              <FormLabel>Description</FormLabel>
-              <Textarea
-                value={editData?.description}
-                onChange={(e) => handleInputChange(e, "description")}
-                placeholder="Enter description"
-              />
-            </FormControl>
+              <FormControl id="description" isRequired mt={4}>
+                <FormLabel>Description</FormLabel>
+                <Textarea
+                  value={editData?.description}
+                  onChange={(e) => handleInputChange(e, "description")}
+                  placeholder="Enter description"
+                />
+              </FormControl>
 
-            <FormControl id="youTube" mt={4}>
-              <FormLabel>YouTube URL</FormLabel>
-              <Input
-                value={editData?.youTube}
-                onChange={(e) => handleInputChange(e, "youTube")}
-                placeholder="Enter YouTube URL"
-              />
-            </FormControl>
+              <FormControl id="youTube" mt={4}>
+                <FormLabel>YouTube URL</FormLabel>
+                <Input
+                  value={editData?.youTube}
+                  onChange={(e) => handleInputChange(e, "youTube")}
+                  placeholder="Enter YouTube URL"
+                />
+              </FormControl>
 
-            <FormControl id="tags" mt={4}>
-              <FormLabel>Tags</FormLabel>
-              <Input
-                value={editData?.tags}
-                onChange={(e) => handleInputChange(e, "tags")}
-                placeholder="Enter tags"
-              />
-            </FormControl>
+              <FormControl id="tags" mt={4}>
+                <FormLabel>Tags</FormLabel>
+                <Input
+                  value={editData?.tags}
+                  onChange={(e) => handleInputChange(e, "tags")}
+                  placeholder="Enter tags"
+                />
+              </FormControl>
 
-            <FormControl id="thumbnail" mt={4}>
-              <FormLabel>Thumbnail</FormLabel>
-              <img
-                width={200}
-                height={200}
-                src={editData?.thumbnail}
-                alt="Enter thumbnail URL"
-              />
+              <FormControl id="thumbnail" mt={4}>
+                <FormLabel>Thumbnail</FormLabel>
+                <img
+                  width={200}
+                  height={200}
+                  src={editData?.thumbnail}
+                  alt="Enter thumbnail URL"
+                />
 
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                mt={2}
-              />
-            </FormControl>
-          </ModalBody>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  mt={2}
+                />
+              </FormControl>
+            </ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSave}>
-              Save
-            </Button>
-            <Button variant="ghost" onClick={onClose}>
-              Cancel
-            </Button>
-          </ModalFooter>
+            <ModalFooter>
+              <Button colorScheme="blue" onClick={handleSave} className="mr-3">
+                Save
+              </Button>
+              <Button variant="red" onClick={onClose}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </div>
         </ModalContent>
       </Modal>
 
@@ -528,88 +539,102 @@ const RadioTv: React.FC<TableProps> = (props) => {
       <Modal isOpen={isNewOpen} onClose={onNewClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add New Item</ModalHeader>
-          <ModalBody>
-            <FormControl isRequired>
-              <FormLabel>Artist</FormLabel>
-              <Select
-                placeholder="Select Artist"
-                value={newData?.artists}
-                onChange={(e) => handleNewInputChange(e, "artists")}
+          <div
+            className={` ${
+              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}
+          >
+            <ModalHeader>Add New Item</ModalHeader>
+            <ModalBody>
+              <FormControl isRequired>
+                <FormLabel>Artist</FormLabel>
+                <Select
+                  placeholder="Select Artist"
+                  value={newData?.artists}
+                  onChange={(e) => handleNewInputChange(e, "artists")}
+                >
+                  {artistAllData.length > 0 ? (
+                    artistAllData?.map((items: any, index: number) => (
+                      <option
+                        key={index}
+                        value={items.artist._id}
+                        className={`${themeMode ? "text-white bg-gray-700" : " text-black bg-gray-700"}`}
+                      >
+                        {items.artist.name}
+                      </option>
+                    ))
+                  ) : (
+                    <p>No data found</p>
+                  )}
+                </Select>
+              </FormControl>
+
+              <FormControl isRequired mt={4}>
+                <FormLabel>Title</FormLabel>
+                <Input
+                  value={newData?.title}
+                  onChange={(e) => handleNewInputChange(e, "title")}
+                  placeholder="Enter title"
+                />
+              </FormControl>
+
+              <FormControl isRequired mt={4}>
+                <FormLabel>Description</FormLabel>
+                <Textarea
+                  value={newData?.description}
+                  onChange={(e) => handleNewInputChange(e, "description")}
+                  placeholder="Enter description"
+                />
+              </FormControl>
+
+              <FormControl mt={4}>
+                <FormLabel>YouTube URL</FormLabel>
+                <Input
+                  value={newData?.youTube}
+                  onChange={(e) => handleNewInputChange(e, "youTube")}
+                  placeholder="Enter YouTube URL"
+                />
+              </FormControl>
+
+              <FormControl mt={4}>
+                <FormLabel>Tags</FormLabel>
+                <Input
+                  value={newData.tags}
+                  onChange={(e) => handleNewInputChange(e, "tags")}
+                  placeholder="Enter tags"
+                />
+              </FormControl>
+
+              <FormControl mt={4}>
+                <FormLabel>Thumbnail</FormLabel>
+                <img
+                  width={200}
+                  height={200}
+                  src={newData?.thumbnail || FolderImage}
+                  alt="Thumbnail Preview"
+                />
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleNewImageUpload}
+                  mt={2}
+                />
+              </FormControl>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button
+                colorScheme="blue"
+                onClick={handleCreatePost}
+                className="mr-3"
               >
-                {artistAllData.length > 0 ? (
-                  artistAllData?.map((items: any, index: number) => (
-                    <option key={index} value={items.artist._id}>
-                      {items.artist.name}
-                    </option>
-                  ))
-                ) : (
-                  <p>No data found</p>
-                )}
-              </Select>
-            </FormControl>
-
-            <FormControl isRequired mt={4}>
-              <FormLabel>Title</FormLabel>
-              <Input
-                value={newData?.title}
-                onChange={(e) => handleNewInputChange(e, "title")}
-                placeholder="Enter title"
-              />
-            </FormControl>
-
-            <FormControl isRequired mt={4}>
-              <FormLabel>Description</FormLabel>
-              <Textarea
-                value={newData?.description}
-                onChange={(e) => handleNewInputChange(e, "description")}
-                placeholder="Enter description"
-              />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>YouTube URL</FormLabel>
-              <Input
-                value={newData?.youTube}
-                onChange={(e) => handleNewInputChange(e, "youTube")}
-                placeholder="Enter YouTube URL"
-              />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Tags</FormLabel>
-              <Input
-                value={newData.tags}
-                onChange={(e) => handleNewInputChange(e, "tags")}
-                placeholder="Enter tags"
-              />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Thumbnail</FormLabel>
-              <img
-                width={200}
-                height={200}
-                src={newData?.thumbnail || "https://placehold.co/200x200"}
-                alt="Thumbnail Preview"
-              />
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={handleNewImageUpload}
-                mt={2}
-              />
-            </FormControl>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="blue" onClick={handleCreatePost}>
-              Save
-            </Button>
-            <Button variant="ghost" onClick={onNewClose}>
-              Cancel
-            </Button>
-          </ModalFooter>
+                Save
+              </Button>
+              <Button variant="red" onClick={onNewClose}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </div>
         </ModalContent>
       </Modal>
     </>

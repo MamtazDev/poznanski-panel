@@ -18,7 +18,7 @@ const axiosAPIFormData = axios.create({
 export async function apiPostReq(
   path: string,
   body: object,
-  formData: boolean = false,
+  formData: boolean = false
 ): Promise<any> {
   try {
     if (formData) {

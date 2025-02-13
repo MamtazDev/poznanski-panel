@@ -45,13 +45,13 @@ export const getExtensionsData = (
 	}),
 		Image.configure({
 		HTMLAttributes: {
-			class: 'mx-auto my-3 max-h-[494px] max-w-[870px] object-cover',
+			class: 'mx-auto my-3 max-h-[494px] object-cover',
 			style: `border-radius: 16px; border: 1px solid #e5e7eb;`
 		},
 	}),
 	customYouTubeArticle,
 	Link.configure({
-		validate: (href:any) => /^https?:\/\//.test(href),
+		validate: (href) => /^https?:\/\//.test(href),
 		autolink: true,
 		HTMLAttributes: {
 			class: 'editor-link',
@@ -150,8 +150,6 @@ const TipTap: React.FC<TipTapProps> = ({
 		}
 	};
 
-
-
 	const handleFileChange = async (
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
@@ -216,7 +214,7 @@ const TipTap: React.FC<TipTapProps> = ({
 						<Box
 							sx={{
 								'&& .ProseMirror': {
-									height: editable ? '600px' : 'auto',
+									height: editable ? '270px' : 'auto',
 									overflowY: 'auto',
 									border: editable
 										? `1px solid ${themeMode ? '' : '#e5e7eb86'}`
