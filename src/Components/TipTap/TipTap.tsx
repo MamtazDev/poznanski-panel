@@ -96,7 +96,6 @@ const TipTap: React.FC<TipTapProps> = ({
 }) => {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const dispatch = useDispatch<AppDispatch>();
-
 	const onEditorUpdate = (htmlString: string) => {
 		if (setArticle && setFiles) {
 			setArticle(htmlString);

@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Select, Avatar } from "@chakra-ui/react";
+import { Image, Select, Avatar, Text } from "@chakra-ui/react";
 import CrudBtn from "../../CrudBtn";
 import PaginationBar from "../../PaginationBar";
 import "./style.css";
@@ -89,6 +89,9 @@ const ArtistTable: React.FC<TableProps> = (props) => {
                       fill="#8A96A3"
                     />
                   </svg>
+                  <Text fontSize="lg" color="gray.500">
+                    Data is not available
+                  </Text>
                 </div>
               </tr>
             )}

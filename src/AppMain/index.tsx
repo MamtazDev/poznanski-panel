@@ -13,7 +13,7 @@ import { closePlayer } from "../reducers/PlayerReducer";
 const AdminPanel = lazy(() => import("../Pages/AdminPanel"));
 const Article = lazy(() => import("../Pages/AdminPanel/Article"));
 const PropossedArticle = lazy(
-  () => import("../Pages/AdminPanel/PropossedArticle"),
+  () => import("../Pages/AdminPanel/PropossedArticle")
 );
 const MaterialContent = lazy(() => import("../Pages/AdminPanel/Materials"));
 const Concert = lazy(() => import("../Pages/AdminPanel/Concert"));
@@ -61,8 +61,7 @@ const AppMain: React.FC = () => {
               size="lg"
             />
           </div>
-        }
-      >
+        }>
         <ScrollToTopOnPageChange />
         <Routes>
           <Route path="" element={<Navigate to="admin" />} />
