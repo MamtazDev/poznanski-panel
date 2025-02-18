@@ -83,7 +83,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     confirmed: false,
     tags: "",
   });
-
+  console.log(newData, "set newData here") //Rafa
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isNewOpen,
@@ -144,21 +144,11 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     }
   };
 
-  // const handleEdit = (id: string) => {
-  //   const selectedItem = cardData.find((item) => item._id === id);
-  //   if (selectedItem) {
-  //     // const parsedContent = JSON.parse(String(selectedItem.content)); // Parse the content
-  //     // setEditData({ ...selectedItem, content: parsedContent }); // Set parsed content
-  //     setEditData({ ...selectedItem }); // Set parsed content
-  //     onOpen();
-  //   }
-  // };
-
   const handleEdit = (id: string) => {
     const selectedItem = cardData.find((item) => item._id === id);
     if (selectedItem) {
       setEditData({ ...selectedItem });
-      setPreview(selectedItem.files?.[0] || null); // Set the preview image
+      setPreview(selectedItem.files?.[0] || null);
       onOpen();
     }
   };
@@ -282,9 +272,8 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
         date: new Date(newData.date).toISOString(),
       };
       const res = await apiPostReq("/news", formattedData);
-      // const res = await apiPostReq("/news", newData);
       if (res.success) {
-        fetchArticles(); // Refetch data after creation
+        fetchArticles();
         toast({
           title: "Article created successfully!",
           status: "success",
@@ -326,8 +315,6 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
 
   const handleSave = async () => {
     if (!editData || !editData._id) return;
-    console.log("editData", editData)
-
     const updatedData = {
       ...editData,
       date: new Date(editData.date).toISOString(),
@@ -503,21 +490,14 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                   width="150px"
                   height="150px">
                   <Image
+                    className="w-full h-full"
                     src={preview}
                     alt="Uploaded Preview"
-                    objectFit="cover"
+                    objectFit="fill"
                   />
                 </Box>
               )}
 
-              {/* Upload Input */}
-              {/* <Input
-                type="file"
-                value={editData?.files || ""}
-                p={1}
-                onChange={handleFileChange}
-                accept="image/*"
-              /> */}
               <Input
                 type="file"
                 p={1}
@@ -597,16 +577,6 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
               />
             </FormControl>
 
-            {/* Rich Text Editor */}
-            {/* <VStack spacing={4} align="stretch" mt={4}>
-              <TipTapPage
-                content={editData?.content || ""}
-                setContent={(newContent) =>
-                  handleContentChange(newContent, false)
-                }
-              />
-            </VStack> */}
-
             {/* Date */}
             <FormControl id="date" isRequired>
               <FormLabel>Date</FormLabel>
@@ -674,7 +644,8 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                   <Image
                     src={preview}
                     alt="Uploaded Preview"
-                    objectFit="cover"
+                    className="w-full h-full"
+                    objectFit="fill"
                   />
                 </Box>
               )}
