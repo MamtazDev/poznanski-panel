@@ -139,16 +139,26 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
             prev ? { ...prev, files: [uploadedImageUrl] } : null
           );
         }
+        setPreview(uploadedImageUrl); // Set the preview image
       }
     }
   };
 
+  // const handleEdit = (id: string) => {
+  //   const selectedItem = cardData.find((item) => item._id === id);
+  //   if (selectedItem) {
+  //     // const parsedContent = JSON.parse(String(selectedItem.content)); // Parse the content
+  //     // setEditData({ ...selectedItem, content: parsedContent }); // Set parsed content
+  //     setEditData({ ...selectedItem }); // Set parsed content
+  //     onOpen();
+  //   }
+  // };
+
   const handleEdit = (id: string) => {
     const selectedItem = cardData.find((item) => item._id === id);
     if (selectedItem) {
-      // const parsedContent = JSON.parse(String(selectedItem.content)); // Parse the content
-      // setEditData({ ...selectedItem, content: parsedContent }); // Set parsed content
-      setEditData({ ...selectedItem }); // Set parsed content
+      setEditData({ ...selectedItem });
+      setPreview(selectedItem.files?.[0] || null); // Set the preview image
       onOpen();
     }
   };
@@ -307,7 +317,6 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     isNew: boolean = false
   ) => {
     const { value } = e.target;
-
     if (isNew) {
       setNewData((prev) => ({ ...prev, [field]: value }));
     } else {
@@ -315,13 +324,14 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     }
   };
 
-  // Handle Image Selection
   const handleSave = async () => {
     if (!editData || !editData._id) return;
+
     const updatedData = {
       ...editData,
-      date: new Date(editData.date).toISOString(), // Format the date
+      date: new Date(editData.date).toISOString(),
       content: JSON.stringify(editData.content),
+      files: editData.files, // Ensure files array is included
     };
 
     try {
@@ -404,9 +414,15 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
           <tbody>
             {cardData?.length > 0 ? (
               cardData.map((item) => (
-                <tr key={item._id} className={`border-b py-3 ${!themeMode ? "bg-gray-800 text-gray-200 hover:bg-gray-700" : "bg-white text-gray-900 hover:bg-gray-200"}`}>
+                <tr
+                  key={item._id}
+                  className={`border-b py-3 ${!themeMode ? "bg-gray-800 text-gray-200 hover:bg-gray-700" : "bg-white text-gray-900 hover:bg-gray-200"}`}>
                   <td>
-                    <img src={item?.files?.[0] || staticImg} className="rounded-full w-[50px] h-[50px] my-2 flex items-center mx-auto" alt="img"/>
+                    <img
+                      src={item?.files?.[0] || staticImg}
+                      className="rounded-full w-[50px] h-[50px] my-2 flex items-center mx-auto"
+                      alt="img"
+                    />
                   </td>
 
                   <td>
@@ -494,10 +510,17 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
               )}
 
               {/* Upload Input */}
+              {/* <Input
+                type="file"
+                value={editData?.files || ""}
+                p={1}
+                onChange={handleFileChange}
+                accept="image/*"
+              /> */}
               <Input
                 type="file"
                 p={1}
-                onChange={handleFileChange}
+                onChange={(e) => handleImageUpload(e, false)}
                 accept="image/*"
               />
 
@@ -507,7 +530,12 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                   size="sm"
                   colorScheme="red"
                   mt={2}
-                  onClick={() => setPreview(null)}>
+                  onClick={() => {
+                    setPreview(null);
+                    setEditData((prev) =>
+                      prev ? { ...prev, files: [""] } : null
+                    );
+                  }}>
                   Remove Image
                 </Button>
               )}

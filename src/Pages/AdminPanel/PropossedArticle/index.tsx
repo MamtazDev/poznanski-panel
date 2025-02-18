@@ -34,10 +34,9 @@ import {
   apiPutReq,
 } from "../../../Constant/api-functions";
 import CommonButton from "../../../Components/Buttons/CommonButton";
-import PaginationBar from "../../../Components/PaginationBar";
-import { FaRegEdit } from "react-icons/fa";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import TipTapPage from "../../../Components/TipTapPage";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { FaRegEdit } from "react-icons/fa";
 
 interface Content {
   subHead: string;
@@ -53,7 +52,7 @@ interface News {
   tags: string;
   date: string;
   files?: string[];
-  content: "";
+  content: string;
   link: string;
   nickname: string;
   email: string;
@@ -69,7 +68,6 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [preview, setPreview] = useState<string | null>(null);
   const [editData, setEditData] = useState<News | null>(null);
-  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [newData, setNewData] = useState<News>({
     _id: "",
     title: "",
@@ -78,6 +76,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
     files: [""],
     date: "",
     content: "",
+    // content: [{ subHead: "", img: "", description: "" }],
     link: "",
     nickname: "",
     email: "",
@@ -140,34 +139,41 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
             prev ? { ...prev, files: [uploadedImageUrl] } : null
           );
         }
+        setPreview(uploadedImageUrl); // Set the preview image
       }
     }
   };
 
+  // const handleEdit = (id: string) => {
+  //   const selectedItem = cardData.find((item) => item._id === id);
+  //   if (selectedItem) {
+  //     // const parsedContent = JSON.parse(String(selectedItem.content)); // Parse the content
+  //     // setEditData({ ...selectedItem, content: parsedContent }); // Set parsed content
+  //     setEditData({ ...selectedItem }); // Set parsed content
+  //     onOpen();
+  //   }
+  // };
+
   const handleEdit = (id: string) => {
     const selectedItem = cardData.find((item) => item._id === id);
     if (selectedItem) {
-      const parsedContent = selectedItem.content; // Parse the content
-      console.log("parsedContent", parsedContent);
-      setEditData({ ...selectedItem, content: parsedContent }); // Set parsed content
+      setEditData({ ...selectedItem });
+      setPreview(selectedItem.files?.[0] || null); // Set the preview image
       onOpen();
     }
   };
 
   const handleDelete = async (id: string) => {
-    setDeleteId(id);
+    // Show confirmation toast
     toast({
-      title: "Confirm Deletion",
-      description: "Are you sure you want to delete this item?",
-      status: "warning",
-      duration: null,
-      isClosable: false,
       position: "top",
+      duration: null, // Wait until user action
+      isClosable: false,
       render: ({ onClose }) => (
         <div
           style={{
+            background: "white",
             padding: "20px",
-            background: "#fff",
             borderRadius: "8px",
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
             textAlign: "center",
@@ -177,7 +183,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
           </p>
           <div
             style={{
-              marginTop: "15px",
+              marginTop: "10px",
               display: "flex",
               justifyContent: "center",
               gap: "10px",
@@ -185,10 +191,13 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
             <Button
               colorScheme="red"
               size="sm"
-              onClick={() => confirmDelete(id, onClose)}>
+              onClick={async () => {
+                onClose(); // Close confirmation toast
+                await deleteItem(id);
+              }}>
               Yes, Delete
             </Button>
-            <Button size="sm" colorScheme="blue" onClick={onClose}>
+            <Button size="sm" onClick={onClose}>
               Cancel
             </Button>
           </div>
@@ -197,38 +206,55 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
     });
   };
 
-  const confirmDelete = async (id: string, onClose: () => void) => {
-    onClose(); // Close the confirmation toast
+  const deleteItem = async (id: string) => {
     try {
       const res = await apiDeleteReq(`/news/${id}`, {});
       if (res.success) {
-        toast({ title: "Deleted successfully!", status: "success" });
+        toast({
+          title: "Deleted successfully!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
         fetchArticles();
       } else {
-        toast({ title: "Failed to delete", status: "error" });
+        toast({
+          title: "Failed to delete",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
       }
     } catch (error) {
       console.error("Error deleting:", error);
-      toast({ title: "Error deleting item", status: "error" });
+      toast({
+        title: "Error deleting item",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
     }
   };
 
   const handleContentChange = (newContent: string, isNew: boolean = false) => {
-    // if (isNew) {
-    //   setNewData((prev) => ({
-    //     ...prev,
-    //     content: newContent,
-    //   }));
-    // } else {
-    //   setEditData((prev) =>
-    //     prev
-    //       ? {
-    //           ...prev,
-    //           content: newContent,
-    //         }
-    //       : null
-    //   );
-    // }
+    if (isNew) {
+      setNewData((prev) => ({
+        ...prev,
+        content: newContent,
+      }));
+    } else {
+      setEditData((prev) =>
+        prev
+          ? {
+              ...prev,
+              content: newContent,
+            }
+          : null
+      );
+    }
   };
 
   const handleAddArticle = () => {
@@ -251,7 +277,12 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
 
   const handleCreateArticle = async () => {
     try {
-      const res = await apiPostReq("/news", newData);
+      const formattedData = {
+        ...newData,
+        date: new Date(newData.date).toISOString(),
+      };
+      const res = await apiPostReq("/news", formattedData);
+      // const res = await apiPostReq("/news", newData);
       if (res.success) {
         fetchArticles(); // Refetch data after creation
         toast({
@@ -286,7 +317,6 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
     isNew: boolean = false
   ) => {
     const { value } = e.target;
-
     if (isNew) {
       setNewData((prev) => ({ ...prev, [field]: value }));
     } else {
@@ -294,12 +324,14 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
     }
   };
 
-  // Handle Image Selection
   const handleSave = async () => {
     if (!editData || !editData._id) return;
+
     const updatedData = {
       ...editData,
+      date: new Date(editData.date).toISOString(),
       content: JSON.stringify(editData.content),
+      files: editData.files, // Ensure files array is included
     };
 
     try {
@@ -359,6 +391,8 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
         <CommonButton text="Add article" onClick={handleAddArticle} />
       </div>
 
+      {/* <TipTapPage/> */}
+
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
@@ -376,16 +410,13 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
               <th className="px-6 py-3">Action</th>
             </tr>
           </thead>
+
           <tbody>
             {cardData?.length > 0 ? (
               cardData.map((item) => (
                 <tr
                   key={item._id}
-                  className={`border-b py-3 ${
-                    !themeMode
-                      ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
-                      : "bg-white text-gray-900 hover:bg-gray-200"
-                  }`}>
+                  className={`border-b py-3 ${!themeMode ? "bg-gray-800 text-gray-200 hover:bg-gray-700" : "bg-white text-gray-900 hover:bg-gray-200"}`}>
                   <td>
                     <img
                       src={item?.files?.[0] || staticImg}
@@ -393,18 +424,23 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                       alt="img"
                     />
                   </td>
+
                   <td>
                     <p className="truncate max-w-[300px]">{item.title}</p>
                   </td>
+
                   <td>
                     <p className="truncate max-w-[300px]">{item.nickname}</p>
                   </td>
+
                   <td>
                     <p className="truncate max-w-[300px]">{item.tags}</p>
                   </td>
+
                   <td>
                     <p className="truncate max-w-[300px]">{item.date}</p>
                   </td>
+
                   <td>
                     <div className="flex justify-center space-x-2">
                       <button onClick={() => handleEdit(item._id)}>
@@ -474,24 +510,38 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
               )}
 
               {/* Upload Input */}
-              <Input
+              {/* <Input
                 type="file"
+                value={editData?.files || ""}
                 p={1}
                 onChange={handleFileChange}
                 accept="image/*"
+              /> */}
+              <Input
+                type="file"
+                p={1}
+                onChange={(e) => handleImageUpload(e, false)}
+                accept="image/*"
               />
 
+              {/* Remove Image Button */}
               {preview && (
                 <Button
                   size="sm"
                   colorScheme="red"
                   mt={2}
-                  onClick={() => setPreview(null)}>
+                  onClick={() => {
+                    setPreview(null);
+                    setEditData((prev) =>
+                      prev ? { ...prev, files: [""] } : null
+                    );
+                  }}>
                   Remove Image
                 </Button>
               )}
             </FormControl>
 
+            {/* Grid Layout for Input Fields */}
             <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
               <FormControl id="title" isRequired>
                 <FormLabel>Title</FormLabel>
@@ -547,14 +597,25 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
             </FormControl>
 
             {/* Rich Text Editor */}
-            <VStack spacing={4} align="stretch" mt={4}>
-              {/* <TipTapPage
+            {/* <VStack spacing={4} align="stretch" mt={4}>
+              <TipTapPage
                 content={editData?.content || ""}
                 setContent={(newContent) =>
                   handleContentChange(newContent, false)
                 }
-              /> */}
-            </VStack>
+              />
+            </VStack> */}
+
+            {/* Date */}
+            <FormControl id="date" isRequired>
+              <FormLabel>Date</FormLabel>
+              <Input
+                type="date"
+                value={editData?.date || ""}
+                onChange={(e) => handleInputChange(e, "date", false)}
+                focusBorderColor="blue.500"
+              />
+            </FormControl>
 
             {/* Checkbox */}
             <FormControl
@@ -577,10 +638,8 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
 
           {/* Buttons */}
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSave} mr={3}>
-              Save
-            </Button>
-            <Button variant="outline" onClick={onClose}>
+            <Button onClick={handleSave}>Save</Button>
+            <Button variant="ghost" onClick={onClose} className="ml-3">
               Cancel
             </Button>
           </ModalFooter>
@@ -596,7 +655,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
             fontWeight="bold"
             textAlign="center"
             color="blue.600">
-            Proposed Article
+            Create New Article
           </ModalHeader>
 
           <ModalBody>
@@ -693,14 +752,25 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
             </FormControl>
 
             {/* Rich Text Editor */}
-            <VStack spacing={4} align="stretch" mt={4}>
+            <VStack spacing={4} align="stretch" mt={4} mb={4}>
               <TipTapPage
-                content={newData.content || ""}
+                content={newData.content}
                 setContent={(newContent) =>
                   handleContentChange(newContent, true)
                 }
               />
             </VStack>
+
+            {/* Date */}
+            <FormControl id="date" isRequired>
+              <FormLabel>Date</FormLabel>
+              <Input
+                type="date"
+                value={newData?.date || ""}
+                onChange={(e) => handleInputChange(e, "date", true)}
+                focusBorderColor="blue.500"
+              />
+            </FormControl>
 
             {/* Checkbox */}
             <FormControl
