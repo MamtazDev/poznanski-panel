@@ -326,11 +326,12 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
 
   const handleSave = async () => {
     if (!editData || !editData._id) return;
+    console.log("editData", editData)
 
     const updatedData = {
       ...editData,
       date: new Date(editData.date).toISOString(),
-      content: JSON.stringify(editData.content),
+      // content: JSON.stringify(editData.content),
       files: editData.files, // Ensure files array is included
     };
 
