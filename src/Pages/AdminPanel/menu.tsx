@@ -65,7 +65,7 @@ const Menu: React.FC<MenuProps> = ({ selectedMenu, setSelectedMenu }) => {
   };
 
   return (
-    <div className="flex flex-col gap-1 w-full">
+    <div className="flex flex-col gap-1 w-full px-5">
       {mainMenu.map((item, idx) => (
         <Link key={idx} to={`/admin/${item.link}`}>
           <div
