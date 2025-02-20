@@ -33,7 +33,7 @@ export type FileFromEditor = {
 };
 
 const TipTapPage1: React.FC<TipTapProps> = ({ content, setContent }) => {
-  console.log("content", content);
+  // console.log("content", content);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [files, setFiles] = useState<FileFromEditor[] | null>(null);
   const [editorContent, setEditorContent] = useState<string>(content || "");

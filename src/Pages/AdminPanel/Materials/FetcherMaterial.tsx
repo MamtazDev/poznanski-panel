@@ -23,7 +23,7 @@ function FetcherMaterial() {
 						},
 					}
 				);
-                console.log(channelResponse)
+               //  console.log(channelResponse)
 				const channelId = channelResponse.data.items[0]?.id;
 
 				if (!channelId) {
@@ -77,7 +77,7 @@ function FetcherMaterial() {
 		};
 
 		fetchAllChannelVideos();
-        console.log("Videos", videos)
+      //   console.log("Videos", videos)
 	}, []);
 
 

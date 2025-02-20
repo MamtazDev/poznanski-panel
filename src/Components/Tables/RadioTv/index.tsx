@@ -307,7 +307,7 @@ const RadioTv: React.FC<TableProps> = ({
       // Prevent duplicate tags
       if (!tags.includes(tagInput.trim())) {
         setTags([...tags, tagInput.trim()]);
-        setNewData({ ...newData, ['tags']: [...tags, tagInput.trim()]  });
+        setNewData({ ...newData, ['tags']: [...tags, tagInput.trim()] });
 
       }
       setTagInput(""); // Clear the input
@@ -332,11 +332,10 @@ const RadioTv: React.FC<TableProps> = ({
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
-            className={`text-xs uppercase ${
-              themeMode
+            className={`text-xs uppercase ${themeMode
                 ? "text-white bg-[#5A1073]"
                 : "bg-[#3bd6c6] text-[#5A1073]"
-            }`}>
+              }`}>
             <tr>
               <th className="px-6 py-3 w-32">Title</th>
               <th className="px-6 py-3 w-32">Image</th>
@@ -350,12 +349,11 @@ const RadioTv: React.FC<TableProps> = ({
             {radioData.length > 0 ? (
               radioData?.map((item, idx) => (
                 <tr
-                  key={`article-table-${idx}`}
-                  className={`border-b  ${
-                    !themeMode
+                  key={idx}
+                  className={`border-b  ${!themeMode
                       ? "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700"
                       : "bg-white text-gray-900 hover:bg-gray-200"
-                  }`}>
+                    }`}>
                   <td className="px-4 py-3">
                     <p className="truncate max-w-[200px]">{item?.title}</p>
                   </td>
@@ -376,15 +374,14 @@ const RadioTv: React.FC<TableProps> = ({
                       <iframe
                         src={
                           item?.youTube?.includes("youtube.com/watch")
-                            ? `https://www.youtube.com/embed/${
-                                item?.youTube?.split("v=")[1].split("&")[0]
-                              }`
+                            ? `https://www.youtube.com/embed/${item?.youTube?.split("v=")[1].split("&")[0]
+                            }`
                             : item?.youTube ||
-                              "https://www.youtube.com/embed/6JYIGclVQdw"
+                            "https://www.youtube.com/embed/6JYIGclVQdw"
                         }
                         title="YouTube video player"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        frameBorder="0"
+                        // frameBorder="0"
                         className="w-40 h-24 md: rounded-lg shadow-lg"></iframe>
                     </div>
                   </td>
@@ -429,9 +426,8 @@ const RadioTv: React.FC<TableProps> = ({
         <ModalOverlay />
         <ModalContent>
           <div
-            className={` ${
-              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-            }`}>
+            className={` ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+              }`}>
             <ModalHeader>Edit Item</ModalHeader>
             <ModalBody>
               {/* artist */}
@@ -439,8 +435,9 @@ const RadioTv: React.FC<TableProps> = ({
                 <FormLabel>Artist</FormLabel>
                 <Select
                   placeholder="Select Artist"
-                  value={editData?.artists || ""}
-                  onChange={(e) => handleInputChange(e, "artists")}>
+                  value={editData?.artists || ""} // Ensure this is a scalar value
+                  onChange={(e) => handleInputChange(e, "artists")}
+                >
                   {artistAllData.length > 0 ? (
                     artistAllData.map((items: any, index: number) => (
                       <option key={index} value={items.artist._id}>
@@ -448,11 +445,10 @@ const RadioTv: React.FC<TableProps> = ({
                       </option>
                     ))
                   ) : (
-                    <>
-                      <p>no data found</p>
-                    </>
+                    <p>No data found</p>
                   )}
                 </Select>
+
               </FormControl>
 
               <FormControl id="title" isRequired mt={4}>
@@ -526,16 +522,15 @@ const RadioTv: React.FC<TableProps> = ({
         <ModalOverlay />
         <ModalContent>
           <div
-            className={` ${
-              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-            }`}>
+            className={` ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+              }`}>
             <ModalHeader>Add New Item</ModalHeader>
             <ModalBody>
               <FormControl isRequired>
                 <FormLabel>Artist</FormLabel>
                 <Select
                   placeholder="Select Artist"
-                  value={newData?.artists}
+                  value={newData?.artists || []}
                   onChange={(e) => handleNewInputChange(e, "artists")}>
                   {artistAllData.length > 0 ? (
                     artistAllData?.map((items: any, index: number) => (

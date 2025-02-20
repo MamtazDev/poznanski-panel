@@ -37,6 +37,7 @@ import CommonButton from "../../../Components/Buttons/CommonButton";
 import TipTapPage from "../../../Components/TipTapPage";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
+import moment from "moment";
 
 interface Content {
   subHead: string;
@@ -61,13 +62,16 @@ interface News {
 
 interface ArticleProps {
   tagData: any[];
+  date?:string
 }
 
-const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
+const PropossedArticle: React.FC<ArticleProps> = ({ tagData ,date}) => {
   const [cardData, setCardData] = useState<News[]>([]);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [preview, setPreview] = useState<string | null>(null);
   const [editData, setEditData] = useState<News | null>(null);
+    const dateFormated = moment(date).format("DD/MM/YYYY");
+
   const [newData, setNewData] = useState<News>({
     _id: "",
     title: "",
@@ -438,7 +442,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                   </td>
 
                   <td>
-                    <p className="truncate max-w-[300px]">{item.date}</p>
+                    <p className="truncate max-w-[300px]">{dateFormated}</p>
                   </td>
 
                   <td>
@@ -607,7 +611,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
             </VStack> */}
 
             {/* Date */}
-            <FormControl id="date" isRequired>
+            {/* <FormControl id="date" isRequired>
               <FormLabel>Date</FormLabel>
               <Input
                 type="date"
@@ -615,7 +619,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                 onChange={(e) => handleInputChange(e, "date", false)}
                 focusBorderColor="blue.500"
               />
-            </FormControl>
+            </FormControl> */}
 
             {/* Checkbox */}
             <FormControl
