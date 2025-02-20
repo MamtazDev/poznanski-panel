@@ -50,7 +50,7 @@ const YoutubePlayer: React.FC<PlayerProps> = ({ link }) => {
   }, []);
 
   const _onReady = (event: { target: any }) => {
-    console.log("test");
+    // console.log("test");
     event.target.pauseVideo();
   };
   return (
@@ -59,7 +59,7 @@ const YoutubePlayer: React.FC<PlayerProps> = ({ link }) => {
         videoId={videoId}
         // id={videoId}
         onPlay={() => {
-          console.log("test");
+          // console.log("test");
         }}
         opts={opts}
         onReady={(event: any) => {

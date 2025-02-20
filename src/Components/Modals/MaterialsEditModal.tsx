@@ -133,7 +133,7 @@ const MaterialsEditModal: React.FC<ModalProps> = ({
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 

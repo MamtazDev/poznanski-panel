@@ -289,7 +289,7 @@ const RadioTv: React.FC<TableProps> = ({
 
   useEffect(() => {
     apiGetReq("/radio?limit=100", {}).then((res) => {
-      console.log(res.records);
+      // console.log(res.records);
       setRadioData(res.records);
     });
   }, []);
@@ -370,7 +370,7 @@ const RadioTv: React.FC<TableProps> = ({
               ))
             ) : (
               <tr className="relative" style={{ height: "400px" }}>
-                <div className="absolute top-1/2 left-1/2 w-32 -translate-x-1/2 -translate-y-1/2">
+                <td className="absolute top-1/2 left-1/2 w-32 -translate-x-1/2 -translate-y-1/2">
                   <svg
                     className="svg-icon"
                     viewBox="0 0 1567 1024"
@@ -384,7 +384,7 @@ const RadioTv: React.FC<TableProps> = ({
                   <Text fontSize="lg" color="gray.500">
                     Data is not available
                   </Text>
-                </div>
+                </td>
               </tr>
             )}
           </tbody>

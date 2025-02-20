@@ -35,7 +35,7 @@ interface TableProps {
 const MaterialsTable: React.FC<TableProps> = (props) => {
   const [materials, setMaterialsData] = useState<any[]>([]);
 
-  console.log(materials, "materialsmaterialsmaterials");
+  // console.log(materials, "materialsmaterialsmaterials");
   useEffect(() => {
     apiGetReq(`/materials`, {}).then((res) => {
       setMaterialsData(res?.materials);
@@ -101,7 +101,7 @@ const MaterialsTable: React.FC<TableProps> = (props) => {
               ))
             ) : (
               <tr className="relative" style={{ height: "400px" }}>
-                <div className="absolute top-1/2 left-1/2 w-32 -translate-x-1/2 -translate-y-1/2">
+                <td className="absolute top-1/2 left-1/2 w-32 -translate-x-1/2 -translate-y-1/2">
                   <svg
                     className="svg-icon"
                     // style={{width: "1.5302734375em", height: "1em", vertical-align: "middle", fill: "currentColor", overflow: "hidden"}}
@@ -114,7 +114,7 @@ const MaterialsTable: React.FC<TableProps> = (props) => {
                       fill="#8A96A3"
                     />
                   </svg>
-                </div>
+                </td>
               </tr>
             )}
           </tbody>

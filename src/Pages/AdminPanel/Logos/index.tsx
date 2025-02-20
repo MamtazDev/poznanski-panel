@@ -95,7 +95,7 @@ const PartnerLogos = () => {
   };
 
   const handleEdit = (id: string) => {
-    console.log("edit:", id);
+    // console.log("edit:", id);
     setModalData(cardData.filter((item) => item.id === id)[0]);
     setOpenEditModal(true);
   };
@@ -106,7 +106,7 @@ const PartnerLogos = () => {
   };
 
   const handleEditData = () => {
-    console.log(modalData);
+    // console.log(modalData);
     apiPutReq("/logo", modalData).then((res) => {
       if (res.success) {
         setCardData((prevState) =>
@@ -124,12 +124,12 @@ const PartnerLogos = () => {
         );
       }
     });
-    console.log(cardData);
+    // console.log(cardData);
     setOpenEditModal(false);
   };
 
   const handleAddData = () => {
-    console.log(modalData);
+    // console.log(modalData);
     apiPostReq("/logo", modalData).then((res) => {
       if (res.success) {
         setCardData((prevState) => [
@@ -144,7 +144,7 @@ const PartnerLogos = () => {
         ]);
       }
     });
-    console.log(cardData);
+    // console.log(cardData);
     setOpenAddModal(false);
   };
 
@@ -160,7 +160,7 @@ const PartnerLogos = () => {
   };
 
   const handleDeleteData = () => {
-    console.log("deleting:", modalData);
+    // console.log("deleting:", modalData);
     apiDeleteReq("/logo", { id: modalData.id }).then((res) => {
       if (res.success) {
         if (res.deleted) {
@@ -168,10 +168,10 @@ const PartnerLogos = () => {
             prevState.filter((item) => item.id !== modalData.id)
           );
         } else {
-          console.log("No match that news!");
+          // console.log("No match that news!");
         }
       } else {
-        console.log("server error!");
+        // console.log("server error!");
       }
     });
     setOpenDeleteModal(false);
