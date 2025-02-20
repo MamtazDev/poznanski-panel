@@ -197,7 +197,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <div className={` h-[310px] rounded-md ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          <div className={` h-[350px] rounded-md ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
             }`}>
             <ModalHeader>Edit User Details</ModalHeader>
             <ModalCloseButton />
@@ -206,7 +206,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
                 onChange={handleVerificationChange}
                 value={verificationStatus}
               >
-                <Input type="text" onChange = {(e) => setNickName(e.target.value) }  placeholder="Edit your name..." />
+                <Input type="text" onChange = {(e) => setNickName(e.target.value) }  placeholder="Edit your name..." className="mb-2"/>
 
                 <Stack direction="column">
                   <Radio value="Verified" style={{
