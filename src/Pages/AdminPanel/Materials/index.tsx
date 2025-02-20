@@ -31,6 +31,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import CommonButton from "../../../Components/Buttons/CommonButton";
 import { AiOutlineSearch } from "react-icons/ai";
+import FetcherMaterial from "./FetcherMaterial";
 
 // Define types for the data
 interface Material {
@@ -81,7 +82,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
     tags: "React, Frontend, JavaScript",
     date: "",
   });
-  console.log(newData, " new data");
+  // console.log(newData, " new data");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isNewOpen,
@@ -96,7 +97,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
 
   useEffect(() => {
     apiGetReq("/materials", { limit: 100 }).then((res) => {
-      console.log(res, "materials data");
+      // console.log(res, "materials data");
 
       if (res && Array.isArray(res.materials)) {
         setMaterials(res.materials);
@@ -109,14 +110,14 @@ const MaterialContent: React.FC<TableProps> = (props) => {
 
   // Edit item
   const handleEdit = (id: string) => {
-    console.log("Editing item:", id);
+    // console.log("Editing item:", id);
     const selectedItem = materials.find((item) => item._id === id);
     if (selectedItem) {
-      console.log("Found item:", selectedItem);
+      // console.log("Found item:", selectedItem);
       setEditData({ ...selectedItem });
       onOpen();
     } else {
-      console.log("Item not found");
+      // console.log("Item not found");
     }
   };
 
@@ -260,9 +261,9 @@ const MaterialContent: React.FC<TableProps> = (props) => {
 
   const handleCreatePost = async () => {
     try {
-      console.log("Sending Data:", newData);
+      // console.log("Sending Data:", newData);
       const res = await apiPostReq("/materials", newData);
-      console.log("API Response:", res);
+      // console.log("API Response:", res);
 
       if (res.title) {
         setRadioData((prev) => ({
@@ -284,7 +285,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
         });
       }
     } catch (error) {
-      console.error("Error creating new material:", error);
+      // console.error("Error creating new material:", error);
       toast({
         title: "Server error while creating post",
         status: "error",
@@ -331,6 +332,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
+      <FetcherMaterial/>
       {/* <div className="flex items-center justify-end py-5">
         <Button colorScheme="green" onClick={handleNewPost}>
           Add New Item
