@@ -2,6 +2,7 @@ import {
   Button,
   FormControl,
   FormLabel,
+  HStack,
   Input,
   Modal,
   ModalBody,
@@ -10,6 +11,9 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
+  Tag,
+  TagCloseButton,
+  TagLabel,
   Text,
   Textarea,
   useDisclosure,
@@ -277,6 +281,7 @@ const RadioTv: React.FC<TableProps> = ({
 
   const handleCreatePost = async () => {
     try {
+      console.log("newData", newData)
       const res = await apiPostReq("/radio", newData);
       if (res) {
         setRadioData((prev) => [...prev, res]);
@@ -285,6 +290,34 @@ const RadioTv: React.FC<TableProps> = ({
     } catch (error) {
       console.error("Error creating new radio item:", error);
     }
+  };
+
+
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState("");
+
+  const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Prevent spaces
+    const value = e.target.value.replace(/\s+/g, "");
+    setTagInput(value);
+  };
+
+  const handleTagInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && tagInput.trim() !== "") {
+      // Prevent duplicate tags
+      if (!tags.includes(tagInput.trim())) {
+        setTags([...tags, tagInput.trim()]);
+        setNewData({ ...newData, ['tags']: [...tags, tagInput.trim()]  });
+
+      }
+      setTagInput(""); // Clear the input
+      e.preventDefault(); // Prevent form submission on Enter
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setTags(tags.filter((tag) => tag !== tagToRemove));
+    console.log("tags", tags)
   };
 
   useEffect(() => {
@@ -546,13 +579,30 @@ const RadioTv: React.FC<TableProps> = ({
                 />
               </FormControl>
 
-              <FormControl mt={4}>
+              {/* <FormControl mt={4}>
                 <FormLabel>Tags</FormLabel>
                 <Input
                   value={newData.tags}
                   onChange={(e) => handleNewInputChange(e, "tags")}
                   placeholder="Enter tags"
                 />
+              </FormControl> */}
+              <FormControl mt={4}>
+                <FormLabel>Tags</FormLabel>
+                <Input
+                  value={tagInput}
+                  onChange={handleTagInputChange}
+                  onKeyPress={handleTagInputKeyPress}
+                  placeholder="Enter tags (one word, press Enter to add)"
+                />
+                <HStack mt={2} spacing={2}>
+                  {tags.map((tag) => (
+                    <Tag key={tag} variant="solid" colorScheme="teal">
+                      <TagLabel>{tag}</TagLabel>
+                      <TagCloseButton onClick={() => handleRemoveTag(tag)} />
+                    </Tag>
+                  ))}
+                </HStack>
               </FormControl>
 
               <FormControl mt={4}>

@@ -77,7 +77,7 @@ function FetcherMaterial() {
 		};
 
 		fetchAllChannelVideos();
-        console.log(videos)
+        console.log("Videos", videos)
 	}, []);
 
 
