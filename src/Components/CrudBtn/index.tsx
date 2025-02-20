@@ -30,7 +30,7 @@ const CrudBtn: React.FC<CrudBtnProps> = ({
           variant={themeMode ? "outline" : "solid"}
           icon={<FaRegEdit />}
           onClick={() => {
-            console.log("Edit clicked:", value, mode);
+            // console.log("Edit clicked:", value, mode);
             onClickEdit(value, mode);
           }}
         />
@@ -39,7 +39,7 @@ const CrudBtn: React.FC<CrudBtnProps> = ({
           variant={themeMode ? "outline" : "solid"}
           icon={ <RiDeleteBin6Line />}
           onClick={() => {
-            console.log("Delete clicked:", value, mode);
+            // console.log("Delete clicked:", value, mode);
             onClickDelete(value, mode);
           }}
         />

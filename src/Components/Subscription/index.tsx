@@ -20,7 +20,7 @@ const Subscription = () => {
     if (isValidEmail(email)) {
       apiPostReq("/subscribe", { email })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           toast({
             title: res.message,
             position: "top-right",
@@ -33,7 +33,7 @@ const Subscription = () => {
             position: "top-right",
             isClosable: true,
           });
-          console.log(err);
+          // console.log(err);
         });
       setEmail("");
     } else {

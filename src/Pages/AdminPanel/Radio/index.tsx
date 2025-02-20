@@ -140,7 +140,7 @@ const RadioContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
   };
 
   const handleEdit = (id: string) => {
-    console.log("edit:", id);
+    // console.log("edit:", id);
     setModalData(cardData.filter((item) => item.id === id)[0]);
     setOpenEditModal(true);
   };
@@ -151,9 +151,9 @@ const RadioContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
   };
 
   const handleEditData = () => {
-    console.log(modalData);
+    // console.log(modalData);
     apiPutReq("/product", modalData).then((res) => {
-      console.log(res);
+      // console.log(res);
 
       const inputDate: Date = new Date(res.data.date);
       const options: object = {
@@ -185,13 +185,13 @@ const RadioContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
         );
       }
     });
-    console.log(cardData);
+    // console.log(cardData);
     setOpenEditModal(false);
   };
 
   const handleAddData = () => {
     apiPostReq("/product", modalData).then((res) => {
-      console.log(res);
+      // console.log(res);
 
       const inputDate: Date = new Date(res.data.date);
       const options: object = {
@@ -224,7 +224,7 @@ const RadioContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
   };
 
   const handleDeleteData = () => {
-    console.log("deleting:", modalData);
+    // console.log("deleting:", modalData);
     apiDeleteReq("/product", { id: modalData.id }).then((res) => {
       if (res.success) {
         if (res.deleted) {
@@ -232,10 +232,10 @@ const RadioContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
             prevState.filter((item) => item.id !== modalData.id),
           );
         } else {
-          console.log("No match that news!");
+          // console.log("No match that news!");
         }
       } else {
-        console.log("server error!");
+        // console.log("server error!");
       }
     });
     setOpenDeleteModal(false);

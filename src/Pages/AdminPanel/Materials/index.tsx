@@ -81,7 +81,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
     tags: "React, Frontend, JavaScript",
     date: "",
   });
-  console.log(newData, " new data");
+  // console.log(newData, " new data");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isNewOpen,
@@ -96,7 +96,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
 
   useEffect(() => {
     apiGetReq("/materials", { limit: 100 }).then((res) => {
-      console.log(res, "materials data");
+      // console.log(res, "materials data");
 
       if (res && Array.isArray(res.materials)) {
         setMaterials(res.materials);
@@ -109,14 +109,14 @@ const MaterialContent: React.FC<TableProps> = (props) => {
 
   // Edit item
   const handleEdit = (id: string) => {
-    console.log("Editing item:", id);
+    // console.log("Editing item:", id);
     const selectedItem = materials.find((item) => item._id === id);
     if (selectedItem) {
-      console.log("Found item:", selectedItem);
+      // console.log("Found item:", selectedItem);
       setEditData({ ...selectedItem });
       onOpen();
     } else {
-      console.log("Item not found");
+      // console.log("Item not found");
     }
   };
 
@@ -260,9 +260,9 @@ const MaterialContent: React.FC<TableProps> = (props) => {
 
   const handleCreatePost = async () => {
     try {
-      console.log("Sending Data:", newData);
+      // console.log("Sending Data:", newData);
       const res = await apiPostReq("/materials", newData);
-      console.log("API Response:", res);
+      // console.log("API Response:", res);
 
       if (res.title) {
         setRadioData((prev) => ({
@@ -432,7 +432,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
               ))
             ) : (
               <tr className="relative" style={{ height: "400px" }}>
-                <div className="absolute top-1/2 left-1/2 w-32 -translate-x-1/2 -translate-y-1/2">
+                <td className="absolute top-1/2 left-1/2 w-32 -translate-x-1/2 -translate-y-1/2">
                   <svg
                     className="svg-icon"
                     viewBox="0 0 1567 1024"
@@ -446,7 +446,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
                   <Text fontSize="lg" color="gray.500">
                     Data is not available
                   </Text>
-                </div>
+                </td>
               </tr>
             )}
           </tbody>

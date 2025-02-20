@@ -90,7 +90,7 @@ const MaterialsAddModal: React.FC<ModalProps> = ({
   };
 
   const createNewTag = (value: string) => {
-    console.log(value);
+    // console.log(value);
     setTags((prevTags) => [...prevTags, { _id: `${Date.now()}`, name: value }]);
   };
 
@@ -115,7 +115,7 @@ const MaterialsAddModal: React.FC<ModalProps> = ({
   };
 
   const handleSaveMaterial = () => {
-    console.log("Current Material Data: ", data);
+    // console.log("Current Material Data: ", data);
     setMaterials((prevMaterials) => [...prevMaterials, { ...data }]);
     setIsOpen(false);
   };

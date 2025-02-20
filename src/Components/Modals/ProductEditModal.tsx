@@ -116,7 +116,7 @@ const ProductEditModal: React.FC<ModalProps> = ({
   };
 
   const createNewTag = (value: string) => {
-    console.log(value);
+    // console.log(value);
     apiPostReq("/tag", { name: value })
       .then((res) => {
         if (res.success) {
@@ -131,7 +131,7 @@ const ProductEditModal: React.FC<ModalProps> = ({
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         throw err;
       });
   };

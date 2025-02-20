@@ -455,7 +455,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
               ))
             ) : (
               <tr className="relative" style={{ height: "400px" }}>
-                <div className="absolute top-1/2 left-1/2 w-32 -translate-x-1/2 -translate-y-1/2">
+                <td className="absolute top-1/2 left-1/2 w-32 -translate-x-1/2 -translate-y-1/2">
                   <svg
                     className="svg-icon"
                     viewBox="0 0 1567 1024"
@@ -469,7 +469,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData }) => {
                   <Text fontSize="lg" color="gray.500">
                     Data is not available
                   </Text>
-                </div>
+                </td>
               </tr>
             )}
           </tbody>
