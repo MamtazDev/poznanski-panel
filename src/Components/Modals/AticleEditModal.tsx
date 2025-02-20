@@ -97,7 +97,7 @@ const EditModal: React.FC<ModalProps> = ({
           },
         ],
       });
-      console.log("Updated content:", data.content);
+      // console.log("Updated content:", data.content);
     }
   };
 
@@ -147,7 +147,7 @@ const EditModal: React.FC<ModalProps> = ({
   };
 
   const createNewTag = (value: string) => {
-    console.log(value);
+    // console.log(value);
     apiPostReq("/tag", { name: value })
       .then((res) => {
         if (res.success) {
@@ -162,7 +162,7 @@ const EditModal: React.FC<ModalProps> = ({
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 
@@ -179,7 +179,7 @@ const EditModal: React.FC<ModalProps> = ({
   };
 
   const handleChangeDate = (payload: Object) => {
-    console.log({ payload });
+    // console.log({ payload });
     setData({
       ...data,
       ...payload,

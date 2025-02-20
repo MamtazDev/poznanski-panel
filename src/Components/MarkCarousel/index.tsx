@@ -55,7 +55,7 @@ const MarkCarousel = () => {
         setLogos(newData);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         throw err;
       });
   }, []);

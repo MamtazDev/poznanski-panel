@@ -49,13 +49,13 @@ const TipTapPage1: React.FC<TipTapProps> = ({ content, setContent }) => {
   // });
 
   useEffect(() => {
-    console.log("Editor Content:", content);
+    // console.log("Editor Content:", content);
   }, [content]);
 
   const [article, setArticle] = useState<string>(content);
 
   useEffect(() => {
-    console.log("article", article);
+    // console.log("article", article);
     setContent(article);
   }, [article]);
 

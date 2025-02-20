@@ -46,7 +46,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     if (props.setFilterText) {
       props.setFilterText(e.target.value);
     }
