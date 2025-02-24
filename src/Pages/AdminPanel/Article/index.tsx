@@ -38,6 +38,7 @@ import TipTapPage from "../../../Components/TipTapPage";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import moment from "moment";
+import ArticleEdit from "./ArticleEdit";
 
 interface Content {
   subHead: string;
@@ -86,7 +87,7 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
     confirmed: false,
     tags: "",
   });
-  // console.log(newData, "set newData here")
+  console.log(newData, "set newData here")
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isNewOpen,
@@ -621,6 +622,7 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <ArticleEdit/>
 
       {/* New Article Modal */}
       <Modal isOpen={isNewOpen} onClose={onNewClose} size="lg" isCentered>
