@@ -12,6 +12,7 @@ import {
   ModalOverlay,
   Radio,
   RadioGroup,
+  Select,
   Stack,
   Table,
   TableContainer,
@@ -49,6 +50,12 @@ const UserMainPage: React.FC<UserDataProps> = () => {
   const [userAllData, setUserAllData] = useState<Users[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const [selectedRole, setSelectedRole] = useState("user");
+  const [nickName, setNickName] = useState("");
+
+  const handleRoleChange = (e: any) => {
+    setSelectedRole(e.target.value);
+  };
   const handleChangeFilterText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(e.target.value);
   };
@@ -67,6 +74,8 @@ const UserMainPage: React.FC<UserDataProps> = () => {
     try {
       await apiPutReq(`/auth/users/${selectedUserId}`, {
         isVerified: verificationStatus === "Verified",
+        role: selectedRole,
+        nickname: nickName,
       });
       setUserAllData((prevData) =>
         prevData.map((user) =>
@@ -92,9 +101,8 @@ const UserMainPage: React.FC<UserDataProps> = () => {
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex justify-between">
         <div
-          className={`mb-4 ${
-            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-          }`}
+          className={`mb-4 ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}
           style={{ width: "300px" }}
         >
           <InputGroup>
@@ -133,7 +141,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
                 <Td className="capitalize">{user.role}</Td>
                 <Td>{user.email}</Td>
                 <Td>
-                 
+
                 </Td>
               </Tr>
             ))}
@@ -144,11 +152,10 @@ const UserMainPage: React.FC<UserDataProps> = () => {
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
-            className={`text-xs uppercase ${
-              themeMode
+            className={`text-xs uppercase ${themeMode
                 ? "text-white bg-[#5A1073]"
                 : "bg-[#3bd6c6] text-[#5A1073]"
-            }`}
+              }`}
           >
             <tr>
               <th className="px-6 py-3">Title</th>
@@ -162,11 +169,10 @@ const UserMainPage: React.FC<UserDataProps> = () => {
             {userAllData.map((user) => (
               <tr
                 key={user._id}
-                className={`border-b py-3 ${
-                  !themeMode
+                className={`border-b py-3 ${!themeMode
                     ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
                     : "bg-white text-gray-900 hover:bg-gray-200"
-                }`}
+                  }`}
               >
                 <td className="py-3">{user.nickname}</td>
                 <td className="py-3">{user.role}</td>
@@ -179,9 +185,9 @@ const UserMainPage: React.FC<UserDataProps> = () => {
                   </div>
                 </td>
                 <td> <AiOutlineEdit
-                      onClick={() => handleEditClick(user._id, user.isVerified)}
-                      className="cursor-pointer mr-5"
-                    /></td>
+                  onClick={() => handleEditClick(user._id, user.isVerified)}
+                  className="cursor-pointer mr-5"
+                /></td>
               </tr>
             ))}
           </tbody>
@@ -191,31 +197,53 @@ const UserMainPage: React.FC<UserDataProps> = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-         <div className={` ${
-            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-          }`}>
-         <ModalHeader>Edit Verification Status</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <RadioGroup
-              onChange={handleVerificationChange}
-              value={verificationStatus}
-            >
-              <Stack direction="column">
-                <Radio value="Verified">Verified</Radio>
-                <Radio value="Unverified">Unverified</Radio>
-              </Stack>
-            </RadioGroup>
-          </ModalBody>
-          <ModalFooter className="space-x-2">
-            <Button colorScheme="blue" onClick={handleSaveVerification}>
-              Save
-            </Button>
-            <Button variant="red" onClick={onClose}>
-              Cancel
-            </Button>
-          </ModalFooter>
-         </div>
+          <div className={` h-[350px] rounded-md ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}>
+            <ModalHeader>Edit User Details</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <RadioGroup
+                onChange={handleVerificationChange}
+                value={verificationStatus}
+              >
+                <Input type="text" onChange = {(e) => setNickName(e.target.value) }  placeholder="Edit your name..." className="mb-2"/>
+
+                <Stack direction="column">
+                  <Radio value="Verified" style={{
+                    color: themeMode ? "#5ae3cc" : "#5A1073"
+                  }}>Verified</Radio>
+                  <Radio value="Unverified" style={{
+                    color: themeMode ? "#5ae3cc" : "#5A1073",
+                  }}>Unverified</Radio>
+                </Stack>
+              </RadioGroup>
+              <div className="mt-4">
+                <label htmlFor="role" className="block text-sm font-medium">Select Role</label>
+                <Select id="role" value={selectedRole} onChange={handleRoleChange} className={` mt-2 focus:outline-none`} style={{
+                  backgroundColor: themeMode ? "#f1f1f6" : "#34495e"
+                }}>
+                  <option value="" style={{
+                    outline: "none",
+                    backgroundColor: themeMode ? "#f1f1f6" : '#34495e'
+                  }}>Select Role</option>
+                  <option value="user" className="rounded-md" style={{
+                    backgroundColor: themeMode ? "#f1f1f6" : '#34495e'
+                  }}>User</option>
+                  <option value="admin" style={{
+                    backgroundColor: themeMode ? "#f1f1f6" : '#34495e'
+                  }}>Admin</option>
+                </Select>
+              </div>
+            </ModalBody>
+            <ModalFooter className="space-x-2">
+              <Button colorScheme="blue" onClick={handleSaveVerification}>
+                Save
+              </Button>
+              <Button variant="red" onClick={onClose}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </div>
         </ModalContent>
       </Modal>
     </div>

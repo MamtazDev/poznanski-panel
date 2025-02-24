@@ -580,7 +580,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
               </FormControl>
 
               {/* Timeframe */}
-              <FormControl id="timeframe" mt={4}>
+              {/* <FormControl id="timeframe" mt={4}>
                 <FormLabel>Start Date</FormLabel>
                 <Input
                   type="datetime-local"
@@ -594,7 +594,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                   value={editData?.timeframe?.end || ""}
                   onChange={(e) => handleInputChange(e, "timeframe", "end")}
                 />
-              </FormControl>
+              </FormControl> */}
 
               {/* Thumbnail */}
               <FormControl id="thumbnail" mt={4}>

@@ -468,7 +468,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
               <FormControl id="title" isRequired mt={4}>
                 <FormLabel>Title</FormLabel>
                 <Input
-                  value={editData?.title}
+                  value={editData?.title ||""}
                   onChange={(e) => handleInputChange(e, "title")}
                   placeholder="Enter title"
                 />
@@ -479,7 +479,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
               <FormControl id="youTube" isRequired mt={4}>
                 <FormLabel>Link</FormLabel>
                 <Input
-                  value={editData?.youTube}
+                  value={editData?.youTube ||""}
                   onChange={(e) => handleInputChange(e, "youTube")}
                   placeholder="Enter YouTube Link"
                 />
@@ -490,7 +490,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
               <FormControl id="description" isRequired mt={4}>
                 <FormLabel>Description</FormLabel>
                 <Input
-                  value={editData?.description}
+                  value={editData?.description ||""}
                   onChange={(e) => handleInputChange(e, "description")}
                   placeholder="Enter description"
                 />
@@ -499,19 +499,19 @@ const MaterialContent: React.FC<TableProps> = (props) => {
               <FormControl id="tags" isRequired mt={4}>
                 <FormLabel>Tags</FormLabel>
                 <Input
-                  value={editData?.tags}
+                  value={editData?.tags ||""}
                   onChange={(e) => handleInputChange(e, "tags")}
                   placeholder="Enter tags"
                 />
               </FormControl>
-              <FormControl id="date" isRequired mt={4}>
+              {/* <FormControl id="date" isRequired mt={4}>
                 <FormLabel>Date</FormLabel>
                 <Input
                   value={editData?.date}
                   onChange={(e) => handleInputChange(e, "date")}
                   placeholder="Enter date"
                 />
-              </FormControl>
+              </FormControl> */}
             </ModalBody>
 
             <ModalFooter>
@@ -540,7 +540,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
               <FormControl id="title" isRequired mt={4}>
                 <FormLabel>Title</FormLabel>
                 <Input
-                  value={newData.title}
+                  value={newData.title ||""}
                   onChange={(e) => handleNewInputChange(e, "title")}
                   placeholder="Enter title"
                 />
@@ -548,7 +548,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
               <FormControl id="tags" isRequired mt={4}>
                 <FormLabel>tags</FormLabel>
                 <Input
-                  value={newData.tags}
+                  value={newData.tags ||" "}
                   onChange={(e) => handleNewInputChange(e, "tags")}
                   placeholder="Enter tags"
                 />
@@ -558,7 +558,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
               <FormControl id="description" isRequired mt={4}>
                 <FormLabel>Description</FormLabel>
                 <Textarea
-                  value={newData.description}
+                  value={newData.description ||""}
                   onChange={(e) => handleNewInputChange(e, "description")}
                   placeholder="Enter description"
                 />

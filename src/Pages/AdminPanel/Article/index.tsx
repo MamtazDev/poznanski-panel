@@ -37,6 +37,8 @@ import CommonButton from "../../../Components/Buttons/CommonButton";
 import TipTapPage from "../../../Components/TipTapPage";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
+import moment from "moment";
+import ArticleEdit from "./ArticleEdit";
 
 interface Content {
   subHead: string;
@@ -61,13 +63,15 @@ interface News {
 
 interface ArticleProps {
   tagData: any[];
+  date?:string
 }
 
-const Article: React.FC<ArticleProps> = ({ tagData }) => {
+const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
   const [cardData, setCardData] = useState<News[]>([]);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [preview, setPreview] = useState<string | null>(null);
   const [editData, setEditData] = useState<News | null>(null);
+  const dateFormated = moment(date).format("DD/MM/YYYY");
   const [newData, setNewData] = useState<News>({
     _id: "",
     title: "",
@@ -83,7 +87,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     confirmed: false,
     tags: "",
   });
-  // console.log(newData, "set newData here")
+  console.log(newData, "set newData here")
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isNewOpen,
@@ -352,6 +356,8 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
     }
   };
 
+
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -426,7 +432,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                   </td>
 
                   <td>
-                    <p className="truncate max-w-[300px]">{item.date}</p>
+                    <p className="truncate max-w-[300px]">  {dateFormated}</p>
                   </td>
 
                   <td>
@@ -578,7 +584,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
             </FormControl>
 
             {/* Date */}
-            <FormControl id="date" isRequired>
+            {/* <FormControl id="date" isRequired>
               <FormLabel>Date</FormLabel>
               <Input
                 type="date"
@@ -586,7 +592,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
                 onChange={(e) => handleInputChange(e, "date", false)}
                 focusBorderColor="blue.500"
               />
-            </FormControl>
+            </FormControl> */}
 
             {/* Checkbox */}
             <FormControl
@@ -616,6 +622,7 @@ const Article: React.FC<ArticleProps> = ({ tagData }) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <ArticleEdit/>
 
       {/* New Article Modal */}
       <Modal isOpen={isNewOpen} onClose={onNewClose} size="lg" isCentered>
