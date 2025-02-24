@@ -30,7 +30,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineArrowOutward } from "react-icons/md";
 import { AiOutlineSearch } from "react-icons/ai";
 import CommonButton from "../../../Components/Buttons/CommonButton";
-import img from "../../../assets/png/profileImg3.png";
+import img from "../../../assets/png/novideo.png";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../reducers";
 
@@ -404,7 +404,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                     />
                   </td>
                   <td className="">  {item.name.length > 20
-                      ? `${item.name.substring(0, 20)}..`
+                      ? `${item.name.substring(0, 20)}...`
                       : item.name}</td>
                   <td>{item.category}</td>
                   <td>{item.location}</td>
@@ -423,7 +423,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                   </td>
                   <td className="text-center">
                     {item.description.length > 40
-                      ? `${item.description.substring(0, 40)}..`
+                      ? `${item.description.substring(0, 40)}...`
                       : item.description}
                   </td>
                   <td className="text-center">
