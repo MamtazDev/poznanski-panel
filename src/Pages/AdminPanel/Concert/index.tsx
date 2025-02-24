@@ -353,9 +353,8 @@ const ConcertContent: React.FC<TableProps> = (props) => {
     <div className="p-3 overflow-y-auto w-full h-full pb-28" style={{}}>
       <div className="flex justify-between">
         <div
-          className={`mb-4 ${
-            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-          }`}
+          className={`mb-4 ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}
           style={{ width: "300px" }}>
           <InputGroup>
             <Input type="text" placeholder="Search..." />
@@ -370,11 +369,10 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
-            className={`text-xs uppercase ${
-              themeMode
+            className={`text-xs uppercase ${themeMode
                 ? "text-white bg-[#5A1073]"
                 : "bg-[#3bd6c6] text-[#5A1073]"
-            }`}>
+              }`}>
             <tr>
               <th className="px-6 py-3">Image</th>
               <th className="px-6 py-3">Title</th>
@@ -394,11 +392,10 @@ const ConcertContent: React.FC<TableProps> = (props) => {
               return (
                 <tr
                   key={index}
-                  className={`border-b py-4  ${
-                    !themeMode
+                  className={`border-b py-4  ${!themeMode
                       ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
                       : "bg-white text-gray-900 hover:bg-gray-200"
-                  }`}>
+                    }`}>
                   <td>
                     <img
                       src={item.img || img}
@@ -422,7 +419,11 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                       </a>
                     </button>
                   </td>
-                  <td className="text-center">{item.description}</td>
+                  <td className="text-center px-2">
+                    {item.description.length > 30
+                      ? `${item.description.substring(0, 30)}..`
+                      : item.description}
+                  </td>
                   <td className="text-center">
                     {item.isFeatured === true ? "Featured" : "Not Featured"}
                   </td>
@@ -449,11 +450,10 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                 return (
                   <tr
                     key={index}
-                    className={`border-b py-4  ${
-                      !themeMode
+                    className={`border-b py-4  ${!themeMode
                         ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
                         : "bg-white text-gray-900 hover:bg-gray-200"
-                    }`}>
+                      }`}>
                     <td>
                       <img
                         src={item.img || img}
@@ -534,9 +534,8 @@ const ConcertContent: React.FC<TableProps> = (props) => {
         <ModalOverlay />
         <ModalContent>
           <div
-            className={` ${
-              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-            }`}>
+            className={` ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+              }`}>
             <ModalHeader>Edit Item</ModalHeader>
             <ModalBody>
               {/* Title */}
@@ -656,9 +655,8 @@ const ConcertContent: React.FC<TableProps> = (props) => {
         <ModalOverlay />
         <ModalContent>
           <div
-            className={` ${
-              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-            }`}>
+            className={` ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+              }`}>
             <ModalHeader>Add New Item</ModalHeader>
             <ModalBody>
               {/* Title */}
