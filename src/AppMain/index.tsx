@@ -9,6 +9,7 @@ import { apiGetReq } from "../Constant/api-functions";
 import UserMainPage from "../Pages/AdminPanel/User";
 import { RootState } from "../reducers";
 import { closePlayer } from "../reducers/PlayerReducer";
+import PlaylistPage from "../Pages/AdminPanel/Playlist";
 
 const AdminPanel = lazy(() => import("../Pages/AdminPanel"));
 const Article = lazy(() => import("../Pages/AdminPanel/Article"));
@@ -61,7 +62,8 @@ const AppMain: React.FC = () => {
               size="lg"
             />
           </div>
-        }>
+        }
+      >
         <ScrollToTopOnPageChange />
         <Routes>
           <Route path="" element={<Navigate to="admin" />} />
@@ -86,6 +88,10 @@ const AppMain: React.FC = () => {
             <Route
               path="material"
               element={<AdminPanel component={<MaterialContent />} />}
+            />
+            <Route
+              path="playlist"
+              element={<AdminPanel component={<PlaylistPage />} />}
             />
 
             <Route

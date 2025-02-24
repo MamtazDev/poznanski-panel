@@ -1,4 +1,9 @@
-import { Input, InputGroup, InputRightElement, useDisclosure } from "@chakra-ui/react";
+import {
+  Input,
+  InputGroup,
+  InputRightElement,
+  useDisclosure,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useSelector } from "react-redux";
@@ -46,7 +51,7 @@ interface ProductContentProps {
 
 const RadioTvPage: React.FC<ProductContentProps> = ({ path, tagData }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-  const [radioData, setRadioData] = useState<any[]>([])
+  const [radioData, setRadioData] = useState<any[]>([]);
   const [newData, setNewData] = useState<any>({
     title: "",
     description: "",
@@ -56,9 +61,13 @@ const RadioTvPage: React.FC<ProductContentProps> = ({ path, tagData }) => {
     userId: "6790c75af5c1e10f364abfd9",
     tags: "",
     date: new Date().toISOString(),
-  })
+  });
 
-  const { isOpen: isNewOpen, onOpen: onNewOpen, onClose: onNewClose } = useDisclosure()
+  const {
+    isOpen: isNewOpen,
+    onOpen: onNewOpen,
+    onClose: onNewClose,
+  } = useDisclosure();
 
   const handleNewPost = () => {
     setNewData({
@@ -70,38 +79,38 @@ const RadioTvPage: React.FC<ProductContentProps> = ({ path, tagData }) => {
       userId: "6790c75af5c1e10f364abfd9",
       tags: "",
       date: new Date().toISOString(),
-    })
-    onNewOpen()
-  }
+    });
+    onNewOpen();
+  };
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
-    <div className="flex justify-between">
-      <div
-        className={`mb-4 ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"}`}
-        style={{ width: "300px" }}
-      >
-        <InputGroup>
-          <Input type="text" placeholder="Search..." />
-          <InputRightElement>
-            <AiOutlineSearch />
-          </InputRightElement>
-        </InputGroup>
+      <div className="flex justify-between">
+        <div
+          className={`mb-4 ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"}`}
+          style={{ width: "300px" }}
+        >
+          <InputGroup>
+            <Input type="text" placeholder="Search..." />
+            <InputRightElement>
+              <AiOutlineSearch />
+            </InputRightElement>
+          </InputGroup>
+        </div>
+        <CommonButton text="Add new Item" onClick={handleNewPost} />
       </div>
-      <CommonButton text="Add new Item" onClick={handleNewPost} />
-    </div>
 
-    <RadioTv
-      themeMode={themeMode}
-      radioData={radioData}
-      setRadioData={setRadioData}
-      newData={newData}
-      setNewData={setNewData}
-      isNewOpen={isNewOpen}
-      onNewOpen={onNewOpen}
-      onNewClose={onNewClose}
-    />
-  </div>
+      <RadioTv
+        themeMode={themeMode}
+        radioData={radioData}
+        setRadioData={setRadioData}
+        newData={newData}
+        setNewData={setNewData}
+        isNewOpen={isNewOpen}
+        onNewOpen={onNewOpen}
+        onNewClose={onNewClose}
+      />
+    </div>
   );
 };
 

@@ -1,0 +1,248 @@
+import {
+  Button,
+  Input,
+  InputGroup,
+  InputRightElement,
+  useToast,
+  Spinner,
+  Box,
+  HStack,
+  useBreakpointValue,
+} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { AiOutlineSearch } from "react-icons/ai";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../reducers";
+import { apiGetReq, apiPostReq } from "../../../Constant/api-functions";
+import CommonButton from "../../../Components/Buttons/CommonButton";
+
+// Pagination Component
+const Pagination = ({
+  totalPages,
+  currentPage,
+  onPageChange,
+}: {
+  totalPages: number;
+  currentPage: number;
+  onPageChange: (page: number) => void;
+}) => {
+  // Control how many page numbers are displayed based on screen size
+  const maxVisiblePages =
+    useBreakpointValue({ base: 3, sm: 5, md: 7, lg: 9 }) || 5;
+
+  // Calculate the range of page numbers to display
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+  let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+  if (endPage - startPage + 1 < maxVisiblePages) {
+    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+  }
+
+  return (
+    <HStack justifyContent="center" spacing={2} mt={5} wrap="wrap">
+      <Button
+        onClick={() => onPageChange(currentPage - 1)}
+        isDisabled={currentPage === 1}
+      >
+        Previous
+      </Button>
+
+      {startPage > 1 && (
+        <>
+          <Button variant="outline" onClick={() => onPageChange(1)}>
+            1
+          </Button>
+          {startPage > 2 && <Button isDisabled>...</Button>}
+        </>
+      )}
+
+      {Array.from({ length: endPage - startPage + 1 }, (_, i) => (
+        <Button
+          key={startPage + i}
+          variant={currentPage === startPage + i ? "solid" : "outline"}
+          onClick={() => onPageChange(startPage + i)}
+        >
+          {startPage + i}
+        </Button>
+      ))}
+
+      {endPage < totalPages && (
+        <>
+          {endPage < totalPages - 1 && <Button isDisabled>...</Button>}
+          <Button variant="outline" onClick={() => onPageChange(totalPages)}>
+            {totalPages}
+          </Button>
+        </>
+      )}
+
+      <Button
+        onClick={() => onPageChange(currentPage + 1)}
+        isDisabled={currentPage === totalPages}
+      >
+        Next
+      </Button>
+    </HStack>
+  );
+};
+
+const PlaylistPage: React.FC = () => {
+  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+  const toast = useToast();
+  const [playlists, setPlaylists] = useState<any[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+
+  const [isReloadLoading, setIsReloadLoading] = useState(false);
+
+  const fetchPlaylists = async (page: number) => {
+    setLoading(true);
+    try {
+      const result = await apiGetReq(`/playlist?page=${page}&limit=10`, {});
+      setPlaylists(result.data);
+      setTotalPages(result.totalPages);
+      setCurrentPage(page);
+    } catch (error: Error | any) {
+      toast({
+        title: "Error fetching playlists",
+        description: error.message || "Something went wrong.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlaylists(currentPage);
+  }, [currentPage]);
+
+  const handleSearch = () => {
+    if (!search) return fetchPlaylists(1);
+    const filtered = playlists.filter((item) =>
+      item.title.toLowerCase().includes(search.toLowerCase())
+    );
+    setPlaylists(filtered);
+  };
+
+  const handleReload = async () => {
+    setIsReloadLoading(true);
+    await apiPostReq(`/playlist/reload`, {});
+    await fetchPlaylists(currentPage);
+    setIsReloadLoading(false);
+  };
+
+  return (
+    <div className="p-3 overflow-y-auto w-full h-full pb-28">
+      <div className="flex justify-between">
+        <Box
+          className={`mb-4 ${
+            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}
+          w="300px"
+        >
+          <InputGroup>
+            <Input
+              type="text"
+              placeholder="Search..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <InputRightElement onClick={handleSearch} cursor="pointer">
+              <AiOutlineSearch />
+            </InputRightElement>
+          </InputGroup>
+        </Box>
+        {/* setIsReloadLoading true to spinner button from chakra ui */}
+        <Button
+          isLoading={isReloadLoading}
+          onClick={() => handleReload()}
+          colorScheme="purple"
+          disabled={isReloadLoading}
+        >
+          Reload Playlist
+        </Button>
+      </div>
+
+      {loading ? (
+        <Box textAlign="center">
+          <Spinner size="xl" />
+        </Box>
+      ) : (
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+          <table className="w-full h-full" style={{ minWidth: "400px" }}>
+            <thead
+              className={`text-xs uppercase ${
+                themeMode
+                  ? "text-white bg-[#5A1073]"
+                  : "bg-[#3bd6c6] text-[#5A1073]"
+              }`}
+            >
+              <tr>
+                <th className="px-6 py-3 text-left">Title</th>
+                <th className="px-6 py-3 text-left">Video</th>
+                <th className="px-6 py-3 text-left">Description</th>
+                <th className="px-6 py-3 text-left">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {playlists?.length > 0 ? (
+                playlists.map((item, index) => (
+                  <tr
+                    key={index}
+                    className={`border-b ${
+                      !themeMode
+                        ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
+                        : "bg-white text-gray-900 hover:bg-gray-200"
+                    }`}
+                  >
+                    <td className="p-4 text-left">{item.title}</td>
+                    <td className="px-4 py-3 text-left">
+                      <iframe
+                        src={
+                          item?.youTube?.includes("youtube.com/watch")
+                            ? `https://www.youtube.com/embed/${
+                                item?.youTube?.split("v=")[1].split("&")[0]
+                              }`
+                            : item?.youTube ||
+                              "https://www.youtube.com/embed/6JYIGclVQdw"
+                        }
+                        title="YouTube player"
+                        className="w-40 h-24 rounded-lg shadow-lg"
+                        frameBorder="0"
+                      />
+                    </td>
+                    <td className="py-4 text-left">
+                      {item.description.slice(0, 50)}
+                    </td>
+                    {/* <td className="py-4">{item.tags}</td> */}
+                    <td className="py-4 text-left">
+                      {new Date(item.publishedAt).toISOString().split("T")[0]}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="text-center py-10">
+                    No data found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={fetchPlaylists}
+      />
+    </div>
+  );
+};
+
+export default PlaylistPage;
