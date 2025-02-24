@@ -403,7 +403,9 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                       className="rounded-full w-[50px] h-[50px] my-2 flex items-center mx-auto"
                     />
                   </td>
-                  <td>{item.name}</td>
+                  <td className="">  {item.name.length > 20
+                      ? `${item.name.substring(0, 20)}..`
+                      : item.name}</td>
                   <td>{item.category}</td>
                   <td>{item.location}</td>
                   <td>
@@ -419,9 +421,9 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                       </a>
                     </button>
                   </td>
-                  <td className="text-center px-2">
-                    {item.description.length > 30
-                      ? `${item.description.substring(0, 30)}..`
+                  <td className="text-center">
+                    {item.description.length > 40
+                      ? `${item.description.substring(0, 40)}..`
                       : item.description}
                   </td>
                   <td className="text-center">
