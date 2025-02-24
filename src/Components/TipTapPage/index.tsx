@@ -58,7 +58,6 @@ const TipTapPage1: React.FC<TipTapProps> = ({ content, setContent }) => {
     // console.log("article", article);
     setContent(article);
   }, [article]);
-
   return (
     <div className="bg-gray-500 p-4 items-center justify-center text-white text-xl rounded-lg shadow-lg h-[555px]">
       <TipTap content={content} setArticle={setArticle} setFiles={setFiles} />

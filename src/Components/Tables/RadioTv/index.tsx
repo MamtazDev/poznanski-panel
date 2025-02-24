@@ -653,12 +653,18 @@ const RadioTv: React.FC<TableProps> = ({
                   placeholder="Enter tags (one word, press Enter to add)"
                 />
                 <HStack mt={2} spacing={2}>
+                  <div className="flex gap-1   flex-wrap">
                   {tags.map((tag) => (
                     <Tag key={tag} variant="solid" colorScheme="teal">
-                      <TagLabel>{tag}</TagLabel>
+                      <p>{tag}</p>
                       <TagCloseButton onClick={() => handleRemoveTag(tag)} />
                     </Tag>
+                    // <Tag key={tag} variant="solid" colorScheme="teal">
+                    //   <TagLabel>{tag}</TagLabel>
+                    //   <TagCloseButton onClick={() => handleRemoveTag(tag)} />
+                    // </Tag>
                   ))}
+                  </div>
                 </HStack>
               </FormControl>
 

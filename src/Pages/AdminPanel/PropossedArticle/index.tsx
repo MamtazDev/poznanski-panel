@@ -489,7 +489,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData ,date}) => {
             fontWeight="bold"
             textAlign="center"
             color="blue.600">
-            Edit Article
+            Edit Propossed Article
           </ModalHeader>
 
           <ModalBody>
@@ -601,14 +601,20 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData ,date}) => {
             </FormControl>
 
             {/* Rich Text Editor */}
-            {/* <VStack spacing={4} align="stretch" mt={4}>
+            <VStack spacing={4} align="stretch" mt={4}>
               <TipTapPage
                 content={editData?.content || ""}
                 setContent={(newContent) =>
                   handleContentChange(newContent, false)
                 }
               />
-            </VStack> */}
+              {/* <TipTapPage
+                content={editData?.content || ""}
+                setContent={(newContent) =>
+                  handleContentChange(newContent, true)
+                }
+              /> */}
+            </VStack>
 
             {/* Date */}
             {/* <FormControl id="date" isRequired>

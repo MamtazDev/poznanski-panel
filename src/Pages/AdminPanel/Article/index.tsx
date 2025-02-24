@@ -479,7 +479,7 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
             fontWeight="bold"
             textAlign="center"
             color="blue.600">
-            Edit Article
+            Edit  Article
           </ModalHeader>
 
           <ModalBody>

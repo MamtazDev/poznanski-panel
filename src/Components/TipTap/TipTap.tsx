@@ -13,6 +13,7 @@ import {customYouTubeArticle, customFileHandler} from './Extensions';
 import { openPlayer } from '../../reducers/PlayerReducer';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../reducers';
+// import {HTML} from "@tiptap/extension-html"
 
 export interface TipTapProps {
 	onVideoAdd?: (videoUrl: string) => void;
@@ -59,29 +60,6 @@ export const getExtensionsData = (
 		},
 	}),
 	customFileHandler(setFiles),
-	// FileHandler.configure({
-	// 	onDrop: (editor, files) => {
-	// 		files.forEach(async (file) => {
-	// 			const compressedFile = await FileResizer(file);
-	// 			if (compressedFile) {
-	// 				const fileToAdd = getFileData(file, compressedFile);
-	// 				editor
-	// 					.chain()
-	// 					.focus()
-	// 					.setImage({src: fileToAdd.url, alt: fileToAdd.name})
-	// 					.run();
-	// 				setFiles((prev) => {
-	// 					URL.revokeObjectURL(fileToAdd.url);
-	// 					if (!prev) {
-	// 						return [fileToAdd];
-	// 					}
-	// 					return [...prev, fileToAdd];
-	// 				});
-	// 				editor.commands.enter();
-	// 			}
-	// 		});
-	// 	}
-	// }),
 ];
 
 const TipTap: React.FC<TipTapProps> = ({
@@ -109,6 +87,7 @@ const TipTap: React.FC<TipTapProps> = ({
 	};
 
 	const editor = useEditor({
+		// extensions: [StarterKit, HTML],
 		extensions: getExtensionsData(setFiles),
 		content,
 		onUpdate: ({editor}) => {
@@ -191,8 +170,7 @@ const TipTap: React.FC<TipTapProps> = ({
 	return (
 		<>
 			<div className={styles.tiptap}>
-				{editable?
-					<>
+				
 						<div
 							className={`block mb-2 text-left ${themeMode ? 'text-gray-900' : 'text-white'} `}
 							style={{fontSize: type ? '14px' : '18px'}}
@@ -240,8 +218,10 @@ const TipTap: React.FC<TipTapProps> = ({
 							ref={fileInputRef}
 							style={{display: 'none'}}
 						/>
-					</> : <div className={!themeMode ?'text-stone-400' : 'text-stone-500'} dangerouslySetInnerHTML={{__html: content}} />
-				}
+				
+				
+				<p>Editable: {editable} Done</p>
+				<div className={!themeMode ?'text-stone-400' : 'text-stone-500'} dangerouslySetInnerHTML={{__html: content}} />
 			</div>
 		</>
 	);
