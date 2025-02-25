@@ -9,7 +9,7 @@ import {getFileData, getFilesIncludedInHTML} from './helpers';
 import TextAlign from '@tiptap/extension-text-align';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
-import {customYouTubeArticle, customFileHandler} from './Extensions';
+import {customYouTubeArticle, customFileHandler, customYoutubeArticleEdit} from './Extensions';
 import { openPlayer } from '../../reducers/PlayerReducer';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../reducers';
@@ -60,6 +60,7 @@ export const getExtensionsData = (
 		},
 	}),
 	customFileHandler(setFiles),
+	customYoutubeArticleEdit,
 ];
 
 const TipTap: React.FC<TipTapProps> = ({
@@ -170,7 +171,7 @@ const TipTap: React.FC<TipTapProps> = ({
 	return (
 		<>
 			<div className={styles.tiptap}>
-				
+
 						<div
 							className={`block mb-2 text-left ${themeMode ? 'text-gray-900' : 'text-white'} `}
 							style={{fontSize: type ? '14px' : '18px'}}
@@ -218,8 +219,8 @@ const TipTap: React.FC<TipTapProps> = ({
 							ref={fileInputRef}
 							style={{display: 'none'}}
 						/>
-				
-				
+
+
 				<p>Editable: {editable} Done</p>
 				<div className={!themeMode ?'text-stone-400' : 'text-stone-500'} dangerouslySetInnerHTML={{__html: content}} />
 			</div>
