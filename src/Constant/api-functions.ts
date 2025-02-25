@@ -64,3 +64,49 @@ export async function apiDeleteReq(path: string, params: object): Promise<any> {
     throw error;
   }
 }
+
+export const checkIfLoggedIn = async (): Promise<any> => {
+  return await apiGetReq("auth/verify", {});
+};
+
+const setAccessToken = (token: string) => {
+  document.cookie = `access_token=${token}; path=/; max-age=3600; Secure; SameSite=Strict`;
+};
+
+// user
+export const loginRequest = async (
+  password: string,
+  email?: string,
+  nickname?: string
+) => {
+  const { accessToken } = await apiPostReq(
+    "auth/login",
+    { email, password, nickname },
+    false
+  );
+  if (accessToken) {
+    setAccessToken(accessToken);
+  }
+};
+
+export const logoutRequest = async () => {
+  try {
+    await apiPostReq("auth/logout", {}, true);
+    localStorage.removeItem("accessToken");
+    sessionStorage.removeItem("selectedMenu");
+  } catch (error) {
+    console.error("Logout failed", error);
+  }
+};
+
+export const registerRequest = async (
+  password: string,
+  email: string,
+  nickname: string
+) => {
+  await apiPostReq("auth/register", { nickname, email, password }, false);
+};
+
+export const verifyEmailRequest = async (token: string) => {
+  await apiPostReq(`auth/verify-email/${token}`, {}, false);
+};
