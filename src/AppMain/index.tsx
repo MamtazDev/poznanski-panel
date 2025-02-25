@@ -10,6 +10,8 @@ import UserMainPage from "../Pages/AdminPanel/User";
 import { RootState } from "../reducers";
 import { closePlayer } from "../reducers/PlayerReducer";
 import PlaylistPage from "../Pages/AdminPanel/Playlist";
+import Login from "../Pages/Login";
+import PrivateRoute from "../Components/PrivateRoute/PrivateRoute";
 
 const AdminPanel = lazy(() => import("../Pages/AdminPanel"));
 const Article = lazy(() => import("../Pages/AdminPanel/Article"));
@@ -62,41 +64,54 @@ const AppMain: React.FC = () => {
               size="lg"
             />
           </div>
-        }
-      >
+        }>
         <ScrollToTopOnPageChange />
+
         <Routes>
-          <Route path="" element={<Navigate to="admin" />} />
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/admin">
             <Route path="" element={<Navigate to="article" />} />
             <Route
               path="article"
-              element={<AdminPanel component={<Article tagData={tags} />} />}
+              element={
+                <PrivateRoute>
+                  <AdminPanel component={<Article tagData={tags} />} />
+                </PrivateRoute>
+              }
             />
             <Route
               path="propossedArticle"
               element={
-                <AdminPanel component={<PropossedArticle tagData={tags} />} />
+                <PrivateRoute>
+                  <AdminPanel component={<PropossedArticle tagData={tags} />} />
+                </PrivateRoute>
               }
             />
             <Route
               path="radio"
               element={
-                <AdminPanel component={<Radio path="tv" tagData={tags} />} />
+                <PrivateRoute>
+                  <AdminPanel component={<Radio path="tv" tagData={tags} />} />
+                </PrivateRoute>
               }
             />
             <Route
               path="material"
-              element={<AdminPanel component={<MaterialContent />} />}
-            />
-            <Route
-              path="playlist"
-              element={<AdminPanel component={<PlaylistPage />} />}
+              element={
+                <PrivateRoute>
+                  <AdminPanel component={<MaterialContent />} />
+                </PrivateRoute>
+              }
             />
 
             <Route
               path="concerts"
-              element={<AdminPanel component={<Concert />} />}
+              element={
+                <PrivateRoute>
+                  <AdminPanel component={<Concert />} />
+                </PrivateRoute>
+              }
             />
             <Route
               path="artists"
@@ -104,11 +119,19 @@ const AppMain: React.FC = () => {
             />
             <Route
               path="logos"
-              element={<AdminPanel component={<PartnerLogos />} />}
+              element={
+                <PrivateRoute>
+                  <AdminPanel component={<PartnerLogos />} />
+                </PrivateRoute>
+              }
             />
             <Route
               path="user"
-              element={<AdminPanel component={<UserMainPage user={[]} />} />}
+              element={
+                <PrivateRoute>
+                  <AdminPanel component={<UserMainPage user={[]} />} />
+                </PrivateRoute>
+              }
             />
           </Route>
         </Routes>

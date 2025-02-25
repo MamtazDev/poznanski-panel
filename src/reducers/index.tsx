@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import ThemeReducer from "./ThemeReducer";
 import PlayerReducer from "./PlayerReducer";
+import UserReducer from "./UserReducer";
 import {
   persistReducer,
   persistStore,
@@ -16,6 +17,7 @@ import storage from "redux-persist/lib/storage";
 const rootReducer = combineReducers({
   themeMode: ThemeReducer,
   player: PlayerReducer,
+  user: UserReducer
 });
 
 const persistConfig = {

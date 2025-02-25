@@ -87,7 +87,7 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
     confirmed: false,
     tags: "",
   });
-  console.log(newData, "set newData here")
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isNewOpen,
