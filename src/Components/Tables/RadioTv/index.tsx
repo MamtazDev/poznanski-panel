@@ -30,6 +30,8 @@ import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import FolderImage from "../../../assets/png/folder_icon.png";
 import { getVideoInfoById } from "../../../utils";
+import { useDispatch } from "react-redux";
+import { openPlayer } from "../../../reducers/PlayerReducer";
 
 interface TableProps {
   themeMode?: boolean;
@@ -98,6 +100,45 @@ const RadioTv: React.FC<TableProps> = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const artistAllData: ArtistData[] = artistData as ArtistData[];
   const toast = useToast();
+  const dispatch = useDispatch();
+
+  const getYouTubeID = (url: string) => {
+    let videoId = "";
+    try {
+      if (url.includes("youtube.com/watch?v=")) {
+        videoId = new URL(url).searchParams.get("v") || "";
+      } else if (url.includes("youtu.be/")) {
+        videoId = url.split("youtu.be/")[1]?.split("?")[0] || "";
+      }
+    } catch (error) {
+      console.error("Error extracting YouTube ID:", error);
+    }
+    return videoId;
+  };
+
+
+  // const handlePlay = (youTube: any) => {
+  //   console.log("Clicked Video URL:", youTube);
+  //   if (youTube) {
+  //     const videoId = getYouTubeID(youTube);
+  //     console.log("Extracted Video ID:", videoId);
+  //     if (videoId) {
+  //       dispatch(openPlayer(videoId));
+  //       console.log("Dispatched Video ID:", videoId);
+  //     }
+  //   }
+  // };
+
+  const handlePlay = (youTube: any) => {
+    if (youTube) {
+      const videoId = getYouTubeID(youTube);
+      if (videoId) {
+        dispatch(openPlayer(videoId));
+      }
+    }
+  };
+
+
 
   // Fetch artist data
   useEffect(() => {
@@ -377,16 +418,16 @@ const RadioTv: React.FC<TableProps> = ({
     });
   }, []);
 
+
   return (
     <>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
-            className={`text-xs uppercase ${
-              themeMode
-                ? "text-white bg-[#5A1073]"
-                : "bg-[#3bd6c6] text-[#5A1073]"
-            }`}
+            className={`text-xs uppercase ${themeMode
+              ? "text-white bg-[#5A1073]"
+              : "bg-[#3bd6c6] text-[#5A1073]"
+              }`}
           >
             <tr>
               <th className="px-6 py-3 w-32">Title</th>
@@ -402,11 +443,10 @@ const RadioTv: React.FC<TableProps> = ({
               radioData?.map((item, idx) => (
                 <tr
                   key={idx}
-                  className={`border-b  ${
-                    !themeMode
-                      ? "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700"
-                      : "bg-white text-gray-900 hover:bg-gray-200"
-                  }`}
+                  className={`border-b  ${!themeMode
+                    ? "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700"
+                    : "bg-white text-gray-900 hover:bg-gray-200"
+                    }`}
                 >
                   <td className="px-4 py-3">
                     <p className="truncate max-w-[200px]">{item?.title}</p>
@@ -423,8 +463,8 @@ const RadioTv: React.FC<TableProps> = ({
                       {item?.description}
                     </p>
                   </td>
-                  <td className="px-4 py-3">
-                    <div className="flex justify-center">
+                  {/* <td className="px-4 py-3">
+                    {/* <div className="flex justify-center">
                       <iframe
                         src={
                           item?.youTube?.includes("youtube.com/watch")
@@ -440,8 +480,71 @@ const RadioTv: React.FC<TableProps> = ({
                         className="w-40 h-24 md: rounded-lg shadow-lg"
                       ></iframe>
                     </div>
+                    <div className={`relative lg:bg-gray-100 cursor-pointer lg:h-48 rounded-md flex-shrink-0 overflow-hidden ${!themeMode && "dark-bg-color"}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handlePlay(item?.youTube);
+                      }}
+
+                      >
+                      <img
+                        src={item?.youTube ? `https://img.youtube.com/vi/${getYouTubeID(item?.youTube)}/hqdefault.jpg` : "default-thumbnail.jpg"}
+                        className="md:w-full w-[69px] h-full  object-cover"
+                        alt="YouTube Thumbnail"
+                      />
+
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        {themeMode ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="58" height="57" viewBox="0 0 58 57" fill="none" className="w-[20px] md:w-[58px]">
+                            <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
+                            <path d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z" fill="white" />
+                          </svg>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 55 55" fill="none" className="w-[20px] md:w-[58px]">
+                            <circle cx="27.5" cy="27.5" r="27.5" fill="#2FC4B2" />
+                            <path d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z" fill="#111217" />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+                  </td> */}
+                  <td className="px-4 py-3">
+                    <div className={`relative lg:bg-gray-100 cursor-pointer lg:h-48 rounded-md flex-shrink-0 overflow-hidden ${!themeMode && "dark-bg-color"}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handlePlay(item?.youTube);
+                      }}
+                    >
+                      <img
+                        src={item?.youTube ? `https://img.youtube.com/vi/${getYouTubeID(item?.youTube)}/hqdefault.jpg` : "default-thumbnail.jpg"}
+                        className="md:w-full w-[69px] h-full object-cover"
+                        alt="YouTube Thumbnail"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        {themeMode ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="58" height="57" viewBox="0 0 58 57" fill="none" className="w-[20px] md:w-[58px]">
+                            <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
+                            <path d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z" fill="white" />
+                          </svg>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 55 55" fill="none" className="w-[20px] md:w-[58px]">
+                            <circle cx="27.5" cy="27.5" r="27.5" fill="#2FC4B2" />
+                            <path d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z" fill="#111217" />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
                   </td>
-                  <td className="px-4 py-3">{item?.tags}</td>
+
+                  <td className="px-4 py-3">   {item?.tags && item?.tags.split(',').length > 0
+                    ? (
+                      <>
+                        {item?.tags.split(',').slice(0, 3).join(", ")}
+                       <span style={{}}> {item?.tags.split(',').length > 3 && ' and more...'}</span>
+                      </>
+                    )
+                    : "No tags available"}</td>
+
                   <td className="px-4 py-3">
                     <div className="flex justify-center space-x-2">
                       <button onClick={() => handleEdit(item._id)}>
@@ -483,9 +586,8 @@ const RadioTv: React.FC<TableProps> = ({
         <ModalOverlay />
         <ModalContent>
           <div
-            className={` ${
-              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-            }`}
+            className={` ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+              }`}
           >
             <ModalHeader>Edit Item</ModalHeader>
             <ModalBody>
@@ -580,9 +682,8 @@ const RadioTv: React.FC<TableProps> = ({
         <ModalOverlay />
         <ModalContent>
           <div
-            className={` ${
-              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-            }`}
+            className={` ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+              }`}
           >
             <ModalHeader>Add New Item</ModalHeader>
             <ModalBody>
@@ -654,16 +755,16 @@ const RadioTv: React.FC<TableProps> = ({
                 />
                 <HStack mt={2} spacing={2}>
                   <div className="flex gap-1   flex-wrap">
-                  {tags.map((tag) => (
-                    <Tag key={tag} variant="solid" colorScheme="teal">
-                      <p>{tag}</p>
-                      <TagCloseButton onClick={() => handleRemoveTag(tag)} />
-                    </Tag>
-                    // <Tag key={tag} variant="solid" colorScheme="teal">
-                    //   <TagLabel>{tag}</TagLabel>
-                    //   <TagCloseButton onClick={() => handleRemoveTag(tag)} />
-                    // </Tag>
-                  ))}
+                    {tags.map((tag) => (
+                      <Tag key={tag} variant="solid" colorScheme="teal">
+                        <p>{tag}</p>
+                        <TagCloseButton onClick={() => handleRemoveTag(tag)} />
+                      </Tag>
+                      // <Tag key={tag} variant="solid" colorScheme="teal">
+                      //   <TagLabel>{tag}</TagLabel>
+                      //   <TagCloseButton onClick={() => handleRemoveTag(tag)} />
+                      // </Tag>
+                    ))}
                   </div>
                 </HStack>
               </FormControl>

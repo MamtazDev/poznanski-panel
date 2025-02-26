@@ -35,6 +35,8 @@ const AppMain: React.FC = () => {
   const selectedLink = useSelector((state: RootState) => state.player.link);
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState<boolean>(playerOpen);
+  const [type, setPropsType] = useState<boolean>(false);
+  const videoId = useSelector((state: RootState) => state.player.videoId);
 
   useEffect(() => {
     setIsOpen(playerOpen);
@@ -90,10 +92,10 @@ const AppMain: React.FC = () => {
               path="material"
               element={<AdminPanel component={<MaterialContent />} />}
             />
-            {/* <Route
+            <Route
               path="album"
               element={<AdminPanel component={<AlbumContent />} />}
-            /> */}
+            />
             <Route
               path="playlist"
               element={<AdminPanel component={<PlaylistPage />} />}
@@ -119,9 +121,11 @@ const AppMain: React.FC = () => {
         </Routes>
       </Suspense>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <YoutubePlayer isOpen={isOpen}  type={type} />
+
+      {/* <Modal isOpen={isOpen} onClose={onClose}>
         <YoutubePlayer link={selectedLink} />
-      </Modal>
+      </Modal> */}
     </div>
   );
 };
