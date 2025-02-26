@@ -508,6 +508,7 @@ const RadioTv: React.FC<TableProps> = ({
                       </div>
                     </div>
                   </td> */}
+                  {/* { tv radio video playder} */}
                   <td className="px-4 py-3">
                     <div className={`relative lg:bg-gray-100 cursor-pointer lg:h-48 rounded-md flex-shrink-0 overflow-hidden ${!themeMode && "dark-bg-color"}`}
                       onClick={(e) => {
