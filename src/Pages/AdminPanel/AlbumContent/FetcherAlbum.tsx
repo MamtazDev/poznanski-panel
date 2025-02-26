@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 
-function FetcherMaterial() {
+function FetcherAlbum() {
 
     const API_KEY = 'AIzaSyBmYFEkoJIVhA4vD7hqWU3M7bf7djo-9rA'; // Wstaw tutaj swój klucz API
 	const CHANNEL_USERNAME = 'poznanskirapcom'; // Nazwa użytkownika kanału
@@ -77,7 +77,7 @@ function FetcherMaterial() {
 		};
 
 		fetchAllChannelVideos();
-      //   console.log("Videos", videos)
+
 	}, []);
 
 
@@ -86,4 +86,4 @@ function FetcherMaterial() {
   )
 }
 
-export default FetcherMaterial
+export default FetcherAlbum

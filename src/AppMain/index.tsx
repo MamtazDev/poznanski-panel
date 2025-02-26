@@ -10,6 +10,7 @@ import UserMainPage from "../Pages/AdminPanel/User";
 import { RootState } from "../reducers";
 import { closePlayer } from "../reducers/PlayerReducer";
 import PlaylistPage from "../Pages/AdminPanel/Playlist";
+import AlbumContent from "../Pages/AdminPanel/AlbumContent/AlbumContent";
 
 const AdminPanel = lazy(() => import("../Pages/AdminPanel"));
 const Article = lazy(() => import("../Pages/AdminPanel/Article"));
@@ -89,6 +90,10 @@ const AppMain: React.FC = () => {
               path="material"
               element={<AdminPanel component={<MaterialContent />} />}
             />
+            {/* <Route
+              path="album"
+              element={<AdminPanel component={<AlbumContent />} />}
+            /> */}
             <Route
               path="playlist"
               element={<AdminPanel component={<PlaylistPage />} />}
