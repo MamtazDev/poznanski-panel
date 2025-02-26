@@ -672,6 +672,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                     </svg>
                   )}
                 </div>
+                <button> Logout</button>
                 <div className="cursor-pointer">
                   {themeMode ? (
                     <img src={Cup} alt="cup" />

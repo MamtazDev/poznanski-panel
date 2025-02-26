@@ -10,6 +10,8 @@ import UserMainPage from "../Pages/AdminPanel/User";
 import { RootState } from "../reducers";
 import { closePlayer } from "../reducers/PlayerReducer";
 import PlaylistPage from "../Pages/AdminPanel/Playlist";
+import Login from "../Pages/Login";
+import PrivateRoute from "./PrivateRoute";
 
 const AdminPanel = lazy(() => import("../Pages/AdminPanel"));
 const Article = lazy(() => import("../Pages/AdminPanel/Article"));
@@ -67,7 +69,8 @@ const AppMain: React.FC = () => {
         <ScrollToTopOnPageChange />
         <Routes>
           <Route path="" element={<Navigate to="admin" />} />
-          <Route path="/admin">
+          <Route path="/login" element={<Login />} />
+          <Route path="/admin" element={<PrivateRoute />}>
             <Route path="" element={<Navigate to="article" />} />
             <Route
               path="article"
