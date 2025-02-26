@@ -298,7 +298,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       });
     }
   };
-
+  
   const handleNewInputChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -380,7 +380,6 @@ const MaterialContent: React.FC<TableProps> = (props) => {
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
-      <FetcherMaterial />
       {/* <div className="flex items-center justify-end py-5">
         <Button colorScheme="green" onClick={handleNewPost}>
           Add New Item
