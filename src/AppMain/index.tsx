@@ -78,31 +78,31 @@ const AppMain: React.FC = () => {
             <Route
               path="article"
               element={
-                <PrivateRoute>
+
                   <AdminPanel component={<Article tagData={tags} />} />
-                </PrivateRoute>
+
               }
             />
             <Route
               path="propossedArticle"
               element={
-                <PrivateRoute>
+
                   <AdminPanel component={<PropossedArticle tagData={tags} />} />
-                </PrivateRoute>
+
               }
             />
             <Route
               path="radio"
               element={
-                <PrivateRoute>
+
                   <AdminPanel component={<Radio path="tv" tagData={tags} />} />
-                </PrivateRoute>
+
               }
             />
-            <Route
+            {/* <Route
               path="material"
               element={<AdminPanel component={<MaterialContent />} />}
-            />
+            /> */}
             <Route
               path="album"
               element={<AdminPanel component={<AlbumContent />} />}
@@ -115,9 +115,9 @@ const AppMain: React.FC = () => {
             <Route
               path="concerts"
               element={
-                <PrivateRoute>
+
                   <AdminPanel component={<Concert />} />
-                </PrivateRoute>
+
               }
             />
             <Route
@@ -127,17 +127,17 @@ const AppMain: React.FC = () => {
             <Route
               path="logos"
               element={
-                <PrivateRoute>
+
                   <AdminPanel component={<PartnerLogos />} />
-                </PrivateRoute>
+
               }
             />
             <Route
               path="user"
               element={
-                <PrivateRoute>
+
                   <AdminPanel component={<UserMainPage user={[]} />} />
-                </PrivateRoute>
+
               }
             />
           </Route>

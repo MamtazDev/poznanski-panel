@@ -10,7 +10,7 @@ const mainMenu = [
   { icon: <BiCircle />, text: "Article", link: "article" },
   { icon: <BiCircle />, text: "Propossed Article", link: "propossedArticle" },
   { icon: <BiCircle />, text: "TV/Radio", link: "radio" },
-  { icon: <BiCircle />, text: "Material", link: "material" },
+  // { icon: <BiCircle />, text: "Material", link: "material" },
   { icon: <BiCircle />, text: "Album", link: "album" },
   {icon: <BiCircle />, text: "Playlist", link: "playlist", },
   { icon: <BiCircle />, text: "Concerts", link: "concerts" },
