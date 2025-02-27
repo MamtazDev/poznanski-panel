@@ -78,6 +78,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
   });
   const [editData, setEditData] = useState<Material | null>(null);
   const [artistData, setArtistData] = useState<any[]>([]);
+  const [songsList, setSongsList] = useState<any[]>([]);
   const artistAllData: any = artistData as any;
 
 
@@ -97,7 +98,8 @@ const AlbumContent: React.FC<TableProps> = (props) => {
     youTube: "",
     description: "",
     tags: "",
-    artists: "",
+    artists: [],
+    songs: [],
     date: "",
   });
   // console.log(newData, " new data");
@@ -237,6 +239,8 @@ const AlbumContent: React.FC<TableProps> = (props) => {
     }
   };
 
+
+  // handle save is used for update
   const handleSave = async () => {
     if (!editData || !editData._id) return;
     const updatedData = {
@@ -290,6 +294,8 @@ const AlbumContent: React.FC<TableProps> = (props) => {
     setNewData({
       userId: "6790c75af5c1e10f364abfd9",
       title: "",
+      artists: [],
+      songs: [],
       description: "",
       youTube: "",
       tags: "",
@@ -300,10 +306,10 @@ const AlbumContent: React.FC<TableProps> = (props) => {
   };
 
   const handleCreatePost = async () => {
+
+    const  reqData = { ...newData, songs: songsList}
     try {
-      console.log("Sending Data:", newData);
-      const res = await apiPostReq("/album", newData);
-      console.log("API Response:", res);
+      const res = await apiPostReq("/album", reqData);
 
       if (res.title) {
         setAlbumes((prev:any) => ({
@@ -342,7 +348,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
   ) => {
     setNewData((prev: any) => ({
       ...prev,
-      [field]: e.target.value,
+      [field]: field === "artists" ? [e.target.value] : e.target.value,
     }));
   };
 
@@ -642,7 +648,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
 
               <FormControl isRequired>
                 <FormLabel>Songs</FormLabel>
-                <CustomDropdown/>
+                <CustomDropdown setSongsList={setSongsList} />
               </FormControl>
 
               <FormControl id="title" isRequired mt={4}>

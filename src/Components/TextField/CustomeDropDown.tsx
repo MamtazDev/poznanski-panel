@@ -20,12 +20,19 @@ interface Record {
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
-const CustomDropdown = () => {
+interface TableProps {
+    setSongsList: string[];
+}
+
+const CustomDropdown = ({setSongsList}:any) => {
   const [selected, setSelected] = useState<Record | null>(null);
   const { data, error, isLoading } = useSWR("http://localhost:8000/api/radio", fetcher);
   const records: Record[] = data?.records || [];
 
-  const handleSelect = (record: Record) => setSelected(record);
+  const handleSelect = (record: Record) =>{    
+    setSongsList([record._id])
+    setSelected(record)
+};
 
   return (
     <Menu>
