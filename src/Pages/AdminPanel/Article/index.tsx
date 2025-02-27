@@ -733,6 +733,7 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
             {/* Rich Text Editor */}
             <VStack spacing={4} align="stretch" mt={4} mb={4}>
               <TipTapPage
+              data={newData}
                 content={newData.content}
                 setContent={(newContent) =>
                   handleContentChange(newContent, true)

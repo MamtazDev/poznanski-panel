@@ -220,8 +220,8 @@ const TipTap: React.FC<TipTapProps> = ({
 						/>
 				
 				
-				<p>Editable: {editable} Done</p>
-				<div className={!themeMode ?'text-stone-400' : 'text-stone-500'} dangerouslySetInnerHTML={{__html: content}} />
+				{/* <p>Editable: {editable} Done</p>
+				<div className={!themeMode ?'text-stone-400' : 'text-stone-500'} dangerouslySetInnerHTML={{__html: content}} /> */}
 			</div>
 		</>
 	);
