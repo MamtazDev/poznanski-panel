@@ -289,7 +289,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
       title: "",
       description: "",
       youTube: "",
-      tags: "", // Should be an array
+      tags: "",
       date: "",
       artist:""
     });
