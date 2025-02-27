@@ -13,28 +13,28 @@ const Login = () => {
 
 
   const handleLogin = async () => {
-        setIsLoading(true);
-        try {
-        await loginRequest(password, email);
-        toast({
-            title: 'Login successful',
-            description: 'You are now logged in.',
-            status: 'success',
-            duration: 5000,
-            isClosable: true,
-        });
-        navigate('/admin/article');
-        } catch (error) {
-        toast({
-            title: 'Login failed',
-            description: 'Invalid email or password.',
-            status: 'error',
-            duration: 5000,
-            isClosable: true,
-        });
-        } finally {
-        setIsLoading(false);
-        }
+    setIsLoading(true);
+    try {
+     await loginRequest(password, email);
+      toast({
+        title: 'Login successful',
+        description: 'You are now logged in.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      navigate('/admin/article');
+    } catch (error) {
+      toast({
+        title: 'Login failed',
+        description: 'Invalid email or password.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

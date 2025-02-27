@@ -33,6 +33,7 @@ import CommonButton from "../../../Components/Buttons/CommonButton";
 import { AiOutlineSearch } from "react-icons/ai";
 import FetcherAlbum from "./FetcherAlbum";
 import { getVideoInfoById } from "../../../utils";
+import CustomDropdown from "../../../Components/TextField/CustomeDropDown";
 
 // Define types for the data
 interface Material {
@@ -91,6 +92,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
   // const [themeMode, setThemeMode] = useState<boolean>(true);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [newData, setNewData] = useState<any>({
+    userId: "6790c75af5c1e10f364abfd9",
     title: "",
     youTube: "",
     description: "",
@@ -286,12 +288,13 @@ const AlbumContent: React.FC<TableProps> = (props) => {
 
   const handleNewPost = () => {
     setNewData({
+      userId: "6790c75af5c1e10f364abfd9",
       title: "",
       description: "",
       youTube: "",
       tags: "",
-      date: "",
-      artist:""
+      date: "2025-01-28T12:00:00.000Z",
+
     });
     onNewOpen();
   };
@@ -304,7 +307,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
 
       if (res.title) {
         setAlbumes((prev:any) => ({
-          album: [...prev.album, res.data],
+          album: [ res.data],
         }));
         toast({
           title: "Post created successfully!",
@@ -636,6 +639,12 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                   )}
                 </Select>
               </FormControl>
+
+              <FormControl isRequired>
+                <FormLabel>Songs</FormLabel>
+                <CustomDropdown/>
+              </FormControl>
+
               <FormControl id="title" isRequired mt={4}>
                 <FormLabel>Title</FormLabel>
                 <Input

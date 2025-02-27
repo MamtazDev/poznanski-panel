@@ -603,6 +603,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData ,date}) => {
             {/* Rich Text Editor */}
             <VStack spacing={4} align="stretch" mt={4}>
               <TipTapPage
+                data={editData}
                 content={editData?.content || ""}
                 setContent={(newContent) =>
                   handleContentChange(newContent, false)

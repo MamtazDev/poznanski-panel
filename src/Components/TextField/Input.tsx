@@ -8,9 +8,10 @@ interface InputProps {
   name: string;
   label: string;
   value?: string | number;
-  error?: boolean;
+  error?: boolean | undefined | string;
   errMsg?: string;
   type?: boolean;
+  register?: any;
 }
 const Input: React.FC<InputProps> = ({
   name,
