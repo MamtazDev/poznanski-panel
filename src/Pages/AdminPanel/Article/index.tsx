@@ -39,6 +39,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import moment from "moment";
 import ArticleEdit from "./ArticleEdit";
+import CustomDropdown from "../../../Components/TextField/CustomeDropDown";
 
 interface Content {
   subHead: string;
@@ -729,6 +730,8 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
                 focusBorderColor="blue.500"
               />
             </FormControl>
+            
+            {/* <CustomDropdown/> */}
 
             {/* Rich Text Editor */}
             <VStack spacing={4} align="stretch" mt={4} mb={4}>
