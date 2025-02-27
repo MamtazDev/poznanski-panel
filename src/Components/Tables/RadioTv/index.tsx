@@ -100,8 +100,8 @@ const RadioTv: React.FC<TableProps> = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const artistAllData: ArtistData[] = artistData as ArtistData[];
   const toast = useToast();
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const getYouTubeID = (url: string) => {
     let videoId = "";
     try {
@@ -115,19 +115,6 @@ const RadioTv: React.FC<TableProps> = ({
     }
     return videoId;
   };
-
-
-  // const handlePlay = (youTube: any) => {
-  //   console.log("Clicked Video URL:", youTube);
-  //   if (youTube) {
-  //     const videoId = getYouTubeID(youTube);
-  //     console.log("Extracted Video ID:", videoId);
-  //     if (videoId) {
-  //       dispatch(openPlayer(videoId));
-  //       console.log("Dispatched Video ID:", videoId);
-  //     }
-  //   }
-  // };
 
   const handlePlay = (youTube: any) => {
     if (youTube) {

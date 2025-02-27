@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'; // You can use any cookie library
 const PrivateRoute: React.FC = () => {
   // Get the refresh token from cookies
   const refreshToken = Cookies.get('access_token');
-  console.log("refreshToken", refreshToken)
+  // console.log("refreshToken", refreshToken)
 
   // If there's no refresh token, redirect to the login page
   if (!refreshToken) {

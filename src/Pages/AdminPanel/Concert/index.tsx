@@ -68,6 +68,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
     img: "",
     description: "",
     link: "",
+    ticket: "",
     isFeatured: false,
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -334,6 +335,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       description: editData.description,
       location: editData.location,
       link: editData.link,
+      ticket: editData.link,
       isFeatured: editData.isFeatured,
     };
 
@@ -382,6 +384,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
       img: "",
       description: "",
       link: "",
+      ticket: "",
     });
     onNewOpen();
   };
@@ -431,7 +434,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
               <th className="px-6 py-3">Title</th>
               <th className="px-6 py-3">Category</th>
               <th className="px-6 py-3">Location</th>
-              <th className="px-6 py-3">Link</th>
+              <th className="px-6 py-3"> Ticket Link</th>
               <th className="px-6 py-3">Description</th>
               <th className="px-6 py-3">isFeatured</th>
               <th className="px-6 py-3">Start</th>
@@ -466,7 +469,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                       className={` py-2 px-4 rounded-md ${themeMode ? "bg-gray-100" : "bg-gray-900"}`}
                     >
                       <a
-                        href={item.link}
+                        href={item.ticket}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 font-semibold flex items-center gap-2 justify-center"
@@ -528,7 +531,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                         className={` py-2 px-4 rounded-md ${themeMode ? "bg-gray-100" : "bg-gray-900"}`}
                       >
                         <a
-                          href={item.link}
+                          href={item.ticket}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-500 font-semibold flex items-center gap-2 justify-center"
@@ -752,6 +755,16 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                   value={newData.link}
                   onChange={(e) => handleYoutubeUrl(e)}
                   placeholder="Enter link"
+                />
+              </FormControl>
+
+              {/* Ticket Link */}
+              <FormControl id="ticket" mt={4}>
+                <FormLabel>Ticket Link</FormLabel>
+                <Input
+                  value={newData.ticket}
+                  onChange={(e) => handleNewInputChange(e, "ticket")}
+                  placeholder="Enter Ticket Link"
                 />
               </FormControl>
 

@@ -12,6 +12,7 @@ interface PlayerProps {
 
 const YoutubePlayer: React.FC<PlayerProps> = ({ isOpen, type }) => {
   const videoId = useSelector((state: RootState) => state.player.videoId);
+  // console.log("videoId", videoId)
   const dispatch = useDispatch();
 
   const opts = {
@@ -37,7 +38,7 @@ const YoutubePlayer: React.FC<PlayerProps> = ({ isOpen, type }) => {
     if (iframe && iframe.src) {
       // Replace the iframe source URL for privacy
       const src = iframe.src.replace('www.youtube.com', 'www.youtube-nocookie.com');
-      iframe.src = src;
+      iframe.src = src || "";
 
       setTimeout(() => {
         event.target.playVideo();

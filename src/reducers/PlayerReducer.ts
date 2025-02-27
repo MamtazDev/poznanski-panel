@@ -17,7 +17,7 @@ export const playerSlice = createSlice({
   reducers: {
     openPlayer: (state, action: PayloadAction<string>) => {
       state.isOpen = true;
-      state.link = action.payload;
+      state.videoId = action.payload;
     },
     closePlayer: (state) => {
       state.isOpen = false;

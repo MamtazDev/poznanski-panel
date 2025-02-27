@@ -8,6 +8,7 @@ import {
   Box,
   HStack,
   useBreakpointValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -15,6 +16,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../reducers";
 import { apiGetReq, apiPostReq } from "../../../Constant/api-functions";
 import CommonButton from "../../../Components/Buttons/CommonButton";
+import { openPlayer } from "../../../reducers/PlayerReducer";
+import { useDispatch } from "react-redux";
 
 // Pagination Component
 const Pagination = ({
@@ -93,8 +96,34 @@ const PlaylistPage: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-
   const [isReloadLoading, setIsReloadLoading] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const dispatch = useDispatch();
+
+  const getYouTubeID = (url: string) => {
+    let videoId = "";
+    try {
+      if (url.includes("youtube.com/watch?v=")) {
+        videoId = new URL(url).searchParams.get("v") || "";
+      } else if (url.includes("youtu.be/")) {
+        videoId = url.split("youtu.be/")[1]?.split("?")[0] || "";
+      }
+    } catch (error) {
+      console.error("Error extracting YouTube ID:", error);
+    }
+    return videoId;
+  };
+
+
+  const handlePlay = (youTube: any) => {
+    if (youTube) {
+      const videoId = getYouTubeID(youTube);
+      if (youTube) {
+        dispatch(openPlayer(youTube));
+      }
+    }
+  };
 
   const fetchPlaylists = async (page: number) => {
     setLoading(true);
@@ -139,9 +168,8 @@ const PlaylistPage: React.FC = () => {
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex justify-between">
         <Box
-          className={`mb-4 ${
-            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-          }`}
+          className={`mb-4 ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}
           w="300px"
         >
           <InputGroup>
@@ -175,11 +203,10 @@ const PlaylistPage: React.FC = () => {
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
           <table className="w-full h-full" style={{ minWidth: "400px" }}>
             <thead
-              className={`text-xs uppercase ${
-                themeMode
+              className={`text-xs uppercase ${themeMode
                   ? "text-white bg-[#5A1073]"
                   : "bg-[#3bd6c6] text-[#5A1073]"
-              }`}
+                }`}
             >
               <tr>
                 <th className="px-6 py-3 text-left">Title</th>
@@ -193,28 +220,58 @@ const PlaylistPage: React.FC = () => {
                 playlists.map((item, index) => (
                   <tr
                     key={index}
-                    className={`border-b ${
-                      !themeMode
+                    className={`border-b ${!themeMode
                         ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
                         : "bg-white text-gray-900 hover:bg-gray-200"
-                    }`}
+                      }`}
                   >
                     <td className="p-4 text-left">{item.title}</td>
-                    <td className="px-4 py-3 text-left">
+                    {/* <td className="px-4 py-3 text-left"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handlePlay(item?.youTube);
+                      }} >
                       <iframe
                         src={
                           item?.youTube?.includes("youtube.com/watch")
-                            ? `https://www.youtube.com/embed/${
-                                item?.youTube?.split("v=")[1].split("&")[0]
-                              }`
+                            ? `https://www.youtube.com/embed/${item?.youTube?.split("v=")[1].split("&")[0]
+                            }`
                             : item?.youTube ||
-                              "https://www.youtube.com/embed/6JYIGclVQdw"
+                            "https://www.youtube.com/embed/6JYIGclVQdw"
                         }
                         title="YouTube player"
                         className="w-40 h-24 rounded-lg shadow-lg"
                         frameBorder="0"
                       />
-                    </td>
+                    </td> */}
+                     <td className="px-4 py-3">
+                    <div className={`relative lg:bg-gray-100 cursor-pointer lg:h-48 rounded-md flex-shrink-0 overflow-hidden ${!themeMode && "dark-bg-color"}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handlePlay(item?.videoId);
+                      }}
+                    >
+                      {/* <p>Title: {item?.videoId }</p> */}
+                      <img
+                        src={item?.videoId ? `https://img.youtube.com/vi/${item?.videoId}/hqdefault.jpg` : "default-thumbnail.jpg"}
+                        className="md:w-full w-[69px] h-full object-cover"
+                        alt="YouTube Thumbnail"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        {themeMode ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="58" height="57" viewBox="0 0 58 57" fill="none" className="w-[20px] md:w-[58px]">
+                            <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
+                            <path d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z" fill="white" />
+                          </svg>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 55 55" fill="none" className="w-[20px] md:w-[58px]">
+                            <circle cx="27.5" cy="27.5" r="27.5" fill="#2FC4B2" />
+                            <path d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z" fill="#111217" />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+                  </td>
                     <td className="py-4 text-left">
                       {item.description.slice(0, 50)}
                     </td>

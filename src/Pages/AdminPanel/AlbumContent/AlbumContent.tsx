@@ -42,6 +42,7 @@ interface Material {
   youTube: string;
   tags: string;
   date: string;
+  artists: string;
   commentsSection: {
     commentsIds: string[];
     embeddedComments: string[];
@@ -59,6 +60,7 @@ interface TableProps {
     description: string;
     tags: string;
     date: number;
+    artists: string;
     youTube: string;
   }[];
   handleEdit?: (id: string) => void;
@@ -70,17 +72,30 @@ interface TableProps {
 }
 
 const AlbumContent: React.FC<TableProps> = (props) => {
-  const [radioData, setRadioData] = useState<{ materials: Material[] }>({
-    materials: [],
+  const [radioData, setRadioData] = useState<{ album: Material[] }>({
+    album: [],
   });
   const [editData, setEditData] = useState<Material | null>(null);
+  const [artistData, setArtistData] = useState<any[]>([]);
+  const artistAllData: any = artistData as any;
+
+
+   // Fetch artist data
+    useEffect(() => {
+      apiGetReq("/artist", {}).then((res) => {
+        setArtistData(res?.data || []);
+      });
+    }, []);
+
+
   // const [themeMode, setThemeMode] = useState<boolean>(true);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [newData, setNewData] = useState<any>({
     title: "",
     youTube: "",
     description: "",
-    tags: "React, Frontend, JavaScript",
+    tags: "",
+    artists: "",
     date: "",
   });
   // console.log(newData, " new data");
@@ -95,24 +110,40 @@ const AlbumContent: React.FC<TableProps> = (props) => {
 
   // Fetch data
   const [materials, setMaterials] = useState<Material[]>([]);
+  const [album, setAlbumes] = useState<any>([]);
 
   useEffect(() => {
-    apiGetReq("/materials", { limit: 100 }).then((res) => {
-      // console.log(res, "materials data");
+    // apiGetReq("/materials", { limit: 100 }).then((res) => {
+    //   // console.log(res, "materials data");
 
-      if (res && Array.isArray(res.materials)) {
-        setMaterials(res.materials);
+    //   if (res && Array.isArray(res.materials)) {
+    //     setMaterials(res.materials);
+    //   } else {
+    //     setMaterials([]);
+    //     console.error("Invalid response format:", res);
+    //   }
+    // });
+
+    apiGetReq("/album", { limit: 100 }).then((res) => {
+      // console.log(res, "album data");
+
+      if (res && Array.isArray(res.albums)) {
+        setAlbumes(res.albums);
       } else {
-        setMaterials([]);
+        setAlbumes([]);
         console.error("Invalid response format:", res);
       }
     });
   }, []);
 
+  useEffect(() => {
+    // console.log("albumes", albumes)
+  }, [album])
+
   // Edit item
   const handleEdit = (id: string) => {
     // console.log("Editing item:", id);
-    const selectedItem = materials.find((item) => item._id === id);
+    const selectedItem = album.find((item: any) => item._id === id);
     if (selectedItem) {
       // console.log("Found item:", selectedItem);
       setEditData({ ...selectedItem });
@@ -171,8 +202,8 @@ const AlbumContent: React.FC<TableProps> = (props) => {
     onClose(); // Close the confirmation toast
 
     try {
-      const res = await apiDeleteReq(`/materials/${id}`, {});
-      if (res.message) {
+      const res = await apiDeleteReq(`/album/${id}`, {});
+      if (res?._id) {
         toast({
           title: "Deleted successfully!",
           status: "success",
@@ -180,9 +211,9 @@ const AlbumContent: React.FC<TableProps> = (props) => {
           isClosable: true,
           position: "top",
         });
-        setRadioData((prev) => ({
-          materials: prev.materials.filter((item) => item._id !== id),
-        }));
+        // setAlbumes((prev:any) => ({
+        //   album: prev.album.filter((item:any) => item._id !== id),
+        // }));
       } else {
         toast({
           title: "Failed to delete",
@@ -212,13 +243,14 @@ const AlbumContent: React.FC<TableProps> = (props) => {
       youTube: editData.youTube,
       tags: editData.tags,
       date: editData.date,
+      artists:editData.artists,
     };
 
     try {
-      const res = await apiPutReq(`/materials/${editData._id}`, updatedData);
+      const res = await apiPutReq(`/album/${editData._id}`, updatedData);
       if (res) {
         setRadioData((prev) => ({
-          materials: prev.materials.map((item) =>
+          album: prev.album.map((item) =>
             item._id === editData._id ? { ...item, ...res.data } : item
           ),
         }));
@@ -257,21 +289,22 @@ const AlbumContent: React.FC<TableProps> = (props) => {
       title: "",
       description: "",
       youTube: "",
-      tags: "React, Frontend, JavaScript", // Should be an array
-      date: "2025-01-28T00:00:00.000Z",
+      tags: "", // Should be an array
+      date: "",
+      artist:""
     });
     onNewOpen();
   };
 
   const handleCreatePost = async () => {
     try {
-      // console.log("Sending Data:", newData);
-      const res = await apiPostReq("/materials", newData);
-      // console.log("API Response:", res);
+      console.log("Sending Data:", newData);
+      const res = await apiPostReq("/album", newData);
+      console.log("API Response:", res);
 
       if (res.title) {
-        setRadioData((prev) => ({
-          materials: [...prev.materials, res.data],
+        setAlbumes((prev:any) => ({
+          album: [...prev.album, res.data],
         }));
         toast({
           title: "Post created successfully!",
@@ -301,8 +334,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
 
   const handleNewInputChange = (
     e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>,
+    React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
     field: string
   ) => {
     setNewData((prev: any) => ({
@@ -383,9 +415,8 @@ const AlbumContent: React.FC<TableProps> = (props) => {
       <FetcherAlbum />
       <div className="flex justify-between">
         <div
-          className={`mb-4 ${
-            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-          }`}
+          className={`mb-4 ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}
           style={{ width: "300px" }}
         >
           <InputGroup>
@@ -401,19 +432,18 @@ const AlbumContent: React.FC<TableProps> = (props) => {
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
-            className={`text-xs uppercase ${
-              themeMode
+            className={`text-xs uppercase ${themeMode
                 ? "text-white bg-[#5A1073]"
                 : "bg-[#3bd6c6] text-[#5A1073]"
-            }`}
+              }`}
           >
             <tr>
               <th className="px-6 py-3" style={{ width: "130px" }}>
                 Title
               </th>
-              <th className="px-6 py-3" style={{ width: "130px" }}>
+              {/* <th className="px-6 py-3" style={{ width: "130px" }}>
                 Video
-              </th>
+              </th> */}
               <th className="px-6 py-3" style={{ width: "130px" }}>
                 Tags
               </th>
@@ -429,20 +459,19 @@ const AlbumContent: React.FC<TableProps> = (props) => {
             </tr>
           </thead>
           <tbody>
-            {materials.length > 0 ? (
-              materials.map((item: Material, index: number) => (
+            {album.length > 0 ? (
+              album?.map((item: any, index: number) => (
                 <tr
                   key={index}
-                  className={`border-b py-4  ${
-                    !themeMode
+                  className={`border-b py-4  ${!themeMode
                       ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
                       : "bg-white text-gray-900 hover:bg-gray-200"
-                  }`}
+                    }`}
                 >
                   <td className="p-4">
                     <p className="truncate max-w-[200px]">{item.title}</p>
                   </td>
-                  <td className="px-4 py-3">
+                  {/* <td className="px-4 py-3">
                     <div className="flex justify-center">
                       <iframe
                         src={
@@ -459,7 +488,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                         className="w-40 h-24 md: rounded-lg shadow-lg"
                       ></iframe>
                     </div>
-                  </td>
+                  </td> */}
                   <td className="py-4">{item.tags}</td>
                   <td className="py-4">
                     {new Date(item.date).toISOString().split("T")[0]}
@@ -507,9 +536,8 @@ const AlbumContent: React.FC<TableProps> = (props) => {
         <ModalOverlay />
         <ModalContent>
           <div
-            className={` ${
-              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-            }`}
+            className={` ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+              }`}
           >
             <ModalHeader>Edit Item</ModalHeader>
             <ModalBody>
@@ -580,13 +608,34 @@ const AlbumContent: React.FC<TableProps> = (props) => {
         <ModalOverlay />
         <ModalContent>
           <div
-            className={`${
-              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-            }`}
+            className={`${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+              }`}
           >
             <ModalHeader>Add New Item</ModalHeader>
             <ModalBody>
               {/* Title */}
+              <FormControl isRequired>
+                <FormLabel>Artist</FormLabel>
+                <Select
+                  placeholder="Select Artist"
+                  value={newData?.artists || []}
+                  onChange={(e) => handleNewInputChange(e, "artists")}
+                >
+                  {artistAllData.length > 0 ? (
+                    artistAllData?.map((items: any, index: number) => (
+                      <option
+                        key={index}
+                        value={items.artist._id}
+                        className={`${themeMode ? "text-black bg-gray-700" : " text-black bg-gray-700"}`}
+                      >
+                        {items.artist.name}
+                      </option>
+                    ))
+                  ) : (
+                    <p>No data found</p>
+                  )}
+                </Select>
+              </FormControl>
               <FormControl id="title" isRequired mt={4}>
                 <FormLabel>Title</FormLabel>
                 <Input
