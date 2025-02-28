@@ -2,6 +2,7 @@ import {
   Button,
   FormControl,
   FormLabel,
+  HStack,
   Input,
   InputGroup,
   InputRightElement,
@@ -11,11 +12,17 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Popover,
+  PopoverBody,
+  PopoverTrigger,
   Select,
+  Tag,
+  TagCloseButton,
   Text,
   Textarea,
   useDisclosure,
   useToast,
+  PopoverContent
 } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -31,7 +38,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import CommonButton from "../../../Components/Buttons/CommonButton";
 import { AiOutlineSearch } from "react-icons/ai";
-import FetcherAlbum from "./FetcherAlbum";
+// import FetcherAlbum from "./FetcherAlbum";
 import { getVideoInfoById } from "../../../utils";
 import CustomDropdown from "../../../Components/TextField/CustomeDropDown";
 
@@ -79,16 +86,16 @@ const AlbumContent: React.FC<TableProps> = (props) => {
   const [editData, setEditData] = useState<Material | null>(null);
   const [artistData, setArtistData] = useState<any[]>([]);
   const [songsList, setSongsList] = useState<any[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
+
   const artistAllData: any = artistData as any;
 
-
-   // Fetch artist data
-    useEffect(() => {
-      apiGetReq("/artist", {}).then((res) => {
-        setArtistData(res?.data || []);
-      });
-    }, []);
-
+  // Fetch artist data
+  useEffect(() => {
+    apiGetReq("/artist", {}).then((res) => {
+      setArtistData(res?.data || []);
+    });
+  }, []);
 
   // const [themeMode, setThemeMode] = useState<boolean>(true);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
@@ -142,7 +149,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
 
   useEffect(() => {
     // console.log("albumes", albumes)
-  }, [album])
+  }, [album]);
 
   // Edit item
   const handleEdit = (id: string) => {
@@ -239,7 +246,6 @@ const AlbumContent: React.FC<TableProps> = (props) => {
     }
   };
 
-
   // handle save is used for update
   const handleSave = async () => {
     if (!editData || !editData._id) return;
@@ -249,7 +255,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
       youTube: editData.youTube,
       tags: editData.tags,
       date: editData.date,
-      artists:editData.artists,
+      artists: editData.artists,
     };
 
     try {
@@ -300,20 +306,18 @@ const AlbumContent: React.FC<TableProps> = (props) => {
       youTube: "",
       tags: "",
       date: "2025-01-28T12:00:00.000Z",
-
     });
     onNewOpen();
   };
 
   const handleCreatePost = async () => {
-
-    const  reqData = { ...newData, songs: songsList}
+    const reqData = { ...newData, songs: songsList };
     try {
       const res = await apiPostReq("/album", reqData);
 
       if (res.title) {
-        setAlbumes((prev:any) => ({
-          album: [ res.data],
+        setAlbumes((prev: any) => ({
+          album: [res.data],
         }));
         toast({
           title: "Post created successfully!",
@@ -342,8 +346,9 @@ const AlbumContent: React.FC<TableProps> = (props) => {
   };
 
   const handleNewInputChange = (
-    e:
-    React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
     field: string
   ) => {
     setNewData((prev: any) => ({
@@ -382,13 +387,19 @@ const AlbumContent: React.FC<TableProps> = (props) => {
     const id = url.split("v=")[1]?.split("&")[0] || null;
     if (id) {
       const videoInfo = await getVideoInfoById(id);
+      console.log("videoInfo", videoInfo);
+
       if (videoInfo) {
         setData((prev: any) => ({
           ...prev,
           youTube: url,
           title: videoInfo.title || prev.title,
           description: videoInfo.description || prev.description,
-        }));
+          tags:
+            videoInfo.tags?.length > 0 ? videoInfo.tags.join(", ") : prev.tags,
+        }),
+        setTags(videoInfo.tags )
+      );
       } else {
         setData((prev: any) => ({ ...prev, youTube: url }));
       }
@@ -407,6 +418,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
       getVideoId(url, setNewData);
     }, 1200);
   };
+  const [tagInput, setTagInput] = useState("");
 
   const handleEditYoutubeUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value;
@@ -419,13 +431,37 @@ const AlbumContent: React.FC<TableProps> = (props) => {
     }, 1200);
   };
 
+  const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Prevent spaces
+    const value = e.target.value.replace(/\s+/g, "");
+    setTagInput(value);
+  };
+
+  const handleTagInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && tagInput.trim() !== "") {
+      // Prevent duplicate tags
+      if (!tags.includes(tagInput.trim())) {
+        setTags([...tags, tagInput.trim()]);
+        setNewData({ ...newData, ["tags"]: [...tags, tagInput.trim()] });
+      }
+      setTagInput(""); // Clear the input
+      e.preventDefault(); // Prevent form submission on Enter
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setTags(tags.filter((tag) => tag !== tagToRemove));
+    console.log("tags", tags);
+  };
+
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
-      <FetcherAlbum />
+      {/* <FetcherAlbum /> */}
       <div className="flex justify-between">
         <div
-          className={`mb-4 ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-            }`}
+          className={`mb-4 ${
+            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}
           style={{ width: "300px" }}
         >
           <InputGroup>
@@ -441,25 +477,26 @@ const AlbumContent: React.FC<TableProps> = (props) => {
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
-            className={`text-xs uppercase ${themeMode
+            className={`text-xs uppercase ${
+              themeMode
                 ? "text-white bg-[#5A1073]"
                 : "bg-[#3bd6c6] text-[#5A1073]"
-              }`}
+            }`}
           >
             <tr>
-              <th className="px-6 py-3" style={{ width: "130px" }}>
+              <th className="px-6 py-3" style={{ width: "50px" }}>
                 Title
               </th>
               {/* <th className="px-6 py-3" style={{ width: "130px" }}>
                 Video
               </th> */}
-              <th className="px-6 py-3" style={{ width: "130px" }}>
+              <th className="px-6 py-3" style={{ width: "320px" }}>
                 Tags
               </th>
-              <th className="px-6 py-3" style={{ width: "130px" }}>
+              <th className="px-6 py-3" style={{ width: "100px" }}>
                 Date
               </th>
-              <th className="px-6 py-3" style={{ width: "130px" }}>
+              <th className="px-6 py-3" style={{ width: "50px" }}>
                 Description
               </th>
               <th className="px-6 py-3" style={{ width: "130px" }}>
@@ -472,10 +509,11 @@ const AlbumContent: React.FC<TableProps> = (props) => {
               album?.map((item: any, index: number) => (
                 <tr
                   key={index}
-                  className={`border-b py-4  ${!themeMode
+                  className={`border-b py-4  ${
+                    !themeMode
                       ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
                       : "bg-white text-gray-900 hover:bg-gray-200"
-                    }`}
+                  }`}
                 >
                   <td className="p-4">
                     <p className="truncate max-w-[200px]">{item.title}</p>
@@ -498,7 +536,21 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                       ></iframe>
                     </div>
                   </td> */}
-                  <td className="py-4">{item.tags}</td>
+                  <td className="py-4">
+                  {/* <div className="flex flex-wrap gap-2 max-h-12 overflow-y-auto">
+                    {item.tags.map((tag: string, index: number) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-purple-900 text-white text-sm rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div> */}
+                    <TagDisplay tags={item.tags} /> 
+                  </td>
+
+
                   <td className="py-4">
                     {new Date(item.date).toISOString().split("T")[0]}
                   </td>
@@ -545,8 +597,9 @@ const AlbumContent: React.FC<TableProps> = (props) => {
         <ModalOverlay />
         <ModalContent>
           <div
-            className={` ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-              }`}
+            className={` ${
+              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}
           >
             <ModalHeader>Edit Item</ModalHeader>
             <ModalBody>
@@ -613,16 +666,16 @@ const AlbumContent: React.FC<TableProps> = (props) => {
       </Modal>
 
       {/* New Post Modal */}
-      <Modal isOpen={isNewOpen} onClose={onNewClose}>
+      <Modal isOpen={isNewOpen} onClose={onNewClose} size="lg">
         <ModalOverlay />
         <ModalContent>
           <div
-            className={`${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-              }`}
+            className={`${
+              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}
           >
             <ModalHeader>Add New Item</ModalHeader>
             <ModalBody>
-              {/* Title */}
               <FormControl isRequired>
                 <FormLabel>Artist</FormLabel>
                 <Select
@@ -661,11 +714,31 @@ const AlbumContent: React.FC<TableProps> = (props) => {
               </FormControl>
               <FormControl id="tags" isRequired mt={4}>
                 <FormLabel>tags</FormLabel>
-                <Input
+                {/* <Input
                   value={newData.tags || " "}
                   onChange={(e) => handleNewInputChange(e, "tags")}
                   placeholder="Enter tags"
+                /> */}
+                <Input
+                  value={tagInput}
+                  onChange={handleTagInputChange}
+                  onKeyPress={handleTagInputKeyPress}
+                  placeholder="Enter tags (one word, press Enter to add)"
                 />
+                <HStack mt={2} spacing={2}>
+                  <div className="flex gap-1   flex-wrap">
+                    {tags.map((tag: any) => (
+                      <Tag key={tag} variant="solid" colorScheme="teal">
+                        <p>{tag}</p>
+                        <TagCloseButton onClick={() => handleRemoveTag(tag)} />
+                      </Tag>
+                      // <Tag key={tag} variant="solid" colorScheme="teal">
+                      //   <TagLabel>{tag}</TagLabel>
+                      //   <TagCloseButton onClick={() => handleRemoveTag(tag)} />
+                      // </Tag>
+                    ))}
+                  </div>
+                </HStack>
               </FormControl>
 
               {/* Description */}
@@ -718,3 +791,37 @@ const AlbumContent: React.FC<TableProps> = (props) => {
 };
 
 export default AlbumContent;
+
+
+const TagDisplay = ({ tags }: { tags: string[] }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Popover 
+      isOpen={isOpen} 
+      onOpen={() => setIsOpen(true)} 
+      onClose={() => setIsOpen(false)}
+      trigger="hover"
+      placement="top"
+    >
+      <PopoverTrigger>
+        <div className="max-w-[200px] truncate cursor-pointer border border-gray-300 px-2 py-1 rounded-md">
+          {tags.join(", ")}
+        </div>
+      </PopoverTrigger>
+
+      <PopoverContent w="fit-content" maxW="300px">
+        <PopoverBody className="flex flex-wrap gap-2 p-3 max-h-[150px] overflow-y-auto">
+          {tags.map((tag, index) => (
+            <span
+              key={index}
+              className="px-3 py-1 bg-purple-900 text-white text-sm rounded-full"
+            >
+              {tag}
+            </span>
+          ))}
+        </PopoverBody>
+      </PopoverContent>
+    </Popover>
+  );
+};
