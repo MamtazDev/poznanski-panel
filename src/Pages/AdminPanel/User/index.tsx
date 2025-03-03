@@ -24,10 +24,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { AiOutlineEdit, AiOutlineSearch } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { apiGetReq, apiPutReq } from "../../../Constant/api-functions";
 import { RootState } from "../../../reducers";
+import { AiOutlineEdit, AiOutlineSearch } from "react-icons/ai";
 
 interface Users {
   _id: string;
@@ -112,7 +112,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
               onChange={handleChangeFilterText}
             />
             <InputRightElement pointerEvents="none">
-              <AiOutlineSearch />
+              <AiOutlineSearch/>
             </InputRightElement>
           </InputGroup>
         </div>
