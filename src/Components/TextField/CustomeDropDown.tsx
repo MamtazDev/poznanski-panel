@@ -59,8 +59,8 @@ const CustomDropdown = ({ setSongsList }: TableProps) => {
       <Flex align="center" marginBottom={10}>
         {selectedRecords.length > 0 && (
           <>
-            <Flex align="center" gap={2} wrap="wrap">
-              {selectedRecords.map((record) => (
+            <Flex align="flex-start" gap={2} direction="column" w="100%">
+              {selectedRecords.map((record, index) => (
                 <Flex
                   key={record._id}
                   align="center"
@@ -68,6 +68,48 @@ const CustomDropdown = ({ setSongsList }: TableProps) => {
                   px={2}
                   py={1}
                   borderRadius="md"
+                  draggable
+                  onDragStart={(e) => {
+                    e.dataTransfer.setData("text/plain", index.toString());
+                    e.currentTarget.style.opacity = "0.5";
+                  }}
+                  onDragEnd={(e) => {
+                    e.currentTarget.style.opacity = "1";
+                  }}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.currentTarget.style.boxShadow = "0 0 5px #4299E1";
+                    e.currentTarget.style.transform = "scale(1.02)";
+                    e.currentTarget.style.border = "2px solid #4299E1";
+                  }}
+                  onDragLeave={(e) => {
+                    e.currentTarget.style.boxShadow = "none";
+                    e.currentTarget.style.transform = "scale(1)";
+                    e.currentTarget.style.border = "none";
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    e.currentTarget.style.boxShadow = "none";
+                    e.currentTarget.style.transform = "scale(1)";
+                    e.currentTarget.style.border = "none";
+
+                    const dragIndex = parseInt(
+                      e.dataTransfer.getData("text/plain")
+                    );
+                    const dropIndex = index;
+
+                    const newRecords = [...selectedRecords];
+                    const draggedItem = newRecords[dragIndex];
+                    newRecords.splice(dragIndex, 1);
+                    newRecords.splice(dropIndex, 0, draggedItem);
+
+                    setSelectedRecords(newRecords);
+                    setSongsList(newRecords.map((r) => r._id));
+                  }}
+                  cursor="move"
+                  transition="all 0.2s"
+                  _hover={{ bg: "gray.200" }}
+                  w="100%"
                 >
                   <Image
                     src={record.thumbnail}
@@ -75,7 +117,7 @@ const CustomDropdown = ({ setSongsList }: TableProps) => {
                     borderRadius="md"
                     mr={1}
                   />
-                  <Text fontSize="sm" noOfLines={1}>
+                  <Text fontSize="sm" noOfLines={1} color="gray.500">
                     {record.title}
                   </Text>
                 </Flex>

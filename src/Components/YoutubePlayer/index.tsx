@@ -22,7 +22,6 @@ const YoutubePlayer: React.FC<PlayerProps> = ({ isOpen, type }) => {
       autoplay: 1,
     },
     iframeClass: 'rounded-lg',
-    enablejsapi: 1,
   };
 
   const onClose = () => {
@@ -56,7 +55,7 @@ const YoutubePlayer: React.FC<PlayerProps> = ({ isOpen, type }) => {
           className={`${type ? '' : isOpen ? 'mx-2' : 'mx-4'} my-auto z-50 items-center`}
         >
           <img
-            className={`w-[120px] rounded-full shadow-2xl transition-transform duration-500 ease-in-out ${isOpen ? 'rotate-360' : 'rotate-0'}`}
+            className={`w-[120px] rounded-full shadow-2xl transition-all duration-500 ease-in-out ${isOpen ? 'rotate-360' : 'rotate-0'}`}
             src={YoutubeSilverButton}
             alt="YouTube Button"
           />

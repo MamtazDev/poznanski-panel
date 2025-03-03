@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import Image from '@tiptap/extension-image';
-import {AnyExtension, EditorContent, useEditor} from '@tiptap/react';
+import {AnyExtension, EditorContent, EditorContentProps, useEditor} from '@tiptap/react';
 import styles from './TipTap.module.css';
 import {Box} from '@chakra-ui/react';
 import {FileResizer} from '../ImageFileResizer/ImageFileResizer';
@@ -9,7 +9,7 @@ import {getFileData, getFilesIncludedInHTML} from './helpers';
 import TextAlign from '@tiptap/extension-text-align';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
-import {customYouTubeArticle, customFileHandler} from './Extensions';
+import {customYouTubeArticle, customFileHandler, customYoutubeArticleEdit} from './Extensions';
 import { openPlayer } from '../../reducers/PlayerReducer';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../reducers';
@@ -52,7 +52,7 @@ export const getExtensionsData = (
 	}),
 	customYouTubeArticle,
 	Link.configure({
-		validate: (href) => /^https?:\/\//.test(href),
+		validate: (href: string) => /^https?:\/\//.test(href),
 		autolink: true,
 		HTMLAttributes: {
 			class: 'editor-link',
@@ -60,6 +60,7 @@ export const getExtensionsData = (
 		},
 	}),
 	customFileHandler(setFiles),
+	customYoutubeArticleEdit,
 ];
 
 const TipTap: React.FC<TipTapProps> = ({
@@ -90,7 +91,7 @@ const TipTap: React.FC<TipTapProps> = ({
 		// extensions: [StarterKit, HTML],
 		extensions: getExtensionsData(setFiles),
 		content,
-		onUpdate: ({editor}) => {
+		onUpdate: ({editor}: EditorContentProps) => {
 			const html = editor.getHTML();
 			return onEditorUpdate(html);
 		},
@@ -170,7 +171,7 @@ const TipTap: React.FC<TipTapProps> = ({
 	return (
 		<>
 			<div className={styles.tiptap}>
-				
+
 						<div
 							className={`block mb-2 text-left ${themeMode ? 'text-gray-900' : 'text-white'} `}
 							style={{fontSize: type ? '14px' : '18px'}}
@@ -218,8 +219,8 @@ const TipTap: React.FC<TipTapProps> = ({
 							ref={fileInputRef}
 							style={{display: 'none'}}
 						/>
-				
-				
+
+
 				{/* <p>Editable: {editable} Done</p>
 				<div className={!themeMode ?'text-stone-400' : 'text-stone-500'} dangerouslySetInnerHTML={{__html: content}} /> */}
 			</div>
