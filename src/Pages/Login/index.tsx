@@ -11,11 +11,11 @@ const Login = () => {
   const toast = useToast();
   const navigate = useNavigate();
 
-
-  const handleLogin = async () => {
+  const handleLogin = async (event:any) => {
+    event.preventDefault(); // Prevent form from reloading the page
     setIsLoading(true);
     try {
-     await loginRequest(password, email);
+      await loginRequest(password, email);
       toast({
         title: 'Login successful',
         description: 'You are now logged in.',
@@ -42,34 +42,36 @@ const Login = () => {
       <Heading as="h2" size="lg" textAlign="center" mb={6}>
         Login
       </Heading>
-      <Stack spacing={4}>
-        <FormControl id="email" isRequired>
-          <FormLabel>Email</FormLabel>
-          <Input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-          />
-        </FormControl>
-        <FormControl id="password" isRequired>
-          <FormLabel>Password</FormLabel>
-          <Input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
-          />
-        </FormControl>
-        <Button
-          colorScheme="teal"
-          onClick={handleLogin}
-          isLoading={isLoading}
-          loadingText="Logging in"
-        >
-          Login
-        </Button>
-      </Stack>
+      <form onSubmit={handleLogin}>
+        <Stack spacing={4}>
+          <FormControl id="email" isRequired>
+            <FormLabel>Email</FormLabel>
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+            />
+          </FormControl>
+          <FormControl id="password" isRequired>
+            <FormLabel>Password</FormLabel>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+            />
+          </FormControl>
+          <Button
+            type="submit"
+            colorScheme="teal"
+            isLoading={isLoading}
+            loadingText="Logging in"
+          >
+            Login
+          </Button>
+        </Stack>
+      </form>
     </Box>
   );
 };

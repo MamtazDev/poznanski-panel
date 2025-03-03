@@ -87,16 +87,28 @@ const TipTap: React.FC<TipTapProps> = ({
 		}
 	};
 
+	// const editor = useEditor({
+	// 	// extensions: [StarterKit, HTML],
+	// 	extensions: getExtensionsData(setFiles),
+	// 	content,
+	// 	onUpdate: ({editor}: EditorContentProps) => {
+	// 		const html = editor.getHTML();
+	// 		return onEditorUpdate(html);
+	// 	},
+	// 	editable,
+	// });
+
 	const editor = useEditor({
-		// extensions: [StarterKit, HTML],
-		extensions: getExtensionsData(setFiles),
-		content,
-		onUpdate: ({editor}: EditorContentProps) => {
-			const html = editor.getHTML();
-			return onEditorUpdate(html);
-		},
-		editable,
-	});
+    extensions: getExtensionsData(setFiles),
+    content,
+    onUpdate: ({ editor }: EditorContentProps) => {
+      if (editor) {  // Null check
+        const html = editor.getHTML();
+        return onEditorUpdate(html);
+      }
+    },
+    editable,
+  });
 
 	const handleVideoAdd = () => {
 		const videoUrl = prompt('Enter YouTube video URL:');
