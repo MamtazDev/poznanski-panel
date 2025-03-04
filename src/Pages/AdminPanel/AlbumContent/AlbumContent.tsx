@@ -613,12 +613,73 @@ const AlbumContent: React.FC<TableProps> = (props) => {
         <ModalOverlay />
         <ModalContent>
           <div
-            className={` ${
-              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-            }`}
+            className={` ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"}`}
           >
             <ModalHeader>Edit Item</ModalHeader>
+
             <ModalBody>
+              {/* Artist */}
+              <FormControl isRequired>
+                <FormLabel>Artists</FormLabel>
+                <select
+                  multiple
+                  className={`w-full p-2 rounded border ${themeMode ? "text-black bg-white" : "text-white bg-gray-700"}`}
+                  value={newData?.artists || []}
+                  onChange={(e) => {
+                    const clickedValue = e.target.value;
+                    const currentValues = newData?.artists || [];
+                    const newValues = currentValues.includes(clickedValue)
+                      ? currentValues.filter((v: string) => v !== clickedValue)
+                      : [...currentValues, clickedValue];
+                    handleNewInputChange(newValues, "artists");
+                  }}
+                >
+                  {artistAllData.length > 0 ? (
+                    artistAllData?.map((items: any, index: number) => (
+                      <option
+                        key={index}
+                        value={items.artist._id}
+                        className={`p-2 border mb-2 ${themeMode ? "text-black bg-gray-100" : "text-white bg-gray-600"}`}
+                      >
+                        {items.artist.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option disabled>No artists found</option>
+                  )}
+                </select>
+
+                {(newData?.artists || []).length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {(newData?.artists || []).map((artistId: string) => {
+                      const artist = artistAllData.find(
+                        (item: any) => item.artist._id === artistId
+                      )?.artist;
+                      if (!artist) return null;
+                      return (
+                        <div
+                          key={artistId}
+                          className="flex items-center gap-1 bg-[#5A1073] text-white px-2 py-1 rounded"
+                        >
+                          <span>{artist.name}</span>
+                          <button
+                            onClick={() => {
+                              const updatedArtists = newData.artists.filter(
+                                (id: string) => id !== artistId
+                              );
+                              handleNewInputChange(updatedArtists, "artists");
+                            }}
+                            className="ml-1 text-sm hover:text-red-300"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </FormControl>
+
               {/* Title */}
               <FormControl id="title" isRequired mt={4}>
                 <FormLabel>Title</FormLabel>
@@ -629,17 +690,13 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                 />
               </FormControl>
 
-              {/* Title */}
-              <FormControl id="youTube" isRequired mt={4}>
-                <FormLabel>Link</FormLabel>
-                <Input
-                  value={editData?.youTube || ""}
-                  onChange={(e) => handleEditYoutubeUrl(e)}
-                  placeholder="Enter YouTube Link"
-                />
+              {/* Songs */}
+              <FormControl isRequired mt={4}>
+                <FormLabel>Songs</FormLabel>
+                <CustomDropdown setSongsList={setSongsList} />
               </FormControl>
 
-              {/* description */}
+              {/* Description */}
               <FormControl id="description" isRequired mt={4}>
                 <FormLabel>Description</FormLabel>
                 <Input
@@ -649,6 +706,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                 />
               </FormControl>
 
+              {/* Tags */}
               <FormControl id="tags" isRequired mt={4}>
                 <FormLabel>Tags</FormLabel>
                 <Input
@@ -657,14 +715,6 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                   placeholder="Enter tags"
                 />
               </FormControl>
-              {/* <FormControl id="date" isRequired mt={4}>
-                <FormLabel>Date</FormLabel>
-                <Input
-                  value={editData?.date}
-                  onChange={(e) => handleInputChange(e, "date")}
-                  placeholder="Enter date"
-                />
-              </FormControl> */}
             </ModalBody>
 
             <ModalFooter>
@@ -729,7 +779,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                       return (
                         <div
                           key={artistId}
-                          className="flex items-center gap-1 bg-blue-500 text-white px-2 py-1 rounded"
+                          className="flex items-center gap-1 bg-[#5A1073] text-white px-2 py-1 rounded"
                         >
                           <span>{artist.name}</span>
                           <button
@@ -763,6 +813,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                   placeholder="Enter title"
                 />
               </FormControl>
+
               <FormControl id="tags" isRequired mt={4}>
                 <FormLabel>tags</FormLabel>
                 {/* <Input

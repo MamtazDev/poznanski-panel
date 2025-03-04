@@ -57,6 +57,16 @@ const CustomDropdown = ({ setSongsList }: TableProps) => {
 
   return (
     <Menu>
+      <MenuButton
+        as={Button}
+        rightIcon={<MdKeyboardArrowDown />}
+        w="100%"
+        textAlign="left"
+        mb={4}
+      >
+        <Text>Select Radio</Text>
+      </MenuButton>
+
       <Flex align="center">
         {selectedRecords.length > 0 && (
           <>
@@ -79,9 +89,9 @@ const CustomDropdown = ({ setSongsList }: TableProps) => {
                   }}
                   onDragOver={(e) => {
                     e.preventDefault();
-                    e.currentTarget.style.boxShadow = "0 0 5px #4299E1";
+                    e.currentTarget.style.boxShadow = "0 0 5px #5A1073";
                     e.currentTarget.style.transform = "scale(1.02)";
-                    e.currentTarget.style.border = "2px solid #4299E1";
+                    e.currentTarget.style.border = "2px solid #5A1073";
                   }}
                   onDragLeave={(e) => {
                     e.currentTarget.style.boxShadow = "none";
@@ -98,12 +108,10 @@ const CustomDropdown = ({ setSongsList }: TableProps) => {
                       e.dataTransfer.getData("text/plain")
                     );
                     const dropIndex = index;
-
                     const newRecords = [...selectedRecords];
                     const draggedItem = newRecords[dragIndex];
                     newRecords.splice(dragIndex, 1);
                     newRecords.splice(dropIndex, 0, draggedItem);
-
                     setSelectedRecords(newRecords);
                     setSongsList(newRecords.map((r) => r._id));
                   }}
@@ -127,14 +135,6 @@ const CustomDropdown = ({ setSongsList }: TableProps) => {
           </>
         )}
       </Flex>
-      <MenuButton
-        as={Button}
-        rightIcon={<MdKeyboardArrowDown />}
-        w="100%"
-        textAlign="left"
-      >
-        <Text>Select Radio</Text>
-      </MenuButton>
 
       <MenuList maxH="200px" overflowY="auto" maxW="465px">
         {isLoading ? (
