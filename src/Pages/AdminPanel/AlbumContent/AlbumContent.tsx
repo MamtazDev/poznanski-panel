@@ -503,12 +503,15 @@ const AlbumContent: React.FC<TableProps> = (props) => {
               <th className="px-6 py-3" style={{ width: "320px" }}>
                 Tags
               </th>
+
               <th className="px-6 py-3" style={{ width: "100px" }}>
                 Date
               </th>
+
               <th className="px-6 py-3" style={{ width: "50px" }}>
                 Description
               </th>
+
               <th className="px-6 py-3" style={{ width: "130px" }}>
                 Action
               </th>
@@ -563,14 +566,17 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                   <td className="py-4">
                     {new Date(item.date).toISOString().split("T")[0]}
                   </td>
+
                   <td className="py-4">
                     <p className="truncate max-w-[300px]">{item.description}</p>
                   </td>
+
                   <td className="text-center py-4">
                     <div className="flex justify-center space-x-2">
                       <button onClick={() => handleEdit(item._id)}>
                         <FaRegEdit />
                       </button>
+
                       <button onClick={() => handleDelete(item._id)}>
                         <RiDeleteBin6Line />
                       </button>
@@ -601,6 +607,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
           </tbody>
         </table>
       </div>
+
       {/* Edit Modal */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -621,8 +628,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                   placeholder="Enter title"
                 />
               </FormControl>
-            </ModalBody>
-            <ModalBody>
+
               {/* Title */}
               <FormControl id="youTube" isRequired mt={4}>
                 <FormLabel>Link</FormLabel>
@@ -632,8 +638,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                   placeholder="Enter YouTube Link"
                 />
               </FormControl>
-            </ModalBody>
-            <ModalBody>
+
               {/* description */}
               <FormControl id="description" isRequired mt={4}>
                 <FormLabel>Description</FormLabel>
@@ -705,7 +710,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                       <option
                         key={index}
                         value={items.artist._id}
-                        className={`p-2 ${themeMode ? "text-black bg-gray-100" : "text-white bg-gray-600"}`}
+                        className={`p-2 border mb-2 ${themeMode ? "text-black bg-gray-100" : "text-white bg-gray-600"}`}
                       >
                         {items.artist.name}
                       </option>
@@ -798,14 +803,14 @@ const AlbumContent: React.FC<TableProps> = (props) => {
               </FormControl>
 
               {/* Link */}
-              <FormControl id="youTube" mt={4}>
+              {/* <FormControl id="youTube" mt={4}>
                 <FormLabel>Link</FormLabel>
                 <Input
                   value={newData.youTube}
                   onChange={(e) => handleYoutubeUrl(e)}
                   placeholder="Enter link"
                 />
-              </FormControl>
+              </FormControl> */}
 
               <FormControl id="date" mt={4}>
                 <FormLabel>Start Date</FormLabel>
