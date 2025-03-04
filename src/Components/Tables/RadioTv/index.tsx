@@ -664,7 +664,7 @@ const RadioTv: React.FC<TableProps> = ({
                       return (
                         <div
                           key={artistId}
-                          className="flex items-center gap-1 bg-blue-500 text-white px-2 py-1 rounded"
+                          className="flex items-center gap-1 bg-[#5A1073] text-white px-2 py-1 rounded"
                         >
                           <span>{artist.name}</span>
                           <button
@@ -801,7 +801,7 @@ const RadioTv: React.FC<TableProps> = ({
                       return (
                         <div
                           key={artistId}
-                          className="flex items-center gap-1 bg-blue-500 text-white px-2 py-1 rounded"
+                          className="flex items-center gap-1 text-white px-2 py-1 rounded"
                         >
                           <span>{artist.name}</span>
                           <button
