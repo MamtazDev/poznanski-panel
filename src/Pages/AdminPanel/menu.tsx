@@ -41,6 +41,10 @@ const Menu = () => {
     sessionStorage.setItem("selectedMenu", selectedMenu);
   }, [selectedMenu]);
 
+  const buttonStyles = !themeMode
+    ? "bg-[#3BD6C6] text-gray-900 border border-[#3BD6C6] hover:bg-[#2AB6A7] shadow-lg"
+    : "bg-[#5A1073] text-white border border-[#5A1073] hover:bg-[#4A0E5F] shadow-md";
+
   return (
     <div className="flex flex-col gap-1 w-full px-5">
       {mainMenu.map((item, idx) => (
@@ -55,9 +59,12 @@ const Menu = () => {
           </div>
         </Link>
       ))}
-      <button className="bg-red-300 p-2 rounded" onClick={handleLogout}>
-        Logout
-      </button>
+        <button
+      className={`p-2 rounded transition-all duration-300 ease-in-out font-medium ${buttonStyles}`}
+      onClick={handleLogout}
+    >
+      Logout
+    </button>
     </div>
   );
 };

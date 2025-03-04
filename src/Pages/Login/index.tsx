@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '@chakra-ui/react';
-import { Input, Button, Box, FormControl, FormLabel, Stack, Heading } from '@chakra-ui/react';
+import { useToast, Input, Button, Box, FormControl, FormLabel, Stack, Heading } from '@chakra-ui/react';
 import { loginRequest } from '../../Constant/api-functions';
 
 const Login = () => {
@@ -11,8 +10,8 @@ const Login = () => {
   const toast = useToast();
   const navigate = useNavigate();
 
-  const handleLogin = async (event:any) => {
-    event.preventDefault(); // Prevent form from reloading the page
+  const handleLogin = async (event: any) => {
+    event.preventDefault();
     setIsLoading(true);
     try {
       await loginRequest(password, email);
@@ -38,40 +37,49 @@ const Login = () => {
   };
 
   return (
-    <Box maxW="md" mx="auto" mt={10} p={5} borderWidth={1} borderRadius="lg">
-      <Heading as="h2" size="lg" textAlign="center" mb={6}>
-        Login
-      </Heading>
-      <form onSubmit={handleLogin}>
-        <Stack spacing={4}>
-          <FormControl id="email" isRequired>
-            <FormLabel>Email</FormLabel>
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-            />
-          </FormControl>
-          <FormControl id="password" isRequired>
-            <FormLabel>Password</FormLabel>
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-            />
-          </FormControl>
-          <Button
-            type="submit"
-            colorScheme="teal"
-            isLoading={isLoading}
-            loadingText="Logging in"
-          >
-            Login
-          </Button>
-        </Stack>
-      </form>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="100vh"
+      width="100vw"
+      bg="gray.50"
+    >
+      <Box maxW="md" w="full" p={5} borderWidth={1} borderRadius="lg" bg="white">
+        <Heading as="h2" size="lg" textAlign="center" mb={6}>
+          Login
+        </Heading>
+        <form onSubmit={handleLogin}>
+          <Stack spacing={4}>
+            <FormControl id="email" isRequired>
+              <FormLabel>Email</FormLabel>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+              />
+            </FormControl>
+            <FormControl id="password" isRequired>
+              <FormLabel>Password</FormLabel>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+              />
+            </FormControl>
+            <Button
+              type="submit"
+              colorScheme="teal"
+              isLoading={isLoading}
+              loadingText="Logging in"
+            >
+              Login
+            </Button>
+          </Stack>
+        </form>
+      </Box>
     </Box>
   );
 };
