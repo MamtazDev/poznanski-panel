@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { BiArrowFromBottom } from "react-icons/bi";
 import axios from "axios";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 interface Artist {
   _id: string;
@@ -56,7 +57,7 @@ const CustomDropdown = ({ setSongsList }: TableProps) => {
 
   return (
     <Menu>
-      <Flex align="center" marginBottom={10}>
+      <Flex align="center">
         {selectedRecords.length > 0 && (
           <>
             <Flex align="flex-start" gap={2} direction="column" w="100%">
@@ -128,14 +129,14 @@ const CustomDropdown = ({ setSongsList }: TableProps) => {
       </Flex>
       <MenuButton
         as={Button}
-        rightIcon={<BiArrowFromBottom />}
+        rightIcon={<MdKeyboardArrowDown />}
         w="100%"
         textAlign="left"
       >
         <Text>Select Radio</Text>
       </MenuButton>
 
-      <MenuList maxH="200px" overflowY="auto" maxW="400px">
+      <MenuList maxH="200px" overflowY="auto" maxW="465px">
         {isLoading ? (
           <Flex justify="center" align="center" p={4}>
             <Spinner size="md" />

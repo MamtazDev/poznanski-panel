@@ -1,5 +1,6 @@
 import axios from "axios";
 import { apiBaseUrl } from "./config";
+import Cookies from "js-cookie";
 
 const axiosAPI = axios.create({
   baseURL: apiBaseUrl,
@@ -73,6 +74,7 @@ const setAccessToken = (token: string) => {
   document.cookie = `access_token=${token}; path=/; max-age=3600; Secure; SameSite=Strict`;
 };
 
+
 // user
 export const loginRequest = async (
   password: string,
@@ -92,8 +94,12 @@ export const loginRequest = async (
 export const logoutRequest = async () => {
   try {
     await apiPostReq("auth/logout", {}, true);
+    Cookies.remove('access_token');
+    
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("access_token");
     sessionStorage.removeItem("selectedMenu");
+
   } catch (error) {
     console.error("Logout failed", error);
   }
