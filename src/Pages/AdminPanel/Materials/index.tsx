@@ -298,7 +298,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
       });
     }
   };
-  
+
   const handleNewInputChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -385,7 +385,7 @@ const MaterialContent: React.FC<TableProps> = (props) => {
           Add New Item
         </Button>
       </div> */}
-      <div className="flex justify-between">
+      <div className="flex md:justify-between gap-2">
         <div
           className={`mb-4 ${
             themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"

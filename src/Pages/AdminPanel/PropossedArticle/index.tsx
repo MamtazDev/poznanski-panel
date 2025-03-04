@@ -379,12 +379,12 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData ,date}) => {
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
-      <div className="flex justify-between">
+      <div className="flex md:justify-between gap-2">
         <div
-          className={`mb-4 ${
+          className={`mb-4 md:w-[300px] w-[276px] ${
             themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
           }`}
-          style={{ width: "300px" }}>
+         >
           <InputGroup>
             <Input type="text" placeholder="Search..." />
             <InputRightElement>
@@ -430,19 +430,19 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData ,date}) => {
                   </td>
 
                   <td>
-                    <p className="truncate max-w-[300px]">{item.title}</p>
+                    <p className="line-clamp-1">{item.title}</p>
                   </td>
 
                   <td>
-                    <p className="truncate max-w-[300px]">{item.nickname}</p>
+                    <p className="line-clamp-1">{item.nickname}</p>
                   </td>
 
                   <td>
-                    <p className="truncate max-w-[300px]">{item.tags}</p>
+                    <p className="line-clamp-1">{item.tags}</p>
                   </td>
 
                   <td>
-                    <p className="truncate max-w-[300px]">{dateFormated}</p>
+                    <p className="line-clamp-1">{dateFormated}</p>
                   </td>
 
                   <td>

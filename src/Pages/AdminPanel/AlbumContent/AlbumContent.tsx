@@ -467,12 +467,12 @@ const AlbumContent: React.FC<TableProps> = (props) => {
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       {/* <FetcherAlbum /> */}
-      <div className="flex justify-between">
+      <div className="flex md:justify-between gap-2">
         <div
-          className={`mb-4 ${
+          className={`mb-4 md:w-[300px] w-[276px] ${
             themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
           }`}
-          style={{ width: "300px" }}
+
         >
           <InputGroup>
             <Input type="text" placeholder="Search..." />
@@ -529,7 +529,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                   }`}
                 >
                   <td className="p-4">
-                    <p className="truncate max-w-[200px]">{item.title}</p>
+                    <p className="line-clamp-1">{item.title}</p>
                   </td>
                   {/* <td className="px-4 py-3">
                     <div className="flex justify-center">
@@ -568,7 +568,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                   </td>
 
                   <td className="py-4">
-                    <p className="truncate max-w-[300px]">{item.description}</p>
+                    <p className="line-clamp-1">{item.description}</p>
                   </td>
 
                   <td className="text-center py-4">
@@ -855,7 +855,7 @@ const TagDisplay = ({ tags }: { tags: string[] }) => {
       placement="top"
     >
       <PopoverTrigger>
-        <div className="max-w-[200px] truncate cursor-pointer border border-gray-300 px-2 py-1 rounded-md">
+        <div className=" line-clamp-1 cursor-pointer  px-2 py-1 rounded-md">
           {tags.join(", ")}
         </div>
       </PopoverTrigger>

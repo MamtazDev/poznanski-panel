@@ -46,20 +46,20 @@ const Login = () => {
       position="relative"
       height="100vh"
       width="100vw"
-      bgGradient={!themeMode ? "linear(to-b, #0c1022, #3d4285 )" : "linear(to-b, #2fdaa1 , #07714e )"}
+      bgGradient={!themeMode ? "linear(to-b, #0c1022, #3d4285 )" : "linear(to-b, #48f1e1  , #07714e )"}
       display="flex"
       alignItems="center"
       justifyContent="center"
     >
       {/* Login Form Container */}
       <Box
-        bg={!themeMode ? "rgba(15, 23, 42, 0.85)" : "#124635"}
+        bg={!themeMode ? "rgba(15, 23, 42, 0.85)" : "white "}
         p={8}
         borderRadius="lg"
         boxShadow="lg"
         width="full"
         maxW="md"
-        color={!themeMode ? "white" : "white"}
+        color={!themeMode ? "white" : "black"}
       >
         <Heading as="h2" size="lg" mb={2}>
           Here you can <Text as="span" fontWeight="bold">Login</Text>
@@ -98,9 +98,9 @@ const Login = () => {
 
             <Button
               type="submit"
-              bgGradient={!themeMode ? "linear(to-r, #6B46C1, #805AD5)" : "linear(to-r, #52b997  , #0d714f )"}
+              bgGradient={!themeMode ? "linear(to-r, #6B46C1, #805AD5)" : "linear(to-r, #14a093   , #0d714f )"}
               color="white"
-              _hover={{ bgGradient: "linear(to-r, #6B46C1, #9F7AEA)" }}
+              _hover={{ bgGradient: !themeMode ? "linear(to-r, #6B46C1, #5c73d9  )":"linear(to-r, #107b71 , #14a093 )" }}
               isLoading={isLoading}
             >
               LOGIN

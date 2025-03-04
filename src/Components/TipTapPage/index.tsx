@@ -16,6 +16,9 @@ import {
 } from "@chakra-ui/react";
 import { Image, Badge } from "@chakra-ui/react";
 import { BiArrowBack } from "react-icons/bi";
+import { useDispatch } from "react-redux";
+import { openPlayer } from "../../reducers/PlayerReducer";
+import YoutubePlayer from "../YoutubePlayer";
 
 interface Content {
   subHead: string;
@@ -46,6 +49,9 @@ const TipTapPage1: React.FC<TipTapProps> = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [files, setFiles] = useState<FileFromEditor[] | null>(null);
   const [editorContent, setEditorContent] = useState<string>(content || "");
+    const dispatch = useDispatch();
+
+
 
   // const editor = useEditor({
   //   extensions: [StarterKit],
@@ -73,8 +79,10 @@ const TipTapPage1: React.FC<TipTapProps> = ({
       <Button onClick={onOpen} colorScheme="blue" mt={4}>
         Preview
       </Button>
+
+
       {/* Preview Modal */}
-      <NewsPreviewModal isOpen={isOpen} onClose={onClose} article={data} />
+      <NewsPreviewModal dispatch={dispatch} isOpen={isOpen} onClose={onClose} article={data} />
       {/* <Modal isOpen={isOpen} onClose={onClose} size="xxl">
         <ModalOverlay />
         <ModalContent>
@@ -93,8 +101,32 @@ const TipTapPage1: React.FC<TipTapProps> = ({
 
 export default TipTapPage1;
 
-const NewsPreviewModal = ({ isOpen, onClose, article }: any) => {
+const NewsPreviewModal = ({ isOpen, onClose, article, dispatch }: any) => {
   if (!article) return null;
+
+  const getYouTubeID = (url: string) => {
+    let videoId = "";
+    try {
+      if (url.includes("youtube.com/watch?v=")) {
+        videoId = new URL(url).searchParams.get("v") || "";
+      } else if (url.includes("youtu.be/")) {
+        videoId = url.split("youtu.be/")[1]?.split("?")[0] || "";
+      }
+    } catch (error) {
+      console.error("Error extracting YouTube ID:", error);
+    }
+    return videoId;
+  };
+
+  const handlePlay = (youTube: any) => {
+    onClose()
+    if (youTube) {
+      const videoId = getYouTubeID(youTube);
+      if (videoId) {
+        dispatch(openPlayer(videoId));
+      }
+    }
+  };
 
   return (
     <Modal
@@ -103,6 +135,7 @@ const NewsPreviewModal = ({ isOpen, onClose, article }: any) => {
       size="lg" // Smaller modal size
       motionPreset="scale"
     >
+      {/* <YoutubePlayer isOpen={isOpen} /> */}
       <ModalOverlay backdropFilter="blur(10px)" />
       <ModalContent className="rounded-lg p-4 shadow-xl" style={{ maxWidth: '1300px', margin: '0 auto' }}>
         <ModalCloseButton
@@ -124,6 +157,7 @@ const NewsPreviewModal = ({ isOpen, onClose, article }: any) => {
           >
             Back to Edit
           </Button>
+          <p onClick={() => handlePlay("https://www.youtube.com/watch?v=8KGhxWjfgIE")}>Preview for youtube</p>
           <h1 className="text-3xl font-semibold text-white">{article.title || "Untitled"}</h1>
           <p className="text-lg opacity-70 mt-2 text-white">
             {article.nickname} · {new Date(article.date).toLocaleDateString()}
@@ -174,18 +208,6 @@ const NewsPreviewModal = ({ isOpen, onClose, article }: any) => {
             dangerouslySetInnerHTML={{ __html: article.content }}
             className="w-full border border-gray-100 rounded-xl p-4 cursor-pointer mt-6"
           />
-
-          {/* External Link */}
-          {article.link && (
-            <a
-              href={article.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-blue-600 text-lg font-medium hover:underline mt-6"
-            >
-              🔗 Visit Full Article
-            </a>
-          )}
         </ModalBody>
 
         {/* Footer */}
