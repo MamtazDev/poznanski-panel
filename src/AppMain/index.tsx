@@ -1,7 +1,7 @@
 import { Spinner } from "@chakra-ui/react";
 import React, { Suspense, lazy, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import Modal from "../Components/Modals";
 import ScrollToTopOnPageChange from "../Components/ScrollToTop";
 import YoutubePlayer from "../Components/YoutubePlayer";
@@ -16,9 +16,7 @@ import PrivateRoute from "../Components/PrivateRoute/PrivateRoute";
 
 const AdminPanel = lazy(() => import("../Pages/AdminPanel"));
 const Article = lazy(() => import("../Pages/AdminPanel/Article"));
-const PropossedArticle = lazy(
-  () => import("../Pages/AdminPanel/PropossedArticle")
-);
+const PropossedArticle = lazy(() => import("../Pages/AdminPanel/PropossedArticle"));
 const MaterialContent = lazy(() => import("../Pages/AdminPanel/Materials"));
 const Concert = lazy(() => import("../Pages/AdminPanel/Concert"));
 const Artist = lazy(() => import("../Pages/AdminPanel/Artist"));
@@ -39,6 +37,9 @@ const AppMain: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(playerOpen);
   const [type, setPropsType] = useState<boolean>(false);
   const videoId = useSelector((state: RootState) => state.player.videoId);
+
+  const location = useLocation(); // Extract current route
+  const isLoginPage = location.pathname === "/login"; // Check if current route is login page
 
   useEffect(() => {
     setIsOpen(playerOpen);
@@ -69,90 +70,69 @@ const AppMain: React.FC = () => {
           </div>
         }>
         <ScrollToTopOnPageChange />
-
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/admin" element={
-            <PrivateRoute>
-              <Outlet />
-            </PrivateRoute>
-          } >
-            <Route path="" element={<Navigate to="article" />} />
-            <Route
-              path="article"
-              element={
-
-                  <AdminPanel component={<Article tagData={tags} />} />
-
-              }
-            />
-            <Route
-              path="propossedArticle"
-              element={
-
-                  <AdminPanel component={<PropossedArticle tagData={tags} />} />
-
-              }
-            />
-            <Route
-              path="radio"
-              element={
-
-                  <AdminPanel component={<Radio path="tv" tagData={tags} />} />
-
-              }
-            />
-            {/* <Route
-              path="material"
-              element={<AdminPanel component={<MaterialContent />} />}
-            /> */}
-            <Route
-              path="album"
-              element={<AdminPanel component={<AlbumContent />} />}
-            />
-            <Route
-              path="playlist"
-              element={<AdminPanel component={<PlaylistPage />} />}
-            />
-
-            <Route
-              path="concerts"
-              element={
-
-                  <AdminPanel component={<Concert />} />
-
-              }
-            />
-            <Route
-              path="artists"
-              element={<AdminPanel component={<Artist />} />}
-            />
-            <Route
-              path="logos"
-              element={
-
-                  <AdminPanel component={<PartnerLogos />} />
-
-              }
-            />
-            <Route
-              path="user"
-              element={
-
-                  <AdminPanel component={<UserMainPage user={[]} />} />
-
-              }
-            />
-          </Route>
         </Routes>
+
+        <div>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={
+              <PrivateRoute>
+                <Outlet />
+              </PrivateRoute>
+            }>
+              <Route path="" element={<Navigate to="article" />} />
+              <Route
+                path="article"
+                element={<AdminPanel component={<Article tagData={tags} />} />}
+              />
+              <Route
+                path="propossedArticle"
+                element={<AdminPanel component={<PropossedArticle tagData={tags} />} />}
+              />
+              <Route
+                path="radio"
+                element={<AdminPanel component={<Radio path="tv" tagData={tags} />} />}
+              />
+              <Route
+                path="album"
+                element={<AdminPanel component={<AlbumContent />} />}
+              />
+              <Route
+                path="playlist"
+                element={<AdminPanel component={<PlaylistPage />} />}
+              />
+              <Route
+                path="concerts"
+                element={<AdminPanel component={<Concert />} />}
+              />
+              <Route
+                path="artists"
+                element={<AdminPanel component={<Artist />} />}
+              />
+              <Route
+                path="logos"
+                element={<AdminPanel component={<PartnerLogos />} />}
+              />
+              <Route
+                path="user"
+                element={<AdminPanel component={<UserMainPage user={[]} />} />}
+              />
+            </Route>
+          </Routes>
+
+          {/* YoutubePlayer will only render if NOT on login page */}
+          {!isLoginPage && <YoutubePlayer isOpen={isOpen} type={type} />}
+        </div>
       </Suspense>
 
-      <YoutubePlayer isOpen={isOpen}  type={type} />
-
-      {/* <Modal isOpen={isOpen} onClose={onClose}>
+      {/* Optional Modal (commented in your original code) */}
+      {/*
+      <Modal isOpen={isOpen} onClose={onClose}>
         <YoutubePlayer link={selectedLink} />
-      </Modal> */}
+      </Modal>
+      */}
     </div>
   );
 };
