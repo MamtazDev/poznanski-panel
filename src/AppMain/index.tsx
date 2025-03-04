@@ -1,7 +1,7 @@
 import { Spinner } from "@chakra-ui/react";
 import React, { Suspense, lazy, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import Modal from "../Components/Modals";
 import ScrollToTopOnPageChange from "../Components/ScrollToTop";
 import YoutubePlayer from "../Components/YoutubePlayer";
@@ -73,7 +73,11 @@ const AppMain: React.FC = () => {
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/admin">
+          <Route path="/admin" element={
+            <PrivateRoute>
+              <Outlet />
+            </PrivateRoute>
+          } >
             <Route path="" element={<Navigate to="article" />} />
             <Route
               path="article"

@@ -30,7 +30,7 @@ const Menu = () => {
 
   const handleLogout = async () => {
     await logoutRequest();
-    navigate("/login");
+    // navigate("/login");
   };
   useEffect(() => {
     const currentPath = location.pathname.split("/").pop();
