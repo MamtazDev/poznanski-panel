@@ -135,7 +135,7 @@ const NewsPreviewModal = ({ isOpen, onClose, article, dispatch }: any) => {
       size="lg" // Smaller modal size
       motionPreset="scale"
     >
-      {/* <YoutubePlayer isOpen={isOpen} /> */}
+      <YoutubePlayer isOpen={isOpen} />
       <ModalOverlay backdropFilter="blur(10px)" />
       <ModalContent className="rounded-lg p-4 shadow-xl" style={{ maxWidth: '1300px', margin: '0 auto' }}>
         <ModalCloseButton
