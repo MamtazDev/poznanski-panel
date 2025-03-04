@@ -730,7 +730,6 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
                 focusBorderColor="blue.500"
               />
             </FormControl>
-            
             {/* <CustomDropdown/> */}
 
             {/* Rich Text Editor */}
@@ -741,6 +740,7 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
                 setContent={(newContent) =>
                   handleContentChange(newContent, true)
                 }
+
               />
             </VStack>
 

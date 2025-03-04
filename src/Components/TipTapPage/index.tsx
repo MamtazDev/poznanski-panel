@@ -100,46 +100,52 @@ const NewsPreviewModal = ({ isOpen, onClose, article }: any) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      size="full"
-      motionPreset="slideInBottom"
+      size="lg" // Smaller modal size
+      motionPreset="scale"
     >
-      <ModalOverlay bg="blackAlpha.800" backdropFilter="blur(8px)" />
-      <ModalContent className="rounded-none p-0 bg-black text-white">
-        <ModalCloseButton color="white" size="lg" top={6} right={6} />
+      <ModalOverlay backdropFilter="blur(10px)" />
+      <ModalContent className="rounded-lg p-4 shadow-xl" style={{ maxWidth: '1300px', margin: '0 auto' }}>
+        <ModalCloseButton
+          color="white"
+          size="lg"
+          top={5}
+          right={6}
+        />
 
-        {/* Black Header */}
-        <Box className="w-full bg-black py-8 px-6 md:px-12">
+        {/* Updated Header */}
+        <Box className={`w-full py-4 px-4 rounded-lg  shadow-2xl bg-[#2d2b2e]`}>
           <Button
             onClick={onClose}
-            colorScheme="blue"
-            variant="outline"
+            colorScheme="whiteAlpha"
+            variant="ghost"
             leftIcon={<BiArrowBack />}
             size="sm"
             className="mb-4"
           >
             Back to Edit
           </Button>
-          <h1 className="text-4xl font-bold text-white">{article.title || "Untitled"}</h1>
-          <p className="text-sm opacity-80 mt-2 text-white">
+          <h1 className="text-3xl font-semibold text-white">{article.title || "Untitled"}</h1>
+          <p className="text-lg opacity-70 mt-2 text-white">
             {article.nickname} · {new Date(article.date).toLocaleDateString()}
           </p>
         </Box>
 
         {/* Body Content */}
-        <ModalBody className="max-w-4xl mx-auto p-8 md:p-12 space-y-8 text-black">
-          {/* Move Image to Body */}
+        <ModalBody className="max-w-full mx-auto p-6 text-black space-y-3 mt-6 ">
+          {/* Image Section */}
           {article.files?.length > 0 && (
-            <Box>
+            <Box className="overflow-hidden rounded-lg  mb-4 justify-center items-center flex">
               <Image
                 src={article.files[0]}
                 alt={article.title}
-                className="h-72 object-cover rounded-lg shadow-md"
+                className="w-[30%] h-[50%] object-cover rounded-lg shadow-md hover:shadow-xl cursor-pointer"
               />
             </Box>
           )}
 
+          {/* Tags */}
           {article.tags && (
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3 mb-4 justify-center items-center cursor-pointer">
               {article.tags.split(",").map((tag: string, index: number) => (
                 <Badge
                   key={index}
@@ -156,21 +162,26 @@ const NewsPreviewModal = ({ isOpen, onClose, article }: any) => {
             </div>
           )}
 
-          <p className="text-xl text-gray-700 leading-relaxed">
+          {/* Introduction */}
+          <div className="text-start p-4 rounded-md shadow-md hover:shadow-xl cursor-pointer">
+          <p className="text-lg text-gray-700 leading-relaxed">
             {article.intro}
           </p>
+          </div>
 
+          {/* Main Content */}
           <Box
             dangerouslySetInnerHTML={{ __html: article.content }}
-            className="prose prose-lg max-w-none"
+            className="w-full border border-gray-100 rounded-xl p-4 cursor-pointer mt-6"
           />
 
+          {/* External Link */}
           {article.link && (
             <a
               href={article.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-blue-600 text-lg font-medium hover:underline"
+              className="inline-flex items-center gap-2 text-blue-600 text-lg font-medium hover:underline mt-6"
             >
               🔗 Visit Full Article
             </a>
@@ -178,11 +189,11 @@ const NewsPreviewModal = ({ isOpen, onClose, article }: any) => {
         </ModalBody>
 
         {/* Footer */}
-        <Box className="w-full p-6 border-t flex justify-center bg-gray-50">
+        {/* <Box className="w-full p-4 border-t flex justify-center bg-gray-100 rounded-lg">
           <Button onClick={onClose} size="lg" colorScheme="blue" px={8}>
             Close
           </Button>
-        </Box>
+        </Box> */}
       </ModalContent>
     </Modal>
   );
