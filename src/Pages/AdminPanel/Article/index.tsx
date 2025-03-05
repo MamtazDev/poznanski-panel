@@ -584,6 +584,22 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
               />
             </FormControl>
 
+            <VStack spacing={4} align="stretch" mt={4}>
+              <TipTapPage
+                data={editData}
+                content={editData?.content || ""}
+                setContent={(newContent) =>
+                  handleContentChange(newContent, false)
+                }
+              />
+              {/* <TipTapPage
+                content={editData?.content || ""}
+                setContent={(newContent) =>
+                  handleContentChange(newContent, true)
+                }
+              /> */}
+            </VStack>
+
             {/* Date */}
             {/* <FormControl id="date" isRequired>
               <FormLabel>Date</FormLabel>
