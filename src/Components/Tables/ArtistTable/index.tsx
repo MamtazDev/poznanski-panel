@@ -14,6 +14,7 @@ interface TableProps {
     star: number;
     description: string;
   }[];
+  filteredData: any[];
   handleEdit: (id: string) => void;
   handleDelete: (id: string) => void;
   handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -44,8 +45,8 @@ const ArtistTable: React.FC<TableProps> = (props) => {
             </tr>
           </thead>
           <tbody>
-            {props.cardData?.length ? (
-              props.cardData.map((item, idx) => (
+            {props.filteredData?.length ? (
+              props.filteredData.map((item, idx) => (
                 <tr
                   key={`article-table-${idx}`}
                   className={`border-b ${!props.themeMode ? "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700" : "bg-white text-gray-900 hover:bg-gray-200"}`}>
