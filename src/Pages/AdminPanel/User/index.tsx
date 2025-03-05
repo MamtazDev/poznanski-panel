@@ -28,6 +28,7 @@ import { useSelector } from "react-redux";
 import { apiGetReq, apiPutReq } from "../../../Constant/api-functions";
 import { RootState } from "../../../reducers";
 import { AiOutlineEdit, AiOutlineSearch } from "react-icons/ai";
+import { MdOutlineDelete } from "react-icons/md";
 
 interface Users {
   _id: string;
@@ -97,6 +98,12 @@ const UserMainPage: React.FC<UserDataProps> = () => {
       .catch((err) => console.error("Error fetching data:", err));
   }, [filterText]);
 
+  const [accountStatus, setAccountStatus] = useState("Unblocked");
+
+const handleAccountStatusChange = (value:any) => {
+  setAccountStatus(value);
+};
+
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex justify-between">
@@ -112,7 +119,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
               onChange={handleChangeFilterText}
             />
             <InputRightElement pointerEvents="none">
-              <AiOutlineSearch/>
+              <AiOutlineSearch />
             </InputRightElement>
           </InputGroup>
         </div>
@@ -153,8 +160,8 @@ const UserMainPage: React.FC<UserDataProps> = () => {
         <table className="w-full h-full" style={{ minWidth: "400px" }}>
           <thead
             className={`text-xs uppercase ${themeMode
-                ? "text-white bg-[#5A1073]"
-                : "bg-[#3bd6c6] text-[#5A1073]"
+              ? "text-white bg-[#5A1073]"
+              : "bg-[#3bd6c6] text-[#5A1073]"
               }`}
           >
             <tr>
@@ -162,6 +169,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
               <th className="px-6 py-3">Role</th>
               <th className="px-6 py-3">Email</th>
               <th className="px-6 py-3">Is Verified</th>
+              <th className="px-6 py-3">Action</th>
               <th></th>
             </tr>
           </thead>
@@ -170,8 +178,8 @@ const UserMainPage: React.FC<UserDataProps> = () => {
               <tr
                 key={user._id}
                 className={`border-b py-3 ${!themeMode
-                    ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
-                    : "bg-white text-gray-900 hover:bg-gray-200"
+                  ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
+                  : "bg-white text-gray-900 hover:bg-gray-200"
                   }`}
               >
                 <td className="py-3">{user.nickname}</td>
@@ -184,10 +192,16 @@ const UserMainPage: React.FC<UserDataProps> = () => {
                     </h2>
                   </div>
                 </td>
-                <td> <AiOutlineEdit
-                  onClick={() => handleEditClick(user._id, user.isVerified)}
-                  className="cursor-pointer mr-5"
-                /></td>
+                <td>
+                  <div className="flex gap-4 justify-center">
+                    <button onClick={() => handleEditClick(user._id, user.isVerified)}>
+                      <AiOutlineEdit className="cursor-pointer mr-5" />
+                    </button>
+                    <button>
+                      <MdOutlineDelete className="cursor-pointer mr-5" />
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -197,7 +211,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <div className={` h-[350px] rounded-md ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          <div className={` h-full rounded-md ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
             }`}>
             <ModalHeader>Edit User Details</ModalHeader>
             <ModalCloseButton />
@@ -206,7 +220,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
                 onChange={handleVerificationChange}
                 value={verificationStatus}
               >
-                <Input type="text" onChange = {(e) => setNickName(e.target.value) }  placeholder="Edit your name..." className="mb-2"/>
+                <Input type="text" onChange={(e) => setNickName(e.target.value)} placeholder="Edit your name..." className="mb-2" />
 
                 <Stack direction="column">
                   <Radio value="Verified" style={{
@@ -234,6 +248,31 @@ const UserMainPage: React.FC<UserDataProps> = () => {
                   }}>Admin</option>
                 </Select>
               </div>
+
+        {/* Block/Unblock Radio Group */}
+        <div className="mt-4">
+          <label className="block text-sm font-medium">Account Status</label>
+          <RadioGroup
+            onChange={handleAccountStatusChange}
+            value={accountStatus}
+            className="mt-2"
+          >
+            <Stack direction="row">
+              <Radio
+                value="Blocked"
+                style={{ color: themeMode ? "#d9534f" : "#ff6b6b" }}
+              >
+                Block
+              </Radio>
+              <Radio
+                value="Unblocked"
+                style={{ color: themeMode ? "#5ae3cc" : "#5A1073" }}
+              >
+                Unblock
+              </Radio>
+            </Stack>
+          </RadioGroup>
+        </div>
             </ModalBody>
             <ModalFooter className="space-x-2">
               <Button colorScheme="blue" onClick={handleSaveVerification}>
