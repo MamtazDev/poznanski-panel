@@ -36,6 +36,7 @@ interface Users {
   nickname: string;
   role: string;
   email: string;
+  block: string;
   isVerified: boolean;
 }
 
@@ -52,11 +53,17 @@ const UserMainPage: React.FC<UserDataProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [selectedRole, setSelectedRole] = useState("user");
+  const [selectedBlock, setSelectedBlock] = useState("Unblocked");
   const [nickName, setNickName] = useState("");
 
   const handleRoleChange = (e: any) => {
     setSelectedRole(e.target.value);
   };
+  // add for block
+  const handleBlockChange = (value: string) => {
+    setSelectedBlock(value);
+  };
+
   const handleChangeFilterText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(e.target.value);
   };
@@ -77,6 +84,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
         isVerified: verificationStatus === "Verified",
         role: selectedRole,
         nickname: nickName,
+        block: selectedBlock,
       });
       setUserAllData((prevData) =>
         prevData.map((user) =>
@@ -100,9 +108,9 @@ const UserMainPage: React.FC<UserDataProps> = () => {
 
   const [accountStatus, setAccountStatus] = useState("Unblocked");
 
-const handleAccountStatusChange = (value:any) => {
-  setAccountStatus(value);
-};
+  const handleAccountStatusChange = (value: any) => {
+    setAccountStatus(value);
+  };
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
@@ -211,7 +219,7 @@ const handleAccountStatusChange = (value:any) => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <div className={` h-full rounded-md ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          <div className={`h-full rounded-md ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
             }`}>
             <ModalHeader>Edit User Details</ModalHeader>
             <ModalCloseButton />
@@ -249,30 +257,19 @@ const handleAccountStatusChange = (value:any) => {
                 </Select>
               </div>
 
-        {/* Block/Unblock Radio Group */}
-        <div className="mt-4">
-          <label className="block text-sm font-medium">Account Status</label>
-          <RadioGroup
-            onChange={handleAccountStatusChange}
-            value={accountStatus}
-            className="mt-2"
-          >
-            <Stack direction="row">
-              <Radio
-                value="Blocked"
-                style={{ color: themeMode ? "#d9534f" : "#ff6b6b" }}
-              >
-                Block
-              </Radio>
-              <Radio
-                value="Unblocked"
-                style={{ color: themeMode ? "#5ae3cc" : "#5A1073" }}
-              >
-                Unblock
-              </Radio>
-            </Stack>
-          </RadioGroup>
-        </div>
+              {/* Block/Unblock Radio Group */}
+              <div className="mt-4">
+                <label className="block text-sm font-medium">Account Status</label>
+                <RadioGroup
+                  value={selectedBlock}
+                  onChange={handleBlockChange}
+                >
+                  <Stack direction="row">
+                    <Radio value="Blocked" style={{ color: themeMode ? "#d9534f" : "#ff6b6b" }}>Block</Radio>
+                    <Radio value="Unblocked" style={{ color: themeMode ? "#5ae3cc" : "#5A1073" }}>Unblock</Radio>
+                  </Stack>
+                </RadioGroup>
+              </div>
             </ModalBody>
             <ModalFooter className="space-x-2">
               <Button colorScheme="blue" onClick={handleSaveVerification}>
