@@ -461,8 +461,11 @@ const AlbumContent: React.FC<TableProps> = (props) => {
     console.log("tags", tags);
   };
 
-  const filteredData = album.filter((item: any) =>
-    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredData = album.filter(
+    (item: any) =>
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.description &&
+        item.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (

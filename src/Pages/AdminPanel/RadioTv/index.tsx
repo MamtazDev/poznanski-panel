@@ -84,8 +84,11 @@ const RadioTvPage: React.FC<ProductContentProps> = ({ path, tagData }) => {
     onNewOpen();
   };
 
-  const filteredData = radioData.filter((item) =>
-    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredData = radioData.filter(
+    (item) =>
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.description &&
+        item.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (

@@ -161,8 +161,11 @@ const PlaylistPage: React.FC = () => {
     setIsReloadLoading(false);
   };
 
-  const filteredData = playlists.filter((item) =>
-    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredData = playlists.filter(
+    (item) =>
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.description &&
+        item.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (
