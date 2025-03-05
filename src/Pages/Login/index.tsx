@@ -46,20 +46,20 @@ const Login = () => {
       position="relative"
       height="100vh"
       width="100vw"
-      bgGradient={!themeMode ? "linear(to-b, #0c1022, #3d4285 )" : "linear(to-b, #48f1e1  , #07714e )"}
+      bgGradient={!themeMode ? "linear(to-b, #88efc3 , #054829 )" : "linear(to-b, #0c1022, #3d4285 ) "}
       display="flex"
       alignItems="center"
       justifyContent="center"
     >
       {/* Login Form Container */}
       <Box
-        bg={!themeMode ? "rgba(15, 23, 42, 0.85)" : "white "}
+        bg={!themeMode ? "white" : "rgba(15, 23, 42, 0.85)"}
         p={8}
         borderRadius="lg"
         boxShadow="lg"
         width="full"
         maxW="md"
-        color={!themeMode ? "white" : "black"}
+        color={!themeMode ? "black" : " white"}
       >
         <Heading as="h2" size="lg" mb={2}>
           Here you can <Text as="span" fontWeight="bold">Login</Text>
@@ -75,10 +75,10 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                bg={isDarkMode ? "gray.700" : "gray.100"}
+                bg={isDarkMode ? "gray.100" : "gray.700"}
                 borderColor={isDarkMode ? "gray.600" : "gray.300"}
                 _placeholder={{ color: isDarkMode ? 'gray.400' : 'gray.500' }}
-                color={isDarkMode ? "white" : "gray.800"}
+                color={isDarkMode ? "gray.800" : " white"}
               />
             </FormControl>
 
@@ -89,18 +89,18 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                bg={isDarkMode ? "gray.700" : "gray.100"}
+                bg={isDarkMode ? "gray.100" : "gray.700"}
                 borderColor={isDarkMode ? "gray.600" : "gray.300"}
                 _placeholder={{ color: isDarkMode ? 'gray.400' : 'gray.500' }}
-                color={isDarkMode ? "white" : "gray.800"}
+                color={isDarkMode ? "gray.800" : " white"}
               />
             </FormControl>
 
             <Button
               type="submit"
-              bgGradient={!themeMode ? "linear(to-r, #6B46C1, #805AD5)" : "linear(to-r, #14a093   , #0d714f )"}
+              bgGradient={!themeMode ? "linear(to-r, #14a093   , #0d714f )" : "  linear(to-r, #6B46C1, #805AD5)"}
               color="white"
-              _hover={{ bgGradient: !themeMode ? "linear(to-r, #6B46C1, #5c73d9  )":"linear(to-r, #107b71 , #14a093 )" }}
+              _hover={{ bgGradient: !themeMode ? "linear(to-r, #107b71 , #14a093 ) ":" linear(to-r, #6B46C1, #5c73d9  )" }}
               isLoading={isLoading}
             >
               LOGIN
