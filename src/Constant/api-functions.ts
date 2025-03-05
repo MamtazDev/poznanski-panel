@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 
 const axiosAPI = axios.create({
   baseURL: apiBaseUrl,
+  withCredentials: true,  // Ensure credentials (cookies) are sent with every request
   headers: {
     "Content-Type": "application/json",
   },
@@ -11,6 +12,7 @@ const axiosAPI = axios.create({
 
 const axiosAPIFormData = axios.create({
   baseURL: apiBaseUrl,
+  withCredentials: true,  // Ensure credentials (cookies) are sent with every request
   headers: {
     "Content-Type": "multipart/form-data",
   },
@@ -22,11 +24,17 @@ export async function apiPostReq(
   formData: boolean = false
 ): Promise<any> {
   try {
+
+    const config = {
+      withCredentials: true,  // This allows cookies to be sent/received
+    };
+
+
     if (formData) {
-      const response = await axiosAPIFormData.post(path, body);
+      const response = await axiosAPIFormData.post(path, body, config);
       return response.data;
     } else {
-      const response = await axiosAPI.post(path, body);
+      const response = await axiosAPI.post(path, body, config);
       return response.data;
     }
   } catch (error) {
@@ -71,7 +79,7 @@ export const checkIfLoggedIn = async (): Promise<any> => {
 };
 
 const setAccessToken = (token: string) => {
-  document.cookie = `access_token=${token}; path=/; max-age=3600; Secure; SameSite=Strict`;
+  document.cookie = `access_token=${token}; path=/; max-age=360000000; Secure; SameSite=Strict`;
 };
 
 
@@ -95,10 +103,6 @@ export const logoutRequest = async () => {
   try {
     await apiPostReq("auth/logout", {}, true);
     Cookies.remove('access_token');
-    
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("access_token");
-    sessionStorage.removeItem("selectedMenu");
 
   } catch (error) {
     console.error("Logout failed", error);

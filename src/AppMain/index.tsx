@@ -13,6 +13,7 @@ import PlaylistPage from "../Pages/AdminPanel/Playlist";
 import AlbumContent from "../Pages/AdminPanel/AlbumContent/AlbumContent";
 import Login from "../Pages/Login";
 import PrivateRoute from "../Components/PrivateRoute/PrivateRoute";
+import RedirectIfAuthenticated from "./RedirectIfAuthenticated";
 
 const AdminPanel = lazy(() => import("../Pages/AdminPanel"));
 const Article = lazy(() => import("../Pages/AdminPanel/Article"));
@@ -76,7 +77,11 @@ const AppMain: React.FC = () => {
 
         <div>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={
+              <RedirectIfAuthenticated>
+                <Login />
+              </RedirectIfAuthenticated>
+            } />
             <Route path="/admin" element={
               <PrivateRoute>
                 <Outlet />
