@@ -166,11 +166,11 @@ const PlaylistPage: React.FC = () => {
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
-      <div className="flex justify-between">
+      <div className="flex md:justify-between gap-2">
         <Box
-          className={`mb-4 ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          className={`mb-4 md:w-[300px] w-[276px] ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
             }`}
-          w="300px"
+
         >
           <InputGroup>
             <Input
@@ -225,7 +225,7 @@ const PlaylistPage: React.FC = () => {
                         : "bg-white text-gray-900 hover:bg-gray-200"
                       }`}
                   >
-                    <td className="p-4 text-left">{item.title}</td>
+                    <td className="p-4 text-left line-clamp-1">{item.title}</td>
                     {/* <td className="px-4 py-3 text-left"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -272,7 +272,7 @@ const PlaylistPage: React.FC = () => {
                       </div>
                     </div>
                   </td>
-                    <td className="py-4 text-left">
+                    <td className="py-4 text-left line-clamp-1">
                       {item.description.slice(0, 50)}
                     </td>
                     {/* <td className="py-4">{item.tags}</td> */}

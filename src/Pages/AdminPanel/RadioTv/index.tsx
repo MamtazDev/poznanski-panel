@@ -85,10 +85,10 @@ const RadioTvPage: React.FC<ProductContentProps> = ({ path, tagData }) => {
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
-      <div className="flex justify-between">
+      <div className="flex md:justify-between gap-2">
         <div
-          className={`mb-4 ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"}`}
-          style={{ width: "300px" }}
+          className={`mb-4 md:w-[300px] w-[276px] ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"}`}
+
         >
           <InputGroup>
             <Input type="text" placeholder="Search..." />

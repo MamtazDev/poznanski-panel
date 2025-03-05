@@ -258,8 +258,8 @@ const RadioContent: React.FC<ProductContentProps> = ({ path, tagData }) => {
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
-      <div className="flex justify-between">
-        <div className="mb-4" style={{ width: "300px" }}>
+      <div className="flex md:justify-between gap-2">
+        <div className="mb-4 md:w-[300px] w-[276px]" >
           <InputGroup>
             <Input
               type="text"

@@ -7,7 +7,7 @@ import { closePlayer, openPlayer } from '../../reducers/PlayerReducer';
 
 interface PlayerProps {
   isOpen: boolean;
-  type: boolean;
+  type?: boolean;
 }
 
 const YoutubePlayer: React.FC<PlayerProps> = ({ isOpen, type }) => {
