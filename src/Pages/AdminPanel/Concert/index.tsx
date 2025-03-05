@@ -436,7 +436,6 @@ const ConcertContent: React.FC<TableProps> = (props) => {
             <tr>
               <th className="px-6 py-3">Image</th>
               <th className="px-6 py-3">Title</th>
-              <th className="px-6 py-3">Category</th>
               <th className="px-6 py-3">Location</th>
               <th className="px-6 py-3"> Ticket Link</th>
               <th className="px-6 py-3">Description</th>
@@ -465,7 +464,6 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                     />
                   </td>
                   <td>{item.name}</td>
-                  <td>{item.category}</td>
                   <td>{item.location}</td>
                   <td>
                     <button
@@ -524,7 +522,6 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                     <td>
                       <p className="w-[200px] truncate">{item.name}</p>
                     </td>
-                    <td>{item.category || "N/A"}</td>
                     <td>{item.location}</td>
                     <td>
                       <button
