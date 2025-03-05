@@ -46,6 +46,7 @@ const ArticleContent = () => {
     description: "",
   });
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedPage, setSelectedPage] = useState<string>("1");
   const [selectedRowsNum, setSelectedRowsNum] = useState<number>(5);
   const [filterText, setFilterText] = useState<string>("");
@@ -175,17 +176,23 @@ const ArticleContent = () => {
     setOpenDeleteModal(false);
   };
 
+  const filteredData = cardData.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex md:justify-between gap-2">
-        <div  className={`mb-4 md:w-[300px] w-[276px] ${
+        <div
+          className={`mb-4 md:w-[300px] w-[276px] ${
             themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-          }`} >
+          }`}>
           <InputGroup>
             <Input
               type="text"
-              placeholder="Search..."
-              onChange={handleChangeFilterText}
+              placeholder="Search by name"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <InputRightElement pointerEvents="none">
               <AiOutlineSearch />
@@ -198,6 +205,7 @@ const ArticleContent = () => {
       <ArtistTable
         themeMode={themeMode}
         cardData={cardData}
+        filteredData={filteredData}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
         handleChange={handleChange}
