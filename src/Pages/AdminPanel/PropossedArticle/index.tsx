@@ -62,15 +62,16 @@ interface News {
 
 interface ArticleProps {
   tagData: any[];
-  date?:string
+  date?: string;
 }
 
-const PropossedArticle: React.FC<ArticleProps> = ({ tagData ,date}) => {
+const PropossedArticle: React.FC<ArticleProps> = ({ tagData, date }) => {
   const [cardData, setCardData] = useState<News[]>([]);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+  const [searchQuery, setSearchQuery] = useState("");
   const [preview, setPreview] = useState<string | null>(null);
   const [editData, setEditData] = useState<News | null>(null);
-    const dateFormated = moment(date).format("DD/MM/YYYY");
+  const dateFormated = moment(date).format("DD/MM/YYYY");
 
   const [newData, setNewData] = useState<News>({
     _id: "",
@@ -377,16 +378,24 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData ,date}) => {
     }
   };
 
+  const filteredData = cardData.filter((article) =>
+    article.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex md:justify-between gap-2">
         <div
           className={`mb-4 md:w-[300px] w-[276px] ${
             themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-          }`}
-         >
+          }`}>
           <InputGroup>
-            <Input type="text" placeholder="Search..." />
+            <Input
+              type="text"
+              placeholder="Search by title"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
             <InputRightElement>
               <AiOutlineSearch />
             </InputRightElement>
@@ -416,8 +425,8 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData ,date}) => {
           </thead>
 
           <tbody>
-            {cardData?.length > 0 ? (
-              cardData.map((item) => (
+            {filteredData?.length > 0 ? (
+              filteredData.map((item) => (
                 <tr
                   key={item._id}
                   className={`border-b py-3 ${!themeMode ? "bg-gray-800 text-gray-200 hover:bg-gray-700" : "bg-white text-gray-900 hover:bg-gray-200"}`}>

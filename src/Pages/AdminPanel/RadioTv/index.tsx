@@ -51,6 +51,7 @@ interface ProductContentProps {
 
 const RadioTvPage: React.FC<ProductContentProps> = ({ path, tagData }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+  const [searchQuery, setSearchQuery] = useState("");
   const [radioData, setRadioData] = useState<any[]>([]);
   const [newData, setNewData] = useState<any>({
     title: "",
@@ -83,15 +84,22 @@ const RadioTvPage: React.FC<ProductContentProps> = ({ path, tagData }) => {
     onNewOpen();
   };
 
+  const filteredData = radioData.filter((item) =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex md:justify-between gap-2">
         <div
-          className={`mb-4 md:w-[300px] w-[276px] ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"}`}
-
-        >
+          className={`mb-4 md:w-[300px] w-[276px] ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"}`}>
           <InputGroup>
-            <Input type="text" placeholder="Search..." />
+            <Input
+              type="text"
+              placeholder="Search by title"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
             <InputRightElement>
               <AiOutlineSearch />
             </InputRightElement>
@@ -106,6 +114,7 @@ const RadioTvPage: React.FC<ProductContentProps> = ({ path, tagData }) => {
         setRadioData={setRadioData}
         newData={newData}
         setNewData={setNewData}
+        filteredData={filteredData}
         isNewOpen={isNewOpen}
         onNewOpen={onNewOpen}
         onNewClose={onNewClose}
