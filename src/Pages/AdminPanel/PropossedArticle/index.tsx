@@ -378,8 +378,12 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData, date }) => {
     }
   };
 
-  const filteredData = cardData.filter((article) =>
-    article.title.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredData = cardData.filter(
+    (item) =>
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.nickname &&
+        item.nickname.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.tags && item.tags.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (

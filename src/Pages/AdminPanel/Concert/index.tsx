@@ -399,8 +399,13 @@ const ConcertContent: React.FC<TableProps> = (props) => {
     }
   };
 
-  const filteredData = radioData.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredData = radioData.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.description &&
+        item.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.location &&
+        item.location.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (

@@ -44,7 +44,7 @@ interface UserDataProps {
 
 const UserMainPage: React.FC<UserDataProps> = () => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-    const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [filterText, setFilterText] = useState<string>("");
   const [selectedUserId, setSelectedUserId] = useState<string>("");
   const [verificationStatus, setVerificationStatus] = useState<string>("");
@@ -92,10 +92,14 @@ const UserMainPage: React.FC<UserDataProps> = () => {
     }
   };
 
-  const filteredData = userAllData.filter((item) =>
-    item.email.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredData = userAllData.filter(
+    (item) =>
+      item.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.role &&
+        item.role.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.nickname &&
+        item.nickname.toLowerCase().includes(searchQuery.toLowerCase()))
   );
-
 
   useEffect(() => {
     apiGetReq("/auth/users", { filter: filterText })
