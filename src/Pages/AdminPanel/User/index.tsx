@@ -48,7 +48,7 @@ interface UserDataProps {
 
 const UserMainPage: React.FC<UserDataProps> = () => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-    const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [filterText, setFilterText] = useState<string>("");
   const [selectedUserId, setSelectedUserId] = useState<string>("");
   const [verificationStatus, setVerificationStatus] = useState<string>("");
@@ -126,7 +126,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
   }, [filterText]);
 
 
-// for delete modal
+  // for delete modal
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
@@ -165,9 +165,8 @@ const UserMainPage: React.FC<UserDataProps> = () => {
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex justify-between">
         <div
-          className={`mb-4 ${
-            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-          }`}
+          className={`mb-4 ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+            }`}
           style={{ width: "300px" }}>
           <InputGroup>
             <Input
@@ -220,12 +219,12 @@ const UserMainPage: React.FC<UserDataProps> = () => {
                 </td>
                 <td>
                   <div className="flex gap-4 justify-center">
-                  <button onClick={() => handleEditClick(user._id, user.nickname, user.role, user.isVerified, user.blockStatus)}>
+                    <button onClick={() => handleEditClick(user._id, user.nickname, user.role, user.isVerified, user.blockStatus)}>
                       <AiOutlineEdit className="cursor-pointer mr-5" />
                     </button>
                     <button onClick={() => handleOpenDeleteModal(user._id)}>
-                    <MdOutlineDelete className="cursor-pointer" />
-                  </button>
+                      <MdOutlineDelete className="cursor-pointer" />
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -257,112 +256,103 @@ const UserMainPage: React.FC<UserDataProps> = () => {
       )}
 
 
-<Modal isOpen={isOpen} onClose={onClose}>
-  <ModalOverlay />
-  <ModalContent>
-    <div className={`h-full rounded-md ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"}`}>
-      <ModalHeader>Edit User Details</ModalHeader>
-      <ModalCloseButton />
-      <ModalBody>
-        <Input
-          type="text"
-          value={nickName}
-          onChange={(e) => setNickName(e.target.value)}
-          placeholder="Edit your name..."
-          className="mb-2"
-        />
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <div className={`h-full rounded-md ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"}`}>
+            <ModalHeader>Edit User Details</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Input
+                type="text"
+                value={nickName}
+                onChange={(e) => setNickName(e.target.value)}
+                placeholder="Edit your name..."
+                className="mb-2"
+              />
 
-        <Stack direction="column">
-          <Radio
-            value="Verified"
-            style={{ color: themeMode ? "#5ae3cc" : "#5A1073" }}
-            isChecked={verificationStatus === "Verified"}
-          >
-            Verified
-          </Radio>
-          <Radio
-            value="Unverified"
-            style={{ color: themeMode ? "#5ae3cc" : "#5A1073" }}
-            isChecked={verificationStatus === "Unverified"}
-          >
-            Unverified
-          </Radio>
-        </Stack>
+              <Stack direction="column">
+                <RadioGroup
+                  onChange={handleVerificationChange}
+                  value={verificationStatus}
+                >
+                  <Stack direction="column">
+                    <Radio
+                      value="Verified"
+                      style={{
+                        color: themeMode ? "#5ae3cc" : "#5A1073",
+                      }}>
+                      Verified
+                    </Radio>
+                    <Radio
+                      value="Unverified"
+                      style={{
+                        color: themeMode ? "#5ae3cc" : "#5A1073",
+                      }}>
+                      Unverified
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
+              </Stack>
 
-        <div className="mt-4">
-          <label htmlFor="role" className="block text-sm font-medium">Select Role</label>
-          <Select
-            id="role"
-            value={selectedRole}
-            onChange={handleRoleChange}
-            className="mt-2 focus:outline-none"
-            style={{ backgroundColor: themeMode ? "#f1f1f6" : "#34495e" }}
-          >
-            <option value="user" style={{ backgroundColor: themeMode ? "#f1f1f6" : '#34495e' }}>User</option>
-            <option value="admin" style={{ backgroundColor: themeMode ? "#f1f1f6" : '#34495e' }}>Admin</option>
-          </Select>
-        </div>
+              <div className="mt-4">
+                <label htmlFor="role" className="block text-sm font-medium">Select Role</label>
+                <Select
+                  id="role"
+                  value={selectedRole}
+                  onChange={handleRoleChange}
+                  className="mt-2 focus:outline-none"
+                  style={{ backgroundColor: themeMode ? "#f1f1f6" : "#34495e" }}
+                >
+                  <option value="user" style={{ backgroundColor: themeMode ? "#f1f1f6" : '#34495e' }}>User</option>
+                  <option value="admin" style={{ backgroundColor: themeMode ? "#f1f1f6" : '#34495e' }}>Admin</option>
+                </Select>
+              </div>
 
-        {/* Block/Unblock Radio Group */}
-        <div className="mt-4">
-          <label className="block text-sm font-medium">Account Status</label>
-          <RadioGroup
-            value={selectedBlock}
-            onChange={handleBlockChange}
-          >
-            <Stack direction="row">
-              <Radio value="Blocked" style={{ color: themeMode ? "#d9534f" : "#ff6b6b" }}>
-                Block
-              </Radio>
-              <Radio value="Unblocked" style={{ color: themeMode ? "#5ae3cc" : "#5A1073" }}>
-                Unblock
-              </Radio>
-            </Stack>
-          </RadioGroup>
-        </div>
-      </ModalBody>
+              {/* Block/Unblock Radio Group */}
+              <div className="mt-4">
+                <label className="block text-sm font-medium">Account Status</label>
+                <RadioGroup
+                  value={selectedBlock}
+                  onChange={handleBlockChange}
+                >
+                  <Stack direction="row">
+                    <Radio value="Blocked" style={{ color: themeMode ? "#d9534f" : "#ff6b6b" }}>
+                      Block
+                    </Radio>
+                    <Radio value="Unblocked" style={{ color: themeMode ? "#5ae3cc" : "#5A1073" }}>
+                      Unblock
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
+              </div>
+            </ModalBody>
 
-      <ModalFooter className="space-x-2">
-        <Button colorScheme="blue" onClick={handleSaveVerification}>
-          Save
-        </Button>
-        <Button variant="red" onClick={onClose}>
-          Cancel
-        </Button>
-      </ModalFooter>
-    </div>
-  </ModalContent>
-</Modal>
+            <ModalFooter className="space-x-2">
+              <Button colorScheme="blue" onClick={handleSaveVerification}>
+                Save
+              </Button>
+              <Button variant="red" onClick={onClose}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </div>
+        </ModalContent>
+      </Modal>
 
       {/* <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-<<<<<<< HEAD
           <div className={`h-full rounded-md ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-=======
-          <div
-            className={` h-[350px] rounded-md ${
-              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
->>>>>>> 29d362fffd85439e1f5ee3bdbdd113c76a881d8e
             }`}>
             <ModalHeader>Edit User Details</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <RadioGroup
                 onChange={handleVerificationChange}
-<<<<<<< HEAD
                 value={verificationStatus}
               >
                 <Input type="text" onChange={(e) => setNickName(e.target.value)} placeholder="Edit your name..." className="mb-2" />
-=======
-                value={verificationStatus}>
-                <Input
-                  type="text"
-                  onChange={(e) => setNickName(e.target.value)}
-                  placeholder="Edit your name..."
-                  className="mb-2"
-                />
->>>>>>> 29d362fffd85439e1f5ee3bdbdd113c76a881d8e
 
                 <Stack direction="column">
                   <Radio
