@@ -64,12 +64,13 @@ interface News {
 
 interface ArticleProps {
   tagData: any[];
-  date?:string
+  date?: string;
 }
 
-const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
+const Article: React.FC<ArticleProps> = ({ tagData, date }) => {
   const [cardData, setCardData] = useState<News[]>([]);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+  const [searchQuery, setSearchQuery] = useState("");
   const [preview, setPreview] = useState<string | null>(null);
   const [editData, setEditData] = useState<News | null>(null);
   const dateFormated = moment(date).format("DD/MM/YYYY");
@@ -357,8 +358,6 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
     }
   };
 
-
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -368,16 +367,24 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
     }
   };
 
+  const filteredData = cardData.filter((item) =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex md:justify-between gap-2">
         <div
           className={`mb-4 md:w-[300px] w-[276px] ${
             themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-          }`}
-          >
+          }`}>
           <InputGroup>
-            <Input type="text" placeholder="Search..." />
+            <Input
+              type="text"
+              placeholder="Search by title"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
             <InputRightElement>
               <AiOutlineSearch />
             </InputRightElement>
@@ -407,8 +414,8 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
           </thead>
 
           <tbody>
-            {cardData?.length > 0 ? (
-              cardData.map((item) => (
+            {filteredData?.length > 0 ? (
+              filteredData.map((item) => (
                 <tr
                   key={item._id}
                   className={`border-b py-3 ${!themeMode ? "bg-gray-800 text-gray-200 hover:bg-gray-700" : "bg-white text-gray-900 hover:bg-gray-200"}`}>
@@ -433,7 +440,7 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
                   </td>
 
                   <td>
-                    <p className="truncate max-w-[300px]">  {dateFormated}</p>
+                    <p className="truncate max-w-[300px]"> {dateFormated}</p>
                   </td>
 
                   <td>
@@ -480,7 +487,7 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
             fontWeight="bold"
             textAlign="center"
             color="blue.600">
-            Edit  Article
+            Edit Article
           </ModalHeader>
 
           <ModalBody>
@@ -584,6 +591,22 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
               />
             </FormControl>
 
+            <VStack spacing={4} align="stretch" mt={4}>
+              <TipTapPage
+                data={editData}
+                content={editData?.content || ""}
+                setContent={(newContent) =>
+                  handleContentChange(newContent, false)
+                }
+              />
+              {/* <TipTapPage
+                content={editData?.content || ""}
+                setContent={(newContent) =>
+                  handleContentChange(newContent, true)
+                }
+              /> */}
+            </VStack>
+
             {/* Date */}
             {/* <FormControl id="date" isRequired>
               <FormLabel>Date</FormLabel>
@@ -623,7 +646,7 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <ArticleEdit/>
+      <ArticleEdit />
 
       {/* New Article Modal */}
       <Modal isOpen={isNewOpen} onClose={onNewClose} size="lg" isCentered>
@@ -735,12 +758,11 @@ const Article: React.FC<ArticleProps> = ({ tagData ,date}) => {
             {/* Rich Text Editor */}
             <VStack spacing={4} align="stretch" mt={4} mb={4}>
               <TipTapPage
-              data={newData}
+                data={newData}
                 content={newData.content}
                 setContent={(newContent) =>
                   handleContentChange(newContent, true)
                 }
-
               />
             </VStack>
 

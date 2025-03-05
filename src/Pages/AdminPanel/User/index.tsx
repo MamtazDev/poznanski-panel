@@ -48,6 +48,7 @@ interface UserDataProps {
 
 const UserMainPage: React.FC<UserDataProps> = () => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+    const [searchQuery, setSearchQuery] = useState("");
   const [filterText, setFilterText] = useState<string>("");
   const [selectedUserId, setSelectedUserId] = useState<string>("");
   const [verificationStatus, setVerificationStatus] = useState<string>("");
@@ -113,6 +114,11 @@ const UserMainPage: React.FC<UserDataProps> = () => {
     }
   };
 
+  const filteredData = userAllData.filter((item) =>
+    item.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+
   useEffect(() => {
     apiGetReq("/auth/users", { filter: filterText })
       .then((res) => setUserAllData(res))
@@ -159,15 +165,16 @@ const UserMainPage: React.FC<UserDataProps> = () => {
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex justify-between">
         <div
-          className={`mb-4 ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-            }`}
-          style={{ width: "300px" }}
-        >
+          className={`mb-4 ${
+            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}
+          style={{ width: "300px" }}>
           <InputGroup>
             <Input
               type="text"
-              placeholder="Search..."
-              onChange={handleChangeFilterText}
+              placeholder="Search by email..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <InputRightElement pointerEvents="none">
               <AiOutlineSearch />
@@ -193,7 +200,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
             </tr>
           </thead>
           <tbody>
-            {userAllData.map((user) => (
+            {filteredData.map((user) => (
               <tr
                 key={user._id}
                 className={`border-b py-3 ${!themeMode
@@ -330,41 +337,85 @@ const UserMainPage: React.FC<UserDataProps> = () => {
       {/* <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
+<<<<<<< HEAD
           <div className={`h-full rounded-md ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+=======
+          <div
+            className={` h-[350px] rounded-md ${
+              themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+>>>>>>> 29d362fffd85439e1f5ee3bdbdd113c76a881d8e
             }`}>
             <ModalHeader>Edit User Details</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <RadioGroup
                 onChange={handleVerificationChange}
+<<<<<<< HEAD
                 value={verificationStatus}
               >
                 <Input type="text" onChange={(e) => setNickName(e.target.value)} placeholder="Edit your name..." className="mb-2" />
+=======
+                value={verificationStatus}>
+                <Input
+                  type="text"
+                  onChange={(e) => setNickName(e.target.value)}
+                  placeholder="Edit your name..."
+                  className="mb-2"
+                />
+>>>>>>> 29d362fffd85439e1f5ee3bdbdd113c76a881d8e
 
                 <Stack direction="column">
-                  <Radio value="Verified" style={{
-                    color: themeMode ? "#5ae3cc" : "#5A1073"
-                  }}>Verified</Radio>
-                  <Radio value="Unverified" style={{
-                    color: themeMode ? "#5ae3cc" : "#5A1073",
-                  }}>Unverified</Radio>
+                  <Radio
+                    value="Verified"
+                    style={{
+                      color: themeMode ? "#5ae3cc" : "#5A1073",
+                    }}>
+                    Verified
+                  </Radio>
+                  <Radio
+                    value="Unverified"
+                    style={{
+                      color: themeMode ? "#5ae3cc" : "#5A1073",
+                    }}>
+                    Unverified
+                  </Radio>
                 </Stack>
               </RadioGroup>
               <div className="mt-4">
-                <label htmlFor="role" className="block text-sm font-medium">Select Role</label>
-                <Select id="role" value={selectedRole} onChange={handleRoleChange} className={` mt-2 focus:outline-none`} style={{
-                  backgroundColor: themeMode ? "#f1f1f6" : "#34495e"
-                }}>
-                  <option value="" style={{
-                    outline: "none",
-                    backgroundColor: themeMode ? "#f1f1f6" : '#34495e'
-                  }}>Select Role</option>
-                  <option value="user" className="rounded-md" style={{
-                    backgroundColor: themeMode ? "#f1f1f6" : '#34495e'
-                  }}>User</option>
-                  <option value="admin" style={{
-                    backgroundColor: themeMode ? "#f1f1f6" : '#34495e'
-                  }}>Admin</option>
+                <label htmlFor="role" className="block text-sm font-medium">
+                  Select Role
+                </label>
+                <Select
+                  id="role"
+                  value={selectedRole}
+                  onChange={handleRoleChange}
+                  className={` mt-2 focus:outline-none`}
+                  style={{
+                    backgroundColor: themeMode ? "#f1f1f6" : "#34495e",
+                  }}>
+                  <option
+                    value=""
+                    style={{
+                      outline: "none",
+                      backgroundColor: themeMode ? "#f1f1f6" : "#34495e",
+                    }}>
+                    Select Role
+                  </option>
+                  <option
+                    value="user"
+                    className="rounded-md"
+                    style={{
+                      backgroundColor: themeMode ? "#f1f1f6" : "#34495e",
+                    }}>
+                    User
+                  </option>
+                  <option
+                    value="admin"
+                    style={{
+                      backgroundColor: themeMode ? "#f1f1f6" : "#34495e",
+                    }}>
+                    Admin
+                  </option>
                 </Select>
               </div>
 

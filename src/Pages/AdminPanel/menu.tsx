@@ -29,9 +29,11 @@ const Menu = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await logoutRequest();
+    document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"; // Deletes the cookie
     navigate("/login");
   };
+
+
   useEffect(() => {
     const currentPath = location.pathname.split("/").pop();
     setSelectedMenu(currentPath || "article"); // Default to "article"

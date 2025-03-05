@@ -45,8 +45,7 @@ const Pagination = ({
     <HStack justifyContent="center" spacing={2} mt={5} wrap="wrap">
       <Button
         onClick={() => onPageChange(currentPage - 1)}
-        isDisabled={currentPage === 1}
-      >
+        isDisabled={currentPage === 1}>
         Previous
       </Button>
 
@@ -63,8 +62,7 @@ const Pagination = ({
         <Button
           key={startPage + i}
           variant={currentPage === startPage + i ? "solid" : "outline"}
-          onClick={() => onPageChange(startPage + i)}
-        >
+          onClick={() => onPageChange(startPage + i)}>
           {startPage + i}
         </Button>
       ))}
@@ -80,8 +78,7 @@ const Pagination = ({
 
       <Button
         onClick={() => onPageChange(currentPage + 1)}
-        isDisabled={currentPage === totalPages}
-      >
+        isDisabled={currentPage === totalPages}>
         Next
       </Button>
     </HStack>
@@ -90,6 +87,7 @@ const Pagination = ({
 
 const PlaylistPage: React.FC = () => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+  const [searchQuery, setSearchQuery] = useState("");
   const toast = useToast();
   const [playlists, setPlaylists] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -114,7 +112,6 @@ const PlaylistPage: React.FC = () => {
     }
     return videoId;
   };
-
 
   const handlePlay = (youTube: any) => {
     if (youTube) {
@@ -164,20 +161,23 @@ const PlaylistPage: React.FC = () => {
     setIsReloadLoading(false);
   };
 
+  const filteredData = playlists.filter((item) =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
       <div className="flex md:justify-between gap-2">
         <Box
-          className={`mb-4 md:w-[300px] w-[276px] ${themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
-            }`}
-
-        >
+          className={`mb-4 md:w-[300px] w-[276px] ${
+            themeMode ? "text-gray-800 bg-white" : "bg-gray-800 text-white"
+          }`}>
           <InputGroup>
             <Input
               type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by title"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <InputRightElement onClick={handleSearch} cursor="pointer">
               <AiOutlineSearch />
@@ -189,8 +189,7 @@ const PlaylistPage: React.FC = () => {
           isLoading={isReloadLoading}
           onClick={() => handleReload()}
           colorScheme="purple"
-          disabled={isReloadLoading}
-        >
+          disabled={isReloadLoading}>
           Reload Playlist
         </Button>
       </div>
@@ -203,11 +202,11 @@ const PlaylistPage: React.FC = () => {
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
           <table className="w-full h-full" style={{ minWidth: "400px" }}>
             <thead
-              className={`text-xs uppercase ${themeMode
+              className={`text-xs uppercase ${
+                themeMode
                   ? "text-white bg-[#5A1073]"
                   : "bg-[#3bd6c6] text-[#5A1073]"
-                }`}
-            >
+              }`}>
               <tr>
                 <th className="px-6 py-3 text-left">Title</th>
                 <th className="px-6 py-3 text-left">Video</th>
@@ -216,15 +215,15 @@ const PlaylistPage: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {playlists?.length > 0 ? (
-                playlists.map((item, index) => (
+              {filteredData?.length > 0 ? (
+                filteredData.map((item, index) => (
                   <tr
                     key={index}
-                    className={`border-b ${!themeMode
+                    className={`border-b ${
+                      !themeMode
                         ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
                         : "bg-white text-gray-900 hover:bg-gray-200"
-                      }`}
-                  >
+                    }`}>
                     <td className="p-4 text-left line-clamp-1">{item.title}</td>
                     {/* <td className="px-4 py-3 text-left"
                       onClick={(e) => {
@@ -244,34 +243,61 @@ const PlaylistPage: React.FC = () => {
                         frameBorder="0"
                       />
                     </td> */}
-                     <td className="px-4 py-3">
-                    <div className={`relative lg:bg-gray-100 cursor-pointer lg:h-48 rounded-md flex-shrink-0 overflow-hidden ${!themeMode && "dark-bg-color"}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handlePlay(item?.videoId);
-                      }}
-                    >
-                      {/* <p>Title: {item?.videoId }</p> */}
-                      <img
-                        src={item?.videoId ? `https://img.youtube.com/vi/${item?.videoId}/hqdefault.jpg` : "default-thumbnail.jpg"}
-                        className="md:w-full w-[69px] h-full object-cover"
-                        alt="YouTube Thumbnail"
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        {themeMode ? (
-                          <svg xmlns="http://www.w3.org/2000/svg" width="58" height="57" viewBox="0 0 58 57" fill="none" className="w-[20px] md:w-[58px]">
-                            <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
-                            <path d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z" fill="white" />
-                          </svg>
-                        ) : (
-                          <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 55 55" fill="none" className="w-[20px] md:w-[58px]">
-                            <circle cx="27.5" cy="27.5" r="27.5" fill="#2FC4B2" />
-                            <path d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z" fill="#111217" />
-                          </svg>
-                        )}
+                    <td className="px-4 py-3">
+                      <div
+                        className={`relative lg:bg-gray-100 cursor-pointer lg:h-48 rounded-md flex-shrink-0 overflow-hidden ${!themeMode && "dark-bg-color"}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handlePlay(item?.videoId);
+                        }}>
+                        {/* <p>Title: {item?.videoId }</p> */}
+                        <img
+                          src={
+                            item?.videoId
+                              ? `https://img.youtube.com/vi/${item?.videoId}/hqdefault.jpg`
+                              : "default-thumbnail.jpg"
+                          }
+                          className="md:w-full w-[69px] h-full object-cover"
+                          alt="YouTube Thumbnail"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          {themeMode ? (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="58"
+                              height="57"
+                              viewBox="0 0 58 57"
+                              fill="none"
+                              className="w-[20px] md:w-[58px]">
+                              <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
+                              <path
+                                d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z"
+                                fill="white"
+                              />
+                            </svg>
+                          ) : (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="55"
+                              height="55"
+                              viewBox="0 0 55 55"
+                              fill="none"
+                              className="w-[20px] md:w-[58px]">
+                              <circle
+                                cx="27.5"
+                                cy="27.5"
+                                r="27.5"
+                                fill="#2FC4B2"
+                              />
+                              <path
+                                d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z"
+                                fill="#111217"
+                              />
+                            </svg>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </td>
+                    </td>
                     <td className="py-4 text-left line-clamp-1">
                       {item.description.slice(0, 50)}
                     </td>
