@@ -34,6 +34,7 @@ import img from "../../../assets/png/profileImg3.png";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../reducers";
 import { getVideoInfoById } from "../../../utils";
+import moment from "moment";
 
 interface TableProps {
   themeMode?: boolean;
@@ -59,6 +60,7 @@ interface TableProps {
 
 const ConcertContent: React.FC<TableProps> = (props) => {
   const [radioData, setRadioData] = useState<any[]>([]);
+  console.log(radioData,"concert Data")
   const [featuredData, setFeaturedData] = useState<any[]>([]);
   const [editData, setEditData] = useState<any | null>(null);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
@@ -399,13 +401,8 @@ const ConcertContent: React.FC<TableProps> = (props) => {
     }
   };
 
-  const filteredData = radioData.filter(
-    (item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (item.description &&
-        item.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.location &&
-        item.location.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredData = radioData.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -441,6 +438,7 @@ const ConcertContent: React.FC<TableProps> = (props) => {
             <tr>
               <th className="px-6 py-3">Image</th>
               <th className="px-6 py-3">Title</th>
+              <th className="px-6 py-3">Category</th>
               <th className="px-6 py-3">Location</th>
               <th className="px-6 py-3"> Ticket Link</th>
               <th className="px-6 py-3">Description</th>
@@ -468,7 +466,8 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                       className="rounded-full w-[50px] h-[50px] my-2 flex items-center mx-auto"
                     />
                   </td>
-                  <td>{item.name}</td>
+                  <td className="text-start md:text-center">{item.name.slice(0, 50)}</td>
+                  <td>{item.category}</td>
                   <td>{item.location}</td>
                   <td>
                     <button
@@ -483,17 +482,17 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                       </a>
                     </button>
                   </td>
-                  <td className="text-center">
-                    {item.description.slice(0, 100)}
+                  <td className="line-clamp-1 text-start md:text-center">
+                    {item.description.slice(0, 50)}
                   </td>
                   <td className="text-center">
                     {item.isFeatured === true ? "Featured" : "Not Featured"}
                   </td>
-                  <td>
-                    {new Date(item.timeframe.start).toISOString().split("T")[0]}
+                  <td className="text-center">
+                    {moment(item.timeframe.start).format("D-MM-YY")}
                   </td>
-                  <td>
-                    {new Date(item.timeframe.end).toISOString().split("T")[0]}
+                  <td className="text-center">
+                    {moment(item.timeframe.end).format("D-MM-YY")}
                   </td>
                   <td className="text-center space-x-2">
                     <button onClick={() => handleEdit(item._id)}>
@@ -525,8 +524,9 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                       />
                     </td>
                     <td>
-                      <p className="w-[200px] truncate">{item.name}</p>
+                      <p className="w-[200px] truncate text-start md:text-center">{item.name}</p>
                     </td>
+                    <td>{item.category || "N/A"}</td>
                     <td>{item.location}</td>
                     <td>
                       <button
@@ -541,24 +541,20 @@ const ConcertContent: React.FC<TableProps> = (props) => {
                         </a>
                       </button>
                     </td>
-                    <td className="text-center">
-                      <p className="w-[500px] truncate">
-                        {item.description.slice(0, 100)}
+                    <td>
+                      <p className="w-[400px] truncate text-start md:text-center">
+                        {item.description.slice(0, 50)}
                       </p>
                     </td>
                     <td className="text-center">
                       {item.isFeatured === true ? "Featured" : "Not Featured"}
                     </td>
-                    <td>
-                      {
-                        new Date(item.timeframe.start)
-                          .toISOString()
-                          .split("T")[0]
-                      }
-                    </td>
-                    <td>
-                      {new Date(item.timeframe.end).toISOString().split("T")[0]}
-                    </td>
+                    <td className="text-center">
+                    {moment(item.timeframe.start).format("D-MM-YY")}
+                  </td>
+                  <td className="text-center">
+                    {moment(item.timeframe.end).format("D-MM-YY")}
+                  </td>
                     <td className="text-center space-x-2">
                       <button onClick={() => handleEdit(item._id)}>
                         <FaRegEdit />
