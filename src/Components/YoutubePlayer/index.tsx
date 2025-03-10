@@ -23,9 +23,14 @@ const YoutubePlayer: React.FC<PlayerProps> = ({ isOpen, type }) => {
     iframeClass: 'rounded-lg',
   };
 
+  // const onClose = () => {
+  //   dispatch(closePlayer());
+  // };
+
   const onClose = () => {
     dispatch(closePlayer());
   };
+
 
   const onOpen = () => {
     dispatch(openPlayer(videoId));
@@ -50,7 +55,7 @@ const YoutubePlayer: React.FC<PlayerProps> = ({ isOpen, type }) => {
     >
       {videoId && (
         <button
-          onClick={!isOpen ? onClose : onOpen}
+        onClick={isOpen ? onClose : onOpen}
           className={`${type ? '' : isOpen ? 'mx-2' : 'mx-4'} my-auto z-50 items-center`}
         >
           <img
