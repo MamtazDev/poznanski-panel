@@ -55,7 +55,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
   const [userAllData, setUserAllData] = useState<Users[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedRole, setSelectedRole] = useState("user");
-  const [selectedBlock, setSelectedBlock] = useState("Unblocked");
+  const [selectedBlock, setSelectedBlock] = useState("false");
   const [nickName, setNickName] = useState("");
 
   const handleRoleChange = (e: any) => {
@@ -98,7 +98,7 @@ const UserMainPage: React.FC<UserDataProps> = () => {
         isVerified: verificationStatus === "Verified",
         role: selectedRole,
         nickname: nickName,
-        block: selectedBlock,
+        isBlocked: selectedBlock,
       });
       setUserAllData((prevData) =>
         prevData.map((user) =>
@@ -325,10 +325,10 @@ const UserMainPage: React.FC<UserDataProps> = () => {
                   onChange={handleBlockChange}
                 >
                   <Stack direction="row">
-                    <Radio value="Blocked" style={{ color: themeMode ? "#d9534f" : "#ff6b6b" }}>
+                    <Radio value="true" style={{ color: themeMode ? "#d9534f" : "#ff6b6b" }}>
                       Block
                     </Radio>
-                    <Radio value="Unblocked" style={{ color: themeMode ? "#5ae3cc" : "#5A1073" }}>
+                    <Radio value="false" style={{ color: themeMode ? "#5ae3cc" : "#5A1073" }}>
                       Unblock
                     </Radio>
                   </Stack>
