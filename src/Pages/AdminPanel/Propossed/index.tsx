@@ -38,6 +38,8 @@ import TipTapPage from "../../../Components/TipTapPage";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import moment from "moment";
+import PropossedArticleEdit from "./PropossedArticleEdit";
+import CustomDropdown from "../../../Components/TextField/CustomeDropDown";
 
 interface Content {
   subHead: string;
@@ -65,14 +67,13 @@ interface ArticleProps {
   date?: string;
 }
 
-const PropossedArticle: React.FC<ArticleProps> = ({ tagData, date }) => {
+const PropossedPage: React.FC<ArticleProps> = ({ tagData, date }) => {
   const [cardData, setCardData] = useState<News[]>([]);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [searchQuery, setSearchQuery] = useState("");
   const [preview, setPreview] = useState<string | null>(null);
   const [editData, setEditData] = useState<News | null>(null);
   const dateFormated = moment(date).format("DD/MM/YYYY");
-
   const [newData, setNewData] = useState<News>({
     _id: "",
     title: "",
@@ -149,21 +150,11 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData, date }) => {
     }
   };
 
-  // const handleEdit = (id: string) => {
-  //   const selectedItem = cardData.find((item) => item._id === id);
-  //   if (selectedItem) {
-  //     // const parsedContent = JSON.parse(String(selectedItem.content)); // Parse the content
-  //     // setEditData({ ...selectedItem, content: parsedContent }); // Set parsed content
-  //     setEditData({ ...selectedItem }); // Set parsed content
-  //     onOpen();
-  //   }
-  // };
-
   const handleEdit = (id: string) => {
     const selectedItem = cardData.find((item) => item._id === id);
     if (selectedItem) {
       setEditData({ ...selectedItem });
-      setPreview(selectedItem.files?.[0] || null); // Set the preview image
+      setPreview(selectedItem.files?.[0] || null);
       onOpen();
     }
   };
@@ -290,9 +281,8 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData, date }) => {
         date: new Date(newData.date).toISOString(),
       };
       const res = await apiPostReq("/news", formattedData);
-      // const res = await apiPostReq("/news", newData);
       if (res.success) {
-        fetchArticles(); // Refetch data after creation
+        fetchArticles();
         toast({
           title: "Article created successfully!",
           status: "success",
@@ -334,11 +324,10 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData, date }) => {
 
   const handleSave = async () => {
     if (!editData || !editData._id) return;
-
     const updatedData = {
       ...editData,
       date: new Date(editData.date).toISOString(),
-      content: JSON.stringify(editData.content),
+      // content: JSON.stringify(editData.content),
       files: editData.files, // Ensure files array is included
     };
 
@@ -449,19 +438,19 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData, date }) => {
                   </td>
 
                   <td>
-                    <p className="line-clamp-1">{item.title}</p>
+                    <p className="truncate max-w-[300px]">{item.title}</p>
                   </td>
 
                   <td>
-                    <p className="line-clamp-1">{item.nickname}</p>
+                    <p className="truncate max-w-[300px]">{item.nickname}</p>
                   </td>
 
                   <td>
-                    <p className="line-clamp-1">{item.tags}</p>
+                    <p className="truncate max-w-[300px]">{item.tags}</p>
                   </td>
 
                   <td>
-                    <p className="line-clamp-1">{dateFormated}</p>
+                    <p className="truncate max-w-[300px]"> {dateFormated}</p>
                   </td>
 
                   <td>
@@ -510,7 +499,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData, date }) => {
             textAlign="center"
             color="blue.600"
           >
-            Edit Propossed Article
+            Edit Article
           </ModalHeader>
 
           <ModalBody>
@@ -528,21 +517,14 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData, date }) => {
                   height="150px"
                 >
                   <Image
+                    className="w-full h-full"
                     src={preview}
                     alt="Uploaded Preview"
-                    objectFit="cover"
+                    objectFit="fill"
                   />
                 </Box>
               )}
 
-              {/* Upload Input */}
-              {/* <Input
-                type="file"
-                value={editData?.files || ""}
-                p={1}
-                onChange={handleFileChange}
-                accept="image/*"
-              /> */}
               <Input
                 type="file"
                 p={1}
@@ -623,7 +605,6 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData, date }) => {
               />
             </FormControl>
 
-            {/* Rich Text Editor */}
             <VStack spacing={4} align="stretch" mt={4}>
               <TipTapPage
                 data={editData}
@@ -681,6 +662,7 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData, date }) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <PropossedArticleEdit />
 
       {/* New Article Modal */}
       <Modal isOpen={isNewOpen} onClose={onNewClose} size="lg" isCentered>
@@ -711,7 +693,8 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData, date }) => {
                   <Image
                     src={preview}
                     alt="Uploaded Preview"
-                    objectFit="cover"
+                    className="w-full h-full"
+                    objectFit="fill"
                   />
                 </Box>
               )}
@@ -789,10 +772,12 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData, date }) => {
                 focusBorderColor="blue.500"
               />
             </FormControl>
+            {/* <CustomDropdown/> */}
 
             {/* Rich Text Editor */}
             <VStack spacing={4} align="stretch" mt={4} mb={4}>
               <TipTapPage
+                data={newData}
                 content={newData.content}
                 setContent={(newContent) =>
                   handleContentChange(newContent, true)
@@ -848,4 +833,4 @@ const PropossedArticle: React.FC<ArticleProps> = ({ tagData, date }) => {
   );
 };
 
-export default PropossedArticle;
+export default PropossedPage;
