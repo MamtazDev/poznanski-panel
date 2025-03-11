@@ -13,10 +13,11 @@ import PlaylistPage from "../Pages/AdminPanel/Playlist";
 import AlbumContent from "../Pages/AdminPanel/AlbumContent/AlbumContent";
 import Login from "../Pages/Login";
 import PrivateRoute from "../Components/PrivateRoute/PrivateRoute";
+import RedirectIfAuthenticated from "./RedirectIfAuthenticated";
 
 const AdminPanel = lazy(() => import("../Pages/AdminPanel"));
 const Article = lazy(() => import("../Pages/AdminPanel/Article"));
-const PropossedArticle = lazy(() => import("../Pages/AdminPanel/PropossedArticle"));
+const PropossedPage = lazy(() => import("../Pages/AdminPanel/Propossed"));
 const MaterialContent = lazy(() => import("../Pages/AdminPanel/Materials"));
 const Concert = lazy(() => import("../Pages/AdminPanel/Concert"));
 const Artist = lazy(() => import("../Pages/AdminPanel/Artist"));
@@ -68,7 +69,8 @@ const AppMain: React.FC = () => {
               size="lg"
             />
           </div>
-        }>
+        }
+      >
         <ScrollToTopOnPageChange />
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
@@ -76,24 +78,44 @@ const AppMain: React.FC = () => {
 
         <div>
           <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/admin" element={
-              <PrivateRoute>
-                <Outlet />
-              </PrivateRoute>
-            }>
+            <Route
+              path="/login"
+              element={
+                <RedirectIfAuthenticated>
+                  <Login />
+                </RedirectIfAuthenticated>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <PrivateRoute>
+                  <Outlet />
+                </PrivateRoute>
+              }
+            >
               <Route path="" element={<Navigate to="article" />} />
               <Route
                 path="article"
                 element={<AdminPanel component={<Article tagData={tags} />} />}
               />
               <Route
-                path="propossedArticle"
-                element={<AdminPanel component={<PropossedArticle tagData={tags} />} />}
+                path="propossed"
+                element={
+                  <AdminPanel component={<PropossedPage tagData={tags} />} />
+                }
               />
+              {/* <Route
+                path="propossedArticle"
+                element={
+                  <AdminPanel component={<PropossedArticle tagData={tags} />} />
+                }
+              /> */}
               <Route
                 path="radio"
-                element={<AdminPanel component={<Radio path="tv" tagData={tags} />} />}
+                element={
+                  <AdminPanel component={<Radio path="tv" tagData={tags} />} />
+                }
               />
               <Route
                 path="album"

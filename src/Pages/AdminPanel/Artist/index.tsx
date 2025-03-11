@@ -176,8 +176,11 @@ const ArticleContent = () => {
     setOpenDeleteModal(false);
   };
 
-  const filteredData = cardData.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredData = cardData.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.description &&
+        item.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (

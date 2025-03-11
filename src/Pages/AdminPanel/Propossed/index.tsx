@@ -38,7 +38,7 @@ import TipTapPage from "../../../Components/TipTapPage";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import moment from "moment";
-import ArticleEdit from "./ArticleEdit";
+import PropossedArticleEdit from "./PropossedArticleEdit";
 import CustomDropdown from "../../../Components/TextField/CustomeDropDown";
 
 interface Content {
@@ -67,7 +67,7 @@ interface ArticleProps {
   date?: string;
 }
 
-const Article: React.FC<ArticleProps> = ({ tagData, date }) => {
+const PropossedPage: React.FC<ArticleProps> = ({ tagData, date }) => {
   const [cardData, setCardData] = useState<News[]>([]);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [searchQuery, setSearchQuery] = useState("");
@@ -103,7 +103,7 @@ const Article: React.FC<ArticleProps> = ({ tagData, date }) => {
   }, []);
 
   const fetchArticles = () => {
-    apiGetReq("/news/all?limit=100", {})
+    apiGetReq("/news/all?type=proposed", {})
       .then((res) => {
         if (res?.news) {
           setCardData(res.news);
@@ -662,7 +662,7 @@ const Article: React.FC<ArticleProps> = ({ tagData, date }) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <ArticleEdit />
+      <PropossedArticleEdit />
 
       {/* New Article Modal */}
       <Modal isOpen={isNewOpen} onClose={onNewClose} size="lg" isCentered>
@@ -833,4 +833,4 @@ const Article: React.FC<ArticleProps> = ({ tagData, date }) => {
   );
 };
 
-export default Article;
+export default PropossedPage;

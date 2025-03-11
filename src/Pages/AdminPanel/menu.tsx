@@ -8,15 +8,15 @@ import { useToast } from "@chakra-ui/react";
 
 const mainMenu = [
   { icon: <BiCircle />, text: "Article", link: "article" },
-  { icon: <BiCircle />, text: "Propossed Article", link: "propossedArticle" },
+  { icon: <BiCircle />, text: "Propossed", link: "propossed" },
+  // { icon: <BiCircle />, text: "Propossed Article", link: "propossedArticle" },
   { icon: <BiCircle />, text: "TV/Radio", link: "radio" },
   // { icon: <BiCircle />, text: "Material", link: "material" },
   { icon: <BiCircle />, text: "Album", link: "album" },
-  {icon: <BiCircle />, text: "Playlist", link: "playlist", },
+  { icon: <BiCircle />, text: "Playlist", link: "playlist" },
   { icon: <BiCircle />, text: "Concerts", link: "concerts" },
   { icon: <BiCircle />, text: "Artists", link: "artists" },
   { icon: <BiCircle />, text: "User", link: "user" },
-
 ];
 
 const Menu = () => {
@@ -29,9 +29,11 @@ const Menu = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await logoutRequest();
+    document.cookie =
+      "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"; // Deletes the cookie
     navigate("/login");
   };
+
   useEffect(() => {
     const currentPath = location.pathname.split("/").pop();
     setSelectedMenu(currentPath || "article"); // Default to "article"
@@ -53,26 +55,24 @@ const Menu = () => {
             className={`flex gap-3 justify-start items-center w-full cursor-pointer p-2.5 side-menu
               ${selectedMenu === item.link ? "side-menu-selected" : ""}
               ${!themeMode ? "side-menu-dark" : ""}`}
-            onClick={() => setSelectedMenu(item.link)}>
+            onClick={() => setSelectedMenu(item.link)}
+          >
             {item.icon}
             <div>{item.text}</div>
           </div>
         </Link>
       ))}
-        <button
-      className={`p-2 rounded transition-all duration-300 ease-in-out font-medium ${buttonStyles}`}
-      onClick={handleLogout}
-    >
-      Logout
-    </button>
+      <button
+        className={`p-2 rounded transition-all duration-300 ease-in-out font-medium ${buttonStyles}`}
+        onClick={handleLogout}
+      >
+        Logout
+      </button>
     </div>
   );
 };
 
 export default Menu;
-
-
-
 
 // function Logout() {
 
@@ -138,8 +138,6 @@ export default Menu;
 //     navigate('/login');
 //     return responseData;
 
-
-
 //   } catch (error) {
 //     toast({
 //       title: 'Logout failed',
@@ -149,7 +147,6 @@ export default Menu;
 //       isClosable: true,
 //   });  }
 // }
-
 
 //   return (
 //     <div onClick={logoutWithFetch}>Logout</div>

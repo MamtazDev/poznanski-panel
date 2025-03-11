@@ -12,7 +12,6 @@ interface PlayerProps {
 
 const YoutubePlayer: React.FC<PlayerProps> = ({ isOpen, type }) => {
   const videoId = useSelector((state: RootState) => state.player.videoId);
-  // console.log("videoId", videoId)
   const dispatch = useDispatch();
 
   const opts = {

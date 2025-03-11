@@ -18,7 +18,7 @@ const Login = () => {
     event.preventDefault();
     setIsLoading(true);
     try {
-      await loginRequest(password, email);
+      const response = await loginRequest(password, email);
       toast({
         title: 'Login successful',
         status: 'success',

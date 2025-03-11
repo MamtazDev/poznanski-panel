@@ -163,22 +163,37 @@ const TipTap: React.FC<TipTapProps> = ({
 		</button>,
 	];
 
-	const handlePlayButton = (event: MouseEvent) => {
+	const handlePlayButton = (event: Event) => {
 		const target = event.target as Element;
 		if (target.closest('.yt-play-button')) {
 			dispatch(openPlayer(`${target.getAttribute('value')}`));
 		}
 	};
 
-	useEffect(() => {
-		window.addEventListener('click', (event) => handlePlayButton(event));
+	// useEffect(() => {
+	// 	window.addEventListener('click', (event) => handlePlayButton(event));
 
+	// 	return () => {
+	// 		window.removeEventListener('click', (event) =>
+	// 			handlePlayButton(event)
+	// 		);
+	// 	};
+	// }, []);
+
+
+	useEffect(() => {
+		const modalElement = document.getElementsByClassName('chakra-modal__content')[0]
+		if (!modalElement) return;
+		modalElement.addEventListener('click', (event) => handlePlayButton(event));
+		
+		
+		
 		return () => {
-			window.removeEventListener('click', (event) =>
-				handlePlayButton(event)
-			);
+		modalElement.removeEventListener('click', (event) =>
+		handlePlayButton(event)
+		);
 		};
-	}, []);
+		}, []);
 
 	return (
 		<>
