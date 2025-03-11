@@ -37,7 +37,7 @@ const NewsPreviewModal = ({ isOpen, onClose, article, dispatch }: any) => {
     };
 
     const container = contentRef.current;
-    if (!container) {        
+    if (!container) {
         return};
 
     const youtubeDivs = container.querySelectorAll<HTMLDivElement>(".editor-youtube");
