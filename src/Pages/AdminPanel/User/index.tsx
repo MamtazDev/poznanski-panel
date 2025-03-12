@@ -77,7 +77,6 @@ const UserMainPage: React.FC<UserDataProps> = () => {
   // };
 
   const handleEditClick = (userId: string, nickname: string, role: string, isVerified: boolean, blockStatus: string) => {
-    console.log("userId", userId)
     setSelectedUserId(userId);
     setNickName(nickname); // Set the nickname to the current value
     setSelectedRole(role); // Set the role to the current value
@@ -92,7 +91,6 @@ const UserMainPage: React.FC<UserDataProps> = () => {
   };
 
   const handleSaveVerification = async () => {
-    console.log("selectedUserId", selectedUserId)
     try {
       await apiPutReq(`/auth/users/${selectedUserId}`, {
         isVerified: verificationStatus === "Verified",

@@ -227,7 +227,7 @@ const PlaylistPage: React.FC = () => {
                         ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
                         : "bg-white text-gray-900 hover:bg-gray-200"
                     }`}>
-                    <td className="p-4 text-left line-clamp-1">{item.title}</td>
+                    <td className="px-2 text-left line-clamp-1">{item.title}</td>
                     {/* <td className="px-4 py-3 text-left"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -246,7 +246,7 @@ const PlaylistPage: React.FC = () => {
                         frameBorder="0"
                       />
                     </td> */}
-                    <td className="px-4 py-3">
+                    <td className="px-4">
                       <div
                         className={`relative lg:bg-gray-100 cursor-pointer lg:h-48 rounded-md flex-shrink-0 overflow-hidden ${!themeMode && "dark-bg-color"}`}
                         onClick={(e) => {
@@ -301,11 +301,11 @@ const PlaylistPage: React.FC = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="py-4 text-left line-clamp-1">
+                    <td className="px-4 text-left line-clamp-1">
                       {item.description.slice(0, 50)}
                     </td>
                     {/* <td className="py-4">{item.tags}</td> */}
-                    <td className="py-4 text-left">
+                    <td className="px-4 text-left">
                       {new Date(item.publishedAt).toISOString().split("T")[0]}
                     </td>
                   </tr>

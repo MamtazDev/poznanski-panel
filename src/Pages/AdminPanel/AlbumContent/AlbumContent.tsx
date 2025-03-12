@@ -25,6 +25,7 @@ import {
   PopoverContent,
 } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
+import ArtistSelect from "react-select";
 import {
   apiDeleteReq,
   apiGetReq,
@@ -391,7 +392,6 @@ const AlbumContent: React.FC<TableProps> = (props) => {
     const id = url.split("v=")[1]?.split("&")[0] || null;
     if (id) {
       const videoInfo = await getVideoInfoById(id);
-      console.log("videoInfo", videoInfo);
 
       if (videoInfo) {
         setData(
@@ -458,7 +458,6 @@ const AlbumContent: React.FC<TableProps> = (props) => {
 
   const handleRemoveTag = (tagToRemove: string) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
-    console.log("tags", tags);
   };
 
   const filteredData = album.filter(
@@ -467,6 +466,10 @@ const AlbumContent: React.FC<TableProps> = (props) => {
       (item.description &&
         item.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
+
+  const handleNewArtistChange = (artists: string[]) => {
+    setNewData((prev: any) => ({ ...prev, artists }));
+  };
 
   return (
     <div className="p-3 overflow-y-auto w-full h-full pb-28">
@@ -622,7 +625,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
 
             <ModalBody>
               {/* Artist */}
-              <FormControl isRequired>
+              {/* <FormControl isRequired>
                 <FormLabel>Artists</FormLabel>
                 <select
                   multiple
@@ -677,6 +680,50 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                     })}
                   </div>
                 )}
+              </FormControl> */}
+              <FormControl isRequired>
+                <FormLabel>Artists</FormLabel>
+                <ArtistSelect
+                  isMulti
+                  options={artistAllData.map((item: any) => ({
+                    value: item.artist._id,
+                    label: item.artist.name,
+                  }))}
+                  value={artistAllData
+                    .filter((item: any) =>
+                      (newData?.artists || []).includes(item.artist._id)
+                    )
+                    .map((item: any) => ({
+                      value: item.artist._id,
+                      label: item.artist.name,
+                    }))}
+                  onChange={(selectedOptions) => {
+                    const newValues = selectedOptions.map(
+                      (option) => option.value
+                    );
+                    handleNewArtistChange(newValues);
+                  }}
+                  className="text-black"
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      backgroundColor: themeMode ? "white" : "#374151",
+                      color: themeMode ? "black" : "black",
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      backgroundColor: themeMode ? "white" : "#374151",
+                    }),
+                    option: (base, { isSelected }) => ({
+                      ...base,
+                      backgroundColor: isSelected ? "#4A5568" : "transparent",
+                      color: themeMode ? "black" : "white",
+                      ":hover": {
+                        backgroundColor: "#718096",
+                      },
+                    }),
+                  }}
+                />
               </FormControl>
 
               {/* Title */}
@@ -738,7 +785,7 @@ const AlbumContent: React.FC<TableProps> = (props) => {
             }`}>
             <ModalHeader>Add New Item</ModalHeader>
             <ModalBody>
-              <FormControl isRequired>
+              {/* <FormControl isRequired>
                 <FormLabel>Artists</FormLabel>
                 <select
                   multiple
@@ -792,6 +839,51 @@ const AlbumContent: React.FC<TableProps> = (props) => {
                     })}
                   </div>
                 )}
+              </FormControl> */}
+
+              <FormControl isRequired className="mb-4">
+                <FormLabel>Artists</FormLabel>
+                <ArtistSelect
+                  isMulti
+                  options={artistAllData.map((item: any) => ({
+                    value: item.artist._id,
+                    label: item.artist.name,
+                  }))}
+                  value={artistAllData
+                    .filter((item: any) =>
+                      (newData?.artists || []).includes(item.artist._id)
+                    )
+                    .map((item: any) => ({
+                      value: item.artist._id,
+                      label: item.artist.name,
+                    }))}
+                  onChange={(selectedOptions) => {
+                    const newValues = selectedOptions.map(
+                      (option) => option.value
+                    );
+                    handleNewArtistChange(newValues);
+                  }}
+                  className="text-black"
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      backgroundColor: themeMode ? "white" : "#374151",
+                      color: themeMode ? "black" : "black",
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      backgroundColor: themeMode ? "white" : "#374151",
+                    }),
+                    option: (base, { isSelected }) => ({
+                      ...base,
+                      backgroundColor: isSelected ? "#4A5568" : "transparent",
+                      color: themeMode ? "black" : "white",
+                      ":hover": {
+                        backgroundColor: "#718096",
+                      },
+                    }),
+                  }}
+                />
               </FormControl>
 
               <FormControl isRequired>
