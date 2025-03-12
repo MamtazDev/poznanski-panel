@@ -502,7 +502,7 @@ const Article: React.FC<ArticleProps> = ({ tagData, date }) => {
             Edit Article
           </ModalHeader>
 
-          <ModalBody>
+          <ModalBody padding={{ base: 0, lg: 4 }}>
             {/* Image Upload Section */}
             <FormControl id="files" isRequired mb={4}>
               <FormLabel>Upload Image</FormLabel>
@@ -677,7 +677,7 @@ const Article: React.FC<ArticleProps> = ({ tagData, date }) => {
             Create New Article
           </ModalHeader>
 
-          <ModalBody>
+          <ModalBody padding={{ base: 0, lg: 4 }}>
             <FormControl id="files" isRequired mb={4}>
               <FormLabel>Upload Image</FormLabel>
               {preview && (
@@ -718,6 +718,7 @@ const Article: React.FC<ArticleProps> = ({ tagData, date }) => {
                 </Button>
               )}
             </FormControl>
+
             {/* Grid Layout */}
             <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
               <FormControl id="title" isRequired>

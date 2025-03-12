@@ -70,11 +70,10 @@ const TipTapPage1: React.FC<TipTapProps> = ({
   const [article, setArticle] = useState<string>(content);
 
   useEffect(() => {
-    console.log("article", data);
     setContent(article);
   }, [article]);
   return (
-    <div className="bg-gray-500 p-4 items-center justify-center text-white text-xl rounded-lg shadow-lg h-[555px]">
+    <div className="bg-gray-500 p-4 items-center justify-center text-white text-xl rounded-lg shadow-lg h-[660px] lg:h-[555px]">
       <TipTap content={content} setArticle={setArticle} setFiles={setFiles} />
       <Button onClick={onOpen} colorScheme="blue" mt={4}>
         Preview

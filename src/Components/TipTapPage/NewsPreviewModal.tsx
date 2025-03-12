@@ -37,18 +37,15 @@ const NewsPreviewModal = ({ isOpen, onClose, article, dispatch }: any) => {
     };
 
     const container = contentRef.current;
-    if (!container) {        
+    if (!container) {
         return};
 
     const youtubeDivs = container.querySelectorAll<HTMLDivElement>(".editor-youtube");
-    console.log("container", youtubeDivs)
-
 
     const handleYoutubeClick = (event: Event) => {
       const target = event.currentTarget as HTMLDivElement;
       const videoSrc = target.getAttribute("src");
       const videoId = videoSrc ? videoSrc.split("v=")[1] : null;
-      console.log("Clicked YouTube Video ID:", videoId);
     };
 
     youtubeDivs.forEach((div) => {

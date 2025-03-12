@@ -19,6 +19,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
+import ArtistSelect from "react-select";
 import React, { useEffect, useRef, useState } from "react";
 import {
   apiDeleteReq,
@@ -358,7 +359,6 @@ const RadioTv: React.FC<TableProps> = ({
 
   const handleCreatePost = async () => {
     try {
-      console.log("newData", newData);
       const res = await apiPostReq("/radio", newData);
       if (res) {
         setRadioData((prev) => [...prev, res]);
@@ -392,7 +392,6 @@ const RadioTv: React.FC<TableProps> = ({
 
   const handleRemoveTag = (tagToRemove: string) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
-    console.log("tags", tags);
   };
 
   useEffect(() => {
@@ -454,52 +453,7 @@ const RadioTv: React.FC<TableProps> = ({
                       {item?.description}
                     </p>
                   </td>
-                  {/* <td className="px-4 py-3">
-                    {/* <div className="flex justify-center">
-                      <iframe
-                        src={
-                          item?.youTube?.includes("youtube.com/watch")
-                            ? `https://www.youtube.com/embed/${
-                                item?.youTube?.split("v=")[1].split("&")[0]
-                              }`
-                            : item?.youTube ||
-                              "https://www.youtube.com/embed/6JYIGclVQdw"
-                        }
-                        title="YouTube video player"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        // frameBorder="0"
-                        className="w-40 h-24 md: rounded-lg shadow-lg"
-                      ></iframe>
-                    </div>
-                    <div className={`relative lg:bg-gray-100 cursor-pointer lg:h-48 rounded-md flex-shrink-0 overflow-hidden ${!themeMode && "dark-bg-color"}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handlePlay(item?.youTube);
-                      }}
 
-                      >
-                      <img
-                        src={item?.youTube ? `https://img.youtube.com/vi/${getYouTubeID(item?.youTube)}/hqdefault.jpg` : "default-thumbnail.jpg"}
-                        className="md:w-full w-[69px] h-full  object-cover"
-                        alt="YouTube Thumbnail"
-                      />
-
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        {themeMode ? (
-                          <svg xmlns="http://www.w3.org/2000/svg" width="58" height="57" viewBox="0 0 58 57" fill="none" className="w-[20px] md:w-[58px]">
-                            <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
-                            <path d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z" fill="white" />
-                          </svg>
-                        ) : (
-                          <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 55 55" fill="none" className="w-[20px] md:w-[58px]">
-                            <circle cx="27.5" cy="27.5" r="27.5" fill="#2FC4B2" />
-                            <path d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z" fill="#111217" />
-                          </svg>
-                        )}
-                      </div>
-                    </div>
-                  </td> */}
-                  {/* { tv radio video playder} */}
                   <td className="px-4 py-3">
                     <div
                       className={`relative lg:bg-gray-100 cursor-pointer lg:h-48 rounded-md flex-shrink-0 overflow-hidden ${!themeMode && "dark-bg-color"}`}
@@ -617,7 +571,7 @@ const RadioTv: React.FC<TableProps> = ({
             <ModalBody>
               {/* artist */}
 
-              <FormControl isRequired>
+              {/* <FormControl isRequired>
                 <FormLabel>Artists</FormLabel>
                 <select
                   multiple
@@ -671,6 +625,51 @@ const RadioTv: React.FC<TableProps> = ({
                     })}
                   </div>
                 )}
+              </FormControl> */}
+
+              <FormControl isRequired>
+                <FormLabel>Artists</FormLabel>
+                <ArtistSelect
+                  isMulti
+                  options={artistAllData.map((item: any) => ({
+                    value: item.artist._id,
+                    label: item.artist.name,
+                  }))}
+                  value={artistAllData
+                    .filter((item: any) =>
+                      (newData?.artists || []).includes(item.artist._id)
+                    )
+                    .map((item: any) => ({
+                      value: item.artist._id,
+                      label: item.artist.name,
+                    }))}
+                  onChange={(selectedOptions) => {
+                    const newValues = selectedOptions.map(
+                      (option) => option.value
+                    );
+                    handleNewArtistChange(newValues);
+                  }}
+                  className="text-black"
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      backgroundColor: themeMode ? "white" : "#374151",
+                      color: themeMode ? "black" : "black",
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      backgroundColor: themeMode ? "white" : "#374151",
+                    }),
+                    option: (base, { isSelected }) => ({
+                      ...base,
+                      backgroundColor: isSelected ? "#4A5568" : "transparent",
+                      color: themeMode ? "black" : "white",
+                      ":hover": {
+                        backgroundColor: "#718096",
+                      },
+                    }),
+                  }}
+                />
               </FormControl>
 
               <FormControl id="title" isRequired mt={4}>
@@ -751,58 +750,47 @@ const RadioTv: React.FC<TableProps> = ({
             <ModalBody>
               <FormControl isRequired>
                 <FormLabel>Artists</FormLabel>
-                <select
-                  multiple
-                  className={`w-full p-2 rounded border ${themeMode ? "text-black bg-white" : "text-white bg-gray-700"}`}
-                  value={newData?.artists || []}
-                  onChange={(e) => {
-                    const clickedValue = e.target.value;
-                    const currentValues = newData?.artists || [];
-                    const newValues = currentValues.includes(clickedValue)
-                      ? currentValues.filter((v: string) => v !== clickedValue)
-                      : [...currentValues, clickedValue];
+                <ArtistSelect
+                  isMulti
+                  options={artistAllData.map((item: any) => ({
+                    value: item.artist._id,
+                    label: item.artist.name,
+                  }))}
+                  value={artistAllData
+                    .filter((item: any) =>
+                      (newData?.artists || []).includes(item.artist._id)
+                    )
+                    .map((item: any) => ({
+                      value: item.artist._id,
+                      label: item.artist.name,
+                    }))}
+                  onChange={(selectedOptions) => {
+                    const newValues = selectedOptions.map(
+                      (option) => option.value
+                    );
                     handleNewArtistChange(newValues);
-                  }}>
-                  {artistAllData.length > 0 ? (
-                    artistAllData?.map((items: any, index: number) => (
-                      <option
-                        key={index}
-                        value={items.artist._id}
-                        className={`p-2 ${themeMode ? "text-black bg-gray-100" : "text-white bg-gray-600"}`}>
-                        {items.artist.name}
-                      </option>
-                    ))
-                  ) : (
-                    <option disabled>No artists found</option>
-                  )}
-                </select>
-                {(newData?.artists || []).length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {(newData?.artists || []).map((artistId: string) => {
-                      const artist = artistAllData.find(
-                        (item: any) => item.artist._id === artistId
-                      )?.artist;
-                      if (!artist) return null;
-                      return (
-                        <div
-                          key={artistId}
-                          className="flex items-center gap-1 text-white px-2 py-1 rounded">
-                          <span>{artist.name}</span>
-                          <button
-                            onClick={() => {
-                              const updatedArtists = newData.artists.filter(
-                                (id: string) => id !== artistId
-                              );
-                              handleNewArtistChange(updatedArtists);
-                            }}
-                            className="ml-1 text-sm hover:text-red-300">
-                            ×
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+                  }}
+                  className="text-black"
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      backgroundColor: themeMode ? "white" : "#374151",
+                      color: themeMode ? "black" : "black",
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      backgroundColor: themeMode ? "white" : "#374151",
+                    }),
+                    option: (base, { isSelected }) => ({
+                      ...base,
+                      backgroundColor: isSelected ? "#4A5568" : "transparent",
+                      color: themeMode ? "black" : "white",
+                      ":hover": {
+                        backgroundColor: "#718096",
+                      },
+                    }),
+                  }}
+                />
               </FormControl>
 
               <FormControl isRequired mt={4}>

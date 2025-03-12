@@ -60,7 +60,6 @@ interface TableProps {
 
 const ConcertContent: React.FC<TableProps> = (props) => {
   const [radioData, setRadioData] = useState<any[]>([]);
-  console.log(radioData,"concert Data")
   const [featuredData, setFeaturedData] = useState<any[]>([]);
   const [editData, setEditData] = useState<any | null>(null);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
